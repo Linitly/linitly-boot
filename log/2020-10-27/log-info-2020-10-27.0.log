@@ -1,0 +1,55 @@
+2020-10-27 14:22:45.306 [main] INFO  org.linitly.boot.LinitlyBootApplication : Starting LinitlyBootApplication on 7weixiaoqing with PID 10988 (D:\Linitly\git_project\linitly-boot\linitly-boot\target\classes started by 7weixiaoqing in D:\Linitly\git_project\linitly-boot\linitly-boot)
+2020-10-27 14:22:45.571 [main] INFO  org.linitly.boot.LinitlyBootApplication : The following profiles are active: dev
+2020-10-27 14:22:46.961 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-10-27 14:22:46.963 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-10-27 14:22:47.001 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25ms. Found 0 Redis repository interfaces.
+2020-10-27 14:22:47.886 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8081 (http)
+2020-10-27 14:22:47.899 [main] INFO  org.apache.coyote.http11.Http11NioProtocol : Initializing ProtocolHandler ["http-nio-8081"]
+2020-10-27 14:22:47.909 [main] INFO  org.apache.catalina.core.StandardService : Starting service [Tomcat]
+2020-10-27 14:22:47.910 [main] INFO  org.apache.catalina.core.StandardEngine : Starting Servlet engine: [Apache Tomcat/9.0.38]
+2020-10-27 14:22:48.017 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/linitly-boot] : Initializing Spring embedded WebApplicationContext
+2020-10-27 14:22:48.017 [main] INFO  org.springframework.web.context.ContextLoader : Root WebApplicationContext: initialization completed in 2316 ms
+2020-10-27 14:22:48.465 [main] INFO  c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-27 14:22:49.004 [main] INFO  com.alibaba.druid.pool.DruidDataSource : {dataSource-1} inited
+2020-10-27 14:22:49.307 [main] INFO  org.quartz.impl.StdSchedulerFactory : Using default implementation for ThreadExecutor
+2020-10-27 14:22:49.309 [main] INFO  org.quartz.simpl.SimpleThreadPool : Job execution threads will use class loader of thread: main
+2020-10-27 14:22:49.317 [main] INFO  org.quartz.core.SchedulerSignalerImpl : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2020-10-27 14:22:49.318 [main] INFO  org.quartz.core.QuartzScheduler : Quartz Scheduler v.2.3.2 created.
+2020-10-27 14:22:49.321 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : Using db table-based data access locking (synchronization).
+2020-10-27 14:22:49.323 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : JobStoreCMT initialized.
+2020-10-27 14:22:49.325 [main] INFO  org.quartz.core.QuartzScheduler : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 5 threads.
+  Using job-store 'org.springframework.scheduling.quartz.LocalDataSourceJobStore' - which supports persistence. and is not clustered.
+
+2020-10-27 14:22:49.325 [main] INFO  org.quartz.impl.StdSchedulerFactory : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2020-10-27 14:22:49.325 [main] INFO  org.quartz.impl.StdSchedulerFactory : Quartz scheduler version: 2.3.2
+2020-10-27 14:22:49.325 [main] INFO  org.quartz.core.QuartzScheduler : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@aa61e4e
+2020-10-27 14:22:50.208 [main] INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2020-10-27 14:22:50.225 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor : Initializing ExecutorService 'taskExecutor'
+2020-10-27 14:22:50.917 [main] INFO  s.d.s.web.plugins.DocumentationPluginsBootstrapper : Context refreshed
+2020-10-27 14:22:50.930 [main] INFO  s.d.s.web.plugins.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-10-27 14:22:50.965 [main] INFO  s.d.spring.web.scanners.ApiListingReferenceScanner : Scanning for api listing references
+2020-10-27 14:22:51.111 [main] INFO  s.d.s.w.r.operation.CachingOperationNameGenerator : Generating unique operation named: testUsingGET_1
+2020-10-27 14:22:51.120 [main] INFO  o.s.scheduling.quartz.SchedulerFactoryBean : Starting Quartz Scheduler now
+2020-10-27 14:22:51.267 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : Freed 0 triggers from 'acquired' / 'blocked' state.
+2020-10-27 14:22:51.281 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : Recovering 0 jobs that were in-progress at the time of the last shut-down.
+2020-10-27 14:22:51.281 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : Recovery complete.
+2020-10-27 14:22:51.282 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : Removed 0 'complete' triggers.
+2020-10-27 14:22:51.283 [main] INFO  o.s.scheduling.quartz.LocalDataSourceJobStore : Removed 0 stale fired job entries.
+2020-10-27 14:22:51.284 [main] INFO  org.quartz.core.QuartzScheduler : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2020-10-27 14:22:51.292 [main] INFO  org.apache.coyote.http11.Http11NioProtocol : Starting ProtocolHandler ["http-nio-8081"]
+2020-10-27 14:22:51.321 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer : Tomcat started on port(s): 8081 (http) with context path '/linitly-boot'
+2020-10-27 14:22:51.323 [main] INFO  org.linitly.boot.LinitlyBootApplication : Started LinitlyBootApplication in 6.94 seconds (JVM running for 8.363)
+2020-10-27 14:22:51.326 [main] INFO  org.linitly.boot.LinitlyBootApplication : 
+----------------------------------------------------------------
+	Application Linitly-boot is running! Access URLs:
+	Local: 		http://localhost:8081/linitly-boot/
+	swagger-ui: 	http://10.170.37.20:8081/linitly-boot/swagger-ui.html
+----------------------------------------------------------------
+2020-10-27 14:23:49.740 [http-nio-8081-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/linitly-boot] : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-27 14:23:49.740 [http-nio-8081-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet : Initializing Servlet 'dispatcherServlet'
+2020-10-27 14:23:49.751 [http-nio-8081-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet : Completed initialization in 11 ms

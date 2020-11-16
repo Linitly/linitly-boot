@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias alias="integer" type="java.lang.Integer"/>
+        <typeAlias alias="long" type="java.lang.Long"/>
+        <typeAlias alias="string" type="java.lang.String"/>
+        <typeAlias alias="date" type="java.util.Date"/>
+        <typeAlias alias="hashMap" type="java.util.HashMap"/>
+        <typeAlias alias="linkedHashMap" type="java.util.LinkedHashMap"/>
+        <typeAlias alias="arrayList" type="java.util.ArrayList"/>
+        <typeAlias alias="linkedList" type="java.util.LinkedList"/>
+        <typeAlias alias="bigDecimal" type="java.math.BigDecimal"/>
+
+        <package name="org.linitly.boot.base.entity" />
+        <package name="org.linitly.boot.business.entity" />
+        <package name="org.linitly.boot.business.vo" />
+    </typeAliases>
+</configuration>

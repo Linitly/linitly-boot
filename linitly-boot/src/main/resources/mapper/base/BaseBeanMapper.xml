@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.linitly.boot.base.dao.BaseBeanMapper">
+
+    <resultMap id="BaseEntityMap" type="org.linitly.boot.base.helper.entity.BaseEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="enabled" jdbcType="INTEGER" property="enabled" />
+        <result column="created_user_id" jdbcType="BIGINT" property="createdUserId" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="last_modified_user_id" jdbcType="BIGINT" property="lastModifiedUserId" />
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime" />
+    </resultMap>
+
+    <resultMap id="BaseDeleteEntityMap" type="org.linitly.boot.base.helper.entity.BaseDeleteEntity" extends="BaseEntityMap">
+        <result column="deleted_time" jdbcType="TIMESTAMP" property="deletedTime" />
+        <result column="deleted_user_id" jdbcType="BIGINT" property="deletedUserId" />
+    </resultMap>
+</mapper>
