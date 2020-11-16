@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <mongodb.version>3.12.7</mongodb.version>
         <api.generator.basedir>docs/asciidoc</api.generator.basedir>
     </properties>
 
@@ -89,6 +90,13 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
         </dependency>
+        <!-- 谷歌guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>29.0-jre</version>
+        </dependency>
+
         <!-- swagger依赖jar包 -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -206,6 +214,10 @@
             <version>7.6.1</version>
         </dependency>
         <!-- mongodb -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

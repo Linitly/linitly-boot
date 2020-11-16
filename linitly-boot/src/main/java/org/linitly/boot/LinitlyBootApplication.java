@@ -20,6 +20,7 @@ public class LinitlyBootApplication {
     public static void main(String[] args) throws UnknownHostException {
 
         ConfigurableApplicationContext application = SpringApplication.run(LinitlyBootApplication.class, args);
+
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = env.getProperty("server.port");

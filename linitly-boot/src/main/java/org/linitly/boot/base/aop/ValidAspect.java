@@ -14,7 +14,7 @@ import java.util.Arrays;
 /**
  * @author: linxiunan
  * @date: 2020/10/12 13:52
- * @descrption:
+ * @descrption: 考虑拦截器
  */
 @Aspect
 @Component

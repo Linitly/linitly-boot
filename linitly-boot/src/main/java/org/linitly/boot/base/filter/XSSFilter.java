@@ -1,8 +1,3 @@
-/**
- * @author: linxiunan
- * @date: 2020/4/28 9:39
- * @descrption:
- */
 package org.linitly.boot.base.filter;
 
 import org.linitly.boot.base.utils.xss.XssHttpServletRequestWrapper;

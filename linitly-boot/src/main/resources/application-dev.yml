@@ -58,6 +58,9 @@ spring:
         - http://115.159.42.127:9200
         - http://42.192.50.57:9200
         - http://122.51.251.122:9200
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/study-springboot
 
 mybatis:
   mapper-locations: classpath:mapper/*/*Mapper.xml
