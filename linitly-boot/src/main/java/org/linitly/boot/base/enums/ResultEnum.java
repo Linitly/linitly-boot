@@ -5,7 +5,7 @@ package org.linitly.boot.base.enums;
  * @author linxiunan
  * @date 2017年10月23日
  */
-public enum ExceptionResultEnum {
+public enum ResultEnum {
 
 	SUCCESS(200, "成功"),
 	SYSTEM_ERROR(500, "服务器开小差，请稍后重试"),
@@ -17,6 +17,9 @@ public enum ExceptionResultEnum {
 	TOKEN_ANALYSIS_ERROR(413, "token解析失败"),
 	REMOTE_LOGIN(417, "您的账号在异地登录,请重新登录"),
 
+	PARAM_EMPTY_ERROR(420, "所需参数未传入"),
+	PATH_PARAM_ERROR(421, "所需路径参数传入错误"),
+
 	ENCRYPT_ERROR(421, "加密失败"),
 	DECRYPT_ERROR(422, "解密失败"),
 	AES_DECRYPT_KEY_ERROR(423, "解密失败，请检查传入的加密Key"),
@@ -27,19 +30,13 @@ public enum ExceptionResultEnum {
 	EXCEL_READ_EMPTY_ERROR(434, "未读取到有效内容，请检查"),
 	EXCEL_UPPER_LIMIT_ERROR(435, "总记录条数超上限，请分批处理"),
 
-
-
-	CLASS_METHOD_ERROR(414, "反射获取方法失败"),
+	CLASS_METHOD_ERROR(440, "反射获取方法失败"),
 	ANNOTATION_GET_ERROR(441, "获取权限注解内容错误"),
 
 	FILE_NOT_UPLOAD_ERROR(456, "所需文件没有上传"),
-	PARAM_EMPTY_ERROR(457, "所需参数未传入"),
 	FILE_TOO_BIG_ERROR(458, "文件大小超过限制"),
-	FILE_NOT_EXIST_ERROR(457, "文件不存在"),
-	FILE_UPLOAD_ERROR(458, "文件上传出错"),
-	FILE_TYPE_ERROR(459, "上传文件类型出错"),
-	FILE_RESOLVER_ERROR(460, "文件转换错误"),
-	FILE_DOWNLOAD_ERROR(461, "文件下载失败"),
+	FILE_DOWNLOAD_ERROR(459, "文件下载失败"),
+
 
 	DUPLICATE_KEY_ERROR(461, "系统错误，请刷新重试"),
 
@@ -50,7 +47,7 @@ public enum ExceptionResultEnum {
 	private Integer code;
 	private String message;
 
-	ExceptionResultEnum(Integer code, String message) {
+	ResultEnum(Integer code, String message) {
 		this.code = code;
 		this.message = message;
 	}

@@ -1,6 +1,6 @@
 package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //
-//import ExceptionResultEnum;
+//import ResultEnum;
 //import CommonException;
 //import org.apache.commons.lang3.StringUtils;
 //import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -56,7 +56,7 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //        } else if (excelFilename.endsWith(".xlsx")) {
 //            return new XSSFWorkbook(is);
 //        } else {
-//            throw new CommonException(ExceptionResultEnum.EXCEL_UPLOAD_FORMAT_ERROR);
+//            throw new CommonException(ResultEnum.EXCEL_UPLOAD_FORMAT_ERROR);
 //        }
 //    }
 //
@@ -91,7 +91,7 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //    public static void validateNum(Workbook wb, int floorLimit, int upperLimit) {
 //        int numberOfNullSheet = 0;
 //        if (wb.getNumberOfSheets() < 1) {
-//            throw new CommonException(ExceptionResultEnum.EXCEL_SHEET_ANALIZE_ERROR);
+//            throw new CommonException(ResultEnum.EXCEL_SHEET_ANALIZE_ERROR);
 //        }
 //        int totalNum = 0;
 //        for (int i = 0; i < wb.getNumberOfSheets(); i++) {
@@ -102,10 +102,10 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //            }
 //        }
 //        if ((totalNum - (wb.getNumberOfSheets() - numberOfNullSheet)) <= floorLimit) {
-//            throw new CommonException(ExceptionResultEnum.EXCEL_FLOOR_LIMIT_ERROR);
+//            throw new CommonException(ResultEnum.EXCEL_FLOOR_LIMIT_ERROR);
 //        }
 //        if ((totalNum - (wb.getNumberOfSheets() - numberOfNullSheet)) > upperLimit) {
-//            throw new CommonException(ExceptionResultEnum.EXCEL_UPPER_LIMIT_ERROR);
+//            throw new CommonException(ResultEnum.EXCEL_UPPER_LIMIT_ERROR);
 //        }
 //    }
 //
@@ -304,7 +304,7 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //        } catch (Exception e) {
 //            response.setContentType("application/json");
 //            e.printStackTrace();
-//            throw new CommonException(ExceptionResultEnum.FILEDOWNLOAD_ERROR);
+//            throw new CommonException(ResultEnum.FILEDOWNLOAD_ERROR);
 //        } finally {
 //            try {
 //                outs.flush();
@@ -461,7 +461,7 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //        }
 //        List<T> list = new ArrayList<>();
 //        if (wb.getNumberOfSheets() < 1) {
-//            throw new CommonException(ExceptionResultEnum.EXCEL_SHEET_ANALIZE_ERROR);
+//            throw new CommonException(ResultEnum.EXCEL_SHEET_ANALIZE_ERROR);
 //        }
 //        for (int i = 0; i < wb.getNumberOfSheets(); i++) {
 //            Sheet sheet = wb.getSheetAt(i);
@@ -489,7 +489,7 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //                        }
 //                    }
 //                } catch (Exception e) {
-//                    throw new CommonException(ExceptionResultEnum.EXCEL_MODULE_ANALIZE_ERROR);
+//                    throw new CommonException(ResultEnum.EXCEL_MODULE_ANALIZE_ERROR);
 //                }
 //                for (int r = 2; r < totalRows; r++) {
 //                    Row row = sheet.getRow(r);
@@ -554,7 +554,7 @@ package org.linitly.boot.base.utils;//package com.zhencang.pipe.gallery.utils;
 //        }
 //        List<T> list = new ArrayList<>();
 //        if (wb.getNumberOfSheets() < 1) {
-//            throw new CommonException(ExceptionResultEnum.EXCEL_SHEET_ANALIZE_ERROR);
+//            throw new CommonException(ResultEnum.EXCEL_SHEET_ANALIZE_ERROR);
 //        }
 //        for (int i = 0; i < wb.getNumberOfSheets(); i++) {
 //            if (i != 0) {

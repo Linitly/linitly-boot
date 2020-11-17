@@ -1,6 +1,6 @@
 package org.linitly.boot.base.exception;
 
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 
 /**
  * 通用异常类
@@ -19,9 +19,9 @@ public class ExcelException extends RuntimeException {
         this.state = state;
     }
 
-    public ExcelException(ExceptionResultEnum exceptionResultEnum) {
-        super(exceptionResultEnum.getMessage());
-        this.state = exceptionResultEnum.getCode();
+    public ExcelException(ResultEnum resultEnum) {
+        super(resultEnum.getMessage());
+        this.state = resultEnum.getCode();
     }
 
     public Integer getCode() {

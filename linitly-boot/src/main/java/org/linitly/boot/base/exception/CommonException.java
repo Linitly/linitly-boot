@@ -1,6 +1,6 @@
 package org.linitly.boot.base.exception;
 
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 
 /**
  * 通用异常类
@@ -19,9 +19,9 @@ public class CommonException extends RuntimeException {
         this.state = state;
     }
 
-    public CommonException(ExceptionResultEnum exceptionResultEnum) {
-        super(exceptionResultEnum.getMessage());
-        this.state = exceptionResultEnum.getCode();
+    public CommonException(ResultEnum resultEnum) {
+        super(resultEnum.getMessage());
+        this.state = resultEnum.getCode();
     }
 
     public Integer getCode() {

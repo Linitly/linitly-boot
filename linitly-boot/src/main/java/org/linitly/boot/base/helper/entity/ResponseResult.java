@@ -1,6 +1,6 @@
 package org.linitly.boot.base.helper.entity;
 
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -40,24 +40,24 @@ public class ResponseResult<T> {
 	}
 
 	public ResponseResult(T data, Object specialData) {
-		this.code = ExceptionResultEnum.SUCCESS.getCode();
-		this.message = ExceptionResultEnum.SUCCESS.getMessage();
+		this.code = ResultEnum.SUCCESS.getCode();
+		this.message = ResultEnum.SUCCESS.getMessage();
 		this.data = data;
 		this.specialData = specialData;
 	}
 
 	public ResponseResult() {
-		this.code = ExceptionResultEnum.SUCCESS.getCode();
-		this.message = ExceptionResultEnum.SUCCESS.getMessage();
+		this.code = ResultEnum.SUCCESS.getCode();
+		this.message = ResultEnum.SUCCESS.getMessage();
 	}
 
 	public ResponseResult(T data) {
-		this.code = ExceptionResultEnum.SUCCESS.getCode();
-		this.message = ExceptionResultEnum.SUCCESS.getMessage();
+		this.code = ResultEnum.SUCCESS.getCode();
+		this.message = ResultEnum.SUCCESS.getMessage();
 		this.data = data;
 	}
 
-	public ResponseResult(ExceptionResultEnum exResEnum) {
+	public ResponseResult(ResultEnum exResEnum) {
 		this.message = exResEnum.getMessage();
 		this.code = exResEnum.getCode();
 	}

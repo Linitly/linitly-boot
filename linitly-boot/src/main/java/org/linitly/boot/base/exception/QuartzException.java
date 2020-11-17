@@ -1,6 +1,6 @@
 package org.linitly.boot.base.exception;
 
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.constant.global.GlobalConstant;
 
 /**
@@ -24,9 +24,9 @@ public class QuartzException extends RuntimeException {
         this.state = state;
     }
 
-    public QuartzException(ExceptionResultEnum exceptionResultEnum) {
-        super(exceptionResultEnum.getMessage());
-        this.state = exceptionResultEnum.getCode();
+    public QuartzException(ResultEnum resultEnum) {
+        super(resultEnum.getMessage());
+        this.state = resultEnum.getCode();
     }
 
     public Integer getCode() {

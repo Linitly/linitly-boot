@@ -1,6 +1,6 @@
 package org.linitly.boot.base.utils.encrypt;
 
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.DecryptException;
 import org.linitly.boot.base.exception.EncryptException;
 
@@ -48,7 +48,7 @@ public class AES {
         } catch (Exception e) {
             e.printStackTrace();
 //            throw new RuntimeException("encrypt fail!", e);
-            throw new EncryptException(ExceptionResultEnum.ENCRYPT_ERROR);
+            throw new EncryptException(ResultEnum.ENCRYPT_ERROR);
         }
     }
 
@@ -78,7 +78,7 @@ public class AES {
         } catch (Exception e) {
             e.printStackTrace();
 //            throw new RuntimeException("decrypt fail!", e);
-            throw new DecryptException(ExceptionResultEnum.DECRYPT_ERROR);
+            throw new DecryptException(ResultEnum.DECRYPT_ERROR);
         }
     }
 
@@ -88,7 +88,7 @@ public class AES {
             return new String(Base64.encode(valueByte));
         } catch (UnsupportedEncodingException e) {
 //            throw new RuntimeException("encrypt fail!", e);
-            throw new EncryptException(ExceptionResultEnum.ENCRYPT_ERROR);
+            throw new EncryptException(ResultEnum.ENCRYPT_ERROR);
         }
 
     }
@@ -100,7 +100,7 @@ public class AES {
             return new String(valueByte, ConfigureEncryptAndDecrypt.CHAR_ENCODING);
         } catch (UnsupportedEncodingException e) {
 //            throw new RuntimeException("decrypt fail!", e);
-            throw new DecryptException(ExceptionResultEnum.DECRYPT_ERROR);
+            throw new DecryptException(ResultEnum.DECRYPT_ERROR);
         }
     }
 
@@ -110,7 +110,7 @@ public class AES {
             return new String(Base64.encode(valueByte));
         } catch (UnsupportedEncodingException e) {
 //            throw new RuntimeException("encrypt fail!", e);
-            throw new EncryptException(ExceptionResultEnum.ENCRYPT_ERROR);
+            throw new EncryptException(ResultEnum.ENCRYPT_ERROR);
         }
     }
 
@@ -121,7 +121,7 @@ public class AES {
             return new String(valueByte, ConfigureEncryptAndDecrypt.CHAR_ENCODING);
         } catch (UnsupportedEncodingException e) {
 //            throw new RuntimeException("decrypt fail!", e);
-            throw new DecryptException(ExceptionResultEnum.DECRYPT_ERROR);
+            throw new DecryptException(ResultEnum.DECRYPT_ERROR);
         }
     }
 

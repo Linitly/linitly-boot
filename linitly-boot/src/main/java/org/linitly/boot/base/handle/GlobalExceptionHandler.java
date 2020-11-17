@@ -2,7 +2,7 @@ package org.linitly.boot.base.handle;
 
 import lombok.extern.slf4j.Slf4j;
 import org.linitly.boot.base.constant.global.GlobalConstant;
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.*;
 import org.linitly.boot.base.helper.entity.ResponseResult;
 import org.linitly.boot.base.utils.valid.BindingResultUtil;
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MissingServletRequestParameterException.class, HttpMessageNotReadableException.class})
     public ResponseResult paramEmptyErrorHandler(Exception e) {
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.PARAM_EMPTY_ERROR);
+        return new ResponseResult(ResultEnum.PARAM_EMPTY_ERROR);
     }
 
     @ExceptionHandler({CommonException.class})
@@ -49,19 +49,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MaxUploadSizeExceededException.class})
     public ResponseResult fileTooBigErrorHandle(MaxUploadSizeExceededException e) {
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.FILE_TOO_BIG_ERROR);
+        return new ResponseResult(ResultEnum.FILE_TOO_BIG_ERROR);
     }
 
     @ExceptionHandler({MissingServletRequestPartException.class, MultipartException.class})
     public ResponseResult missFileErrorHandle(Exception e) {
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.FILE_NOT_UPLOAD_ERROR);
+        return new ResponseResult(ResultEnum.FILE_NOT_UPLOAD_ERROR);
     }
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class, HttpMediaTypeNotSupportedException.class})
     public ResponseResult unSupportErrorHandle(Exception e) {
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.UN_SUPPORT_REQUEST);
+        return new ResponseResult(ResultEnum.UN_SUPPORT_REQUEST);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -74,13 +74,13 @@ public class GlobalExceptionHandler {
     public ResponseResult duplicateErrorKeyHandle(DuplicateKeyException e) {
         // 数据库新增时，唯一限制字段已存在抛错
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.DUPLICATE_KEY_ERROR);
+        return new ResponseResult(ResultEnum.DUPLICATE_KEY_ERROR);
     }
 
     @ExceptionHandler({AESDecryptKeyException.class})
     public ResponseResult aesDecryptErrorKeyHandle(AESDecryptKeyException e) {
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.AES_DECRYPT_KEY_ERROR);
+        return new ResponseResult(ResultEnum.AES_DECRYPT_KEY_ERROR);
     }
 
     @ExceptionHandler({QuartzException.class})
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Object defaultExceptionHandler(Exception e) {
         e.printStackTrace();
-        return new ResponseResult(ExceptionResultEnum.SYSTEM_ERROR);
+        return new ResponseResult(ResultEnum.SYSTEM_ERROR);
     }
 
 }

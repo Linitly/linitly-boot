@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.linitly.boot.base.annotation.RequirePermission;
 import org.linitly.boot.base.annotation.RequireRole;
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.utils.RedisOperator;
 import org.linitly.boot.base.utils.jwt.JwtAdminUtil;
 import org.linitly.boot.base.constant.admin.AdminJwtConstant;
@@ -68,11 +68,11 @@ public class PermissionAspect {
 				boolean hasRoleOrPermission = RoleAndPermissionUtil.hasRoleOrPermission(new ArrayList<>(rolesOrPermissions), requireRolesOrPermissions,
 						target.getClass(), methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);
 				if (!hasRoleOrPermission)
-					throw new CommonException(ExceptionResultEnum.NO_PERMISSION);
+					throw new CommonException(ResultEnum.NO_PERMISSION);
 			}
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
-			throw new CommonException(ExceptionResultEnum.CLASS_METHOD_ERROR);
+			throw new CommonException(ResultEnum.CLASS_METHOD_ERROR);
 		}
 		return joinPoint.proceed();
 	}

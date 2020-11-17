@@ -1,8 +1,3 @@
-/**
- * @author: linxiunan
- * @date: 2020/5/27 10:07
- * @descrption:
- */
 package org.linitly.boot.base.constant.entity;
 
 /**

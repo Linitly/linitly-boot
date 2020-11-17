@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.linitly.boot.base.annotation.ExcelExport;
 import org.linitly.boot.base.annotation.ExcelProperty;
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.utils.NumberUtil;
 import org.linitly.boot.base.utils.StringUtil;
@@ -63,7 +63,7 @@ public class ExcelExportUtil {
         } catch (IOException e) {
             e.printStackTrace();
             response.setContentType("application/json");
-            throw new CommonException(ExceptionResultEnum.FILE_DOWNLOAD_ERROR);
+            throw new CommonException(ResultEnum.FILE_DOWNLOAD_ERROR);
         } finally {
             if (outputStream != null) {
                 try {

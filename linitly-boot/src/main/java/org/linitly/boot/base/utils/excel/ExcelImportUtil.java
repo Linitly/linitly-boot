@@ -4,7 +4,7 @@ import org.linitly.boot.base.annotation.ExcelImport;
 import org.linitly.boot.base.annotation.ExcelProperty;
 import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.enums.DateFormat;
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.ExcelException;
 import org.linitly.boot.base.utils.IDateUtil;
 import org.linitly.boot.base.utils.NumberUtil;
@@ -59,7 +59,7 @@ public class ExcelImportUtil {
         } else if (fileName.endsWith(".xlsx")) {
             return new XSSFWorkbook(inputStream);
         } else {
-            throw new ExcelException(ExceptionResultEnum.EXCEL_UPLOAD_FORMAT_ERROR);
+            throw new ExcelException(ResultEnum.EXCEL_UPLOAD_FORMAT_ERROR);
         }
     }
 
@@ -67,7 +67,7 @@ public class ExcelImportUtil {
         List<Sheet> sheets = new ArrayList<>();
         int sheetNumber = workbook.getNumberOfSheets();
         if (sheetNumber < 1) {
-            throw new ExcelException(ExceptionResultEnum.EXCEL_SHEET_ANALYSE_ERROR);
+            throw new ExcelException(ResultEnum.EXCEL_SHEET_ANALYSE_ERROR);
         }
         Sheet sheet = null;
         switch (excelImport.sheetReadType()) {
@@ -104,7 +104,7 @@ public class ExcelImportUtil {
             }
         }
         if (resultList.isEmpty()) {
-            throw new ExcelException(ExceptionResultEnum.EXCEL_READ_EMPTY_ERROR);
+            throw new ExcelException(ResultEnum.EXCEL_READ_EMPTY_ERROR);
         }
         return resultList;
     }
@@ -114,14 +114,14 @@ public class ExcelImportUtil {
         int totalRowNumber = sheet.getPhysicalNumberOfRows();
         if (totalRowNumber < excelImport.startReadRow() + 1) {
 //            throw new RuntimeException("row count was min to start read row number");
-            throw new ExcelException(ExceptionResultEnum.EXCEL_ROW_NUMBER_ERROR);
+            throw new ExcelException(ResultEnum.EXCEL_ROW_NUMBER_ERROR);
         }
         if (sheet.getRow(excelImport.startReadRow()) == null) {
 //            throw new RuntimeException("start read row was empty");
-            throw new ExcelException(ExceptionResultEnum.EXCEL_ROW_NUMBER_ERROR);
+            throw new ExcelException(ResultEnum.EXCEL_ROW_NUMBER_ERROR);
         }
         if (totalRowNumber > excelImport.maxReadRow()) {
-            throw new ExcelException(ExceptionResultEnum.EXCEL_UPPER_LIMIT_ERROR);
+            throw new ExcelException(ResultEnum.EXCEL_UPPER_LIMIT_ERROR);
         }
         Row row = null;
         for (int i = excelImport.startReadRow(); i < totalRowNumber; i++) {

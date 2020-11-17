@@ -3,7 +3,7 @@ package org.linitly.boot.base.interceptor;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.linitly.boot.base.enums.ExceptionResultEnum;
+import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.utils.RedisOperator;
 import org.linitly.boot.base.utils.jwt.JwtAdminUtil;
 import org.linitly.boot.base.utils.jwt.JwtCommonUtil;
@@ -58,7 +58,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         String token = JwtAdminUtil.getAdminToken(request);
         String refreshToken = JwtAdminUtil.getAdminRefreshToken(request);
         if (StringUtils.isBlank(token) || StringUtils.isBlank(refreshToken)) {
-            throw new CommonException(ExceptionResultEnum.UNAUTHORIZED);
+            throw new CommonException(ResultEnum.UNAUTHORIZED);
         }
         return parseToken(token, refreshToken, response);
     }
@@ -86,7 +86,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
             return parseRefreshToken(refreshToken, response, true);
         } catch (Exception e) {
             log.error("【后台token解密失败】，token为" + token);
-            throw new CommonException(ExceptionResultEnum.TOKEN_ANALYSIS_ERROR);
+            throw new CommonException(ResultEnum.TOKEN_ANALYSIS_ERROR);
         }
         return validToken(claims, token, refreshToken, response);
     }
@@ -96,10 +96,10 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         try {
             claims = JwtCommonUtil.parseJwt(refreshToken);
         } catch (ExpiredJwtException e) {
-            throw new CommonException(ExceptionResultEnum.LOGIN_FAILURE);
+            throw new CommonException(ResultEnum.LOGIN_FAILURE);
         } catch (Exception e) {
             log.error("【后台refresh_token解密失败】，refresh_token为" + refreshToken);
-            throw new CommonException(ExceptionResultEnum.TOKEN_ANALYSIS_ERROR);
+            throw new CommonException(ResultEnum.TOKEN_ANALYSIS_ERROR);
         }
         return validRefreshToken(claims, refreshToken, response, generateNewTokens);
     }
@@ -109,9 +109,9 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         String redisKey = AdminJwtConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
         String redisRefreshToken = redisOperator.get(redisKey);
         if (StringUtils.isBlank(redisRefreshToken)) {
-            throw new CommonException(ExceptionResultEnum.LOGIN_FAILURE);
+            throw new CommonException(ResultEnum.LOGIN_FAILURE);
         } else if (!refreshToken.equals(redisRefreshToken)) {
-            throw new CommonException(ExceptionResultEnum.REMOTE_LOGIN);
+            throw new CommonException(ResultEnum.REMOTE_LOGIN);
         }
         // 生成新的token对
         if (generateNewTokens) {
@@ -132,9 +132,9 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         String redisKey = AdminJwtConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
         String redisToken = redisOperator.get(redisKey);
         if (StringUtils.isBlank(redisToken)) {
-            throw new CommonException(ExceptionResultEnum.LOGIN_FAILURE);
+            throw new CommonException(ResultEnum.LOGIN_FAILURE);
         } else if (!token.equals(redisToken)) {
-            throw new CommonException(ExceptionResultEnum.REMOTE_LOGIN);
+            throw new CommonException(ResultEnum.REMOTE_LOGIN);
         }
         return parseRefreshToken(refreshToken, response, false);
     }

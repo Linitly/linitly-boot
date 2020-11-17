@@ -13,7 +13,9 @@
         <typeAlias alias="bigDecimal" type="java.math.BigDecimal"/>
 
         <package name="org.linitly.boot.base.entity" />
+
         <package name="org.linitly.boot.business.entity" />
         <package name="org.linitly.boot.business.vo" />
+        <package name="org.linitly.boot.business.dto" />
     </typeAliases>
 </configuration>

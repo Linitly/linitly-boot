@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.linitly.boot.business.dao.TestMybatisMapper">
 
-    <resultMap id="BaseTestMap" type="org.linitly.boot.business.entity.TestMybatis" extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap">
+    <resultMap id="BaseTestMap" type="testMybatis" extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap">
         <result column="test" jdbcType="VARCHAR" property="test" />
     </resultMap>
 
