@@ -5,7 +5,7 @@ target
 .classpath
 .project
 /.settings/
-/logs/
+/log/
 *.class
 .git
 /bin/
