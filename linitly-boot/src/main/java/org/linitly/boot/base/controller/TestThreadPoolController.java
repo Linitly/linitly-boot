@@ -1,6 +1,6 @@
 package org.linitly.boot.base.controller;
 
-import org.linitly.boot.base.service.impl.TestThreadPoolService;
+import org.linitly.boot.base.service.TestThreadPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
