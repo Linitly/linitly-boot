@@ -41,6 +41,16 @@ package org.linitly.boot.base.utils.permission;
  */
 public class AntPathMatcher implements PatternMatcher {
 
+    //
+    private static AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
+
+    private AntPathMatcher() {}
+
+    public static AntPathMatcher getInstance() {
+        return ANT_PATH_MATCHER;
+    }
+    //
+
     //TODO - complete JavaDoc
 
     /**

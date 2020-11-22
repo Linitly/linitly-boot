@@ -42,6 +42,8 @@ public enum ResultEnum {
 
 	SEND_MSG_ERROR(471, "发送短信验证码失败，请稍后重试并检查手机号是否正确"),
 	BUSINESS_LIMIT_CONTROL(472, "发送短信过于频繁，请稍后重试并检查手机号是否正确"),
+
+	FACTORY_GET_ERROR(490, "工厂获取对象错误"),
 	;
 
 	private Integer code;

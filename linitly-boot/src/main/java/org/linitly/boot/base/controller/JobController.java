@@ -22,7 +22,6 @@ import java.util.List;
 @Result
 @RestController
 @RequestMapping("/job")
-//@RequestMapping(AdminCommonConstant.URL_PREFIX + "/job")
 @Api(tags = "定时任务管理")
 public class JobController {
 

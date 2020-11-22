@@ -4,15 +4,16 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.enums.ResultEnum;
+import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.utils.RedisOperator;
-import org.linitly.boot.base.utils.jwt.JwtAdminUtil;
-import org.linitly.boot.base.utils.jwt.JwtCommonUtil;
+import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.constant.admin.AdminJwtConstant;
 import org.linitly.boot.base.constant.entity.AdminUserConstant;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.helper.entity.BaseEntity;
 import org.linitly.boot.base.utils.encrypt.EncryptionUtil;
+import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.utils.permission.AntPathMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,26 +42,27 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
 
     static {
         // 登录接口
-        UN_CHECK_URIS.add(AdminCommonConstant.URL_PREFIX + "/login");
+        UN_CHECK_URIS.add(SystemEnum.ADMIN.getUrlPrefix() + "/login");
 
         // 退出接口
-        UN_CHECK_URIS.add(AdminCommonConstant.URL_PREFIX + "/logout/**");
+        UN_CHECK_URIS.add(SystemEnum.ADMIN.getUrlPrefix() + "/logout/**");
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String uri = request.getRequestURI();
-        AntPathMatcher antPathMatcher = new AntPathMatcher();
+
         for (String unCheckUri : UN_CHECK_URIS) {
-            if (antPathMatcher.matches(unCheckUri, uri))
+            if (AntPathMatcher.getInstance().matches(unCheckUri, uri))
                 return true;
         }
-        String token = JwtAdminUtil.getAdminToken(request);
-        String refreshToken = JwtAdminUtil.getAdminRefreshToken(request);
+        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(SystemEnum.ADMIN.getSystemCode());
+        String token = jwtUtil.getToken(request);
+        String refreshToken = jwtUtil.getRefreshToken(request);
         if (StringUtils.isBlank(token) || StringUtils.isBlank(refreshToken)) {
             throw new CommonException(ResultEnum.UNAUTHORIZED);
         }
-        return parseToken(token, refreshToken, response);
+        return parseToken(jwtUtil, token, refreshToken, response);
     }
 
     @Override
@@ -77,34 +79,34 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 
-    private boolean parseToken(String token, String refreshToken, HttpServletResponse response) {
-        Map<String, Object> claims = null;
+    private boolean parseToken(AbstractJwtUtil jwtUtil, String token, String refreshToken, HttpServletResponse response) {
+        Map<String, Object> claims;
         try {
-            claims = JwtCommonUtil.parseJwt(token);
+            claims = jwtUtil.parseJwt(token);
         } catch (ExpiredJwtException e) {
             // token过期，使用refresh_token校验
-            return parseRefreshToken(refreshToken, response, true);
+            return parseRefreshToken(jwtUtil, refreshToken, response, true);
         } catch (Exception e) {
             log.error("【后台token解密失败】，token为" + token);
             throw new CommonException(ResultEnum.TOKEN_ANALYSIS_ERROR);
         }
-        return validToken(claims, token, refreshToken, response);
+        return validToken(jwtUtil, claims, token, refreshToken, response);
     }
 
-    private boolean parseRefreshToken(String refreshToken, HttpServletResponse response, boolean generateNewTokens) {
-        Map<String, Object> claims = null;
+    private boolean parseRefreshToken(AbstractJwtUtil jwtUtil, String refreshToken, HttpServletResponse response, boolean generateNewTokens) {
+        Map<String, Object> claims;
         try {
-            claims = JwtCommonUtil.parseJwt(refreshToken);
+            claims = jwtUtil.parseJwt(refreshToken);
         } catch (ExpiredJwtException e) {
             throw new CommonException(ResultEnum.LOGIN_FAILURE);
         } catch (Exception e) {
             log.error("【后台refresh_token解密失败】，refresh_token为" + refreshToken);
             throw new CommonException(ResultEnum.TOKEN_ANALYSIS_ERROR);
         }
-        return validRefreshToken(claims, refreshToken, response, generateNewTokens);
+        return validRefreshToken(jwtUtil, claims, refreshToken, response, generateNewTokens);
     }
 
-    private boolean validRefreshToken(Map<String, Object> claims, String refreshToken, HttpServletResponse response, boolean generateNewTokens) {
+    private boolean validRefreshToken(AbstractJwtUtil jwtUtil, Map<String, Object> claims, String refreshToken, HttpServletResponse response, boolean generateNewTokens) {
         String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
         String redisKey = AdminJwtConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
         String redisRefreshToken = redisOperator.get(redisKey);
@@ -117,7 +119,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         if (generateNewTokens) {
             BaseEntity baseEntity = new BaseEntity();
             baseEntity.setId(Long.valueOf(userId));
-            String[] tokens = JwtAdminUtil.generateAdminTokens(baseEntity);
+            String[] tokens = jwtUtil.generateToken(baseEntity);
             redisOperator.set(AdminJwtConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT), tokens[0], AdminJwtConstant.ADMIN_TOKEN_EXPIRE_SECOND);
             redisOperator.set(AdminJwtConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT), tokens[1], AdminJwtConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
             response.setHeader(AdminCommonConstant.ADMIN_TOKEN, tokens[0]);
@@ -127,7 +129,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private boolean validToken(Map<String, Object> claims, String token, String refreshToken, HttpServletResponse response) {
+    private boolean validToken(AbstractJwtUtil jwtUtil, Map<String, Object> claims, String token, String refreshToken, HttpServletResponse response) {
         String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
         String redisKey = AdminJwtConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
         String redisToken = redisOperator.get(redisKey);
@@ -136,6 +138,6 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         } else if (!token.equals(redisToken)) {
             throw new CommonException(ResultEnum.REMOTE_LOGIN);
         }
-        return parseRefreshToken(refreshToken, response, false);
+        return parseRefreshToken(jwtUtil, refreshToken, response, false);
     }
 }

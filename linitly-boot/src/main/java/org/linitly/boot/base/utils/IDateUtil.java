@@ -823,4 +823,8 @@ public class IDateUtil {
     public static LocalDateTime parseToLDT(String dateString, DateFormat dateFormat) {
         return LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern(dateFormat.getFormat()));
     }
+
+    public static Long getNowMilli() {
+        return LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+    }
 }

@@ -8,11 +8,6 @@ package org.linitly.boot.base.constant.admin;
 public interface AdminCommonConstant {
 
     /**
-     * 路径前缀
-     */
-    String URL_PREFIX = "/admin";
-
-    /**
      * redis存储后台key中缀
      */
     String REDIS_KEY_INFIX = "admin:";

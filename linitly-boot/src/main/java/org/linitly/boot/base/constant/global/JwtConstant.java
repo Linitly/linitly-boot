@@ -12,5 +12,7 @@ public interface JwtConstant {
      */
     String USER_TYPE_KEY = "user_type";
 
-    String JWT_SALT = "jwt_salt!!!!@@##/*-/*-656-*haskdjalk$&*(@!&$(@!JKLAJsad(*&*)(dsadDLKSJKLDSAKL:-=23891IOP";
+    String UUID_JWT_KEY = "uuid";
+
+    String DEFAULT_JWT_SALT = "jwt_salt!!!!@@##/*-/*-656-*haskdjalk$&*(@!&$(@!JKLAJsad(*&*)(dsadDLKSJKLDSAKL:-=23891IOP";
 }
