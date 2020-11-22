@@ -1,8 +1,12 @@
 package org.linitly.boot.base.utils.jwt;
 
+import org.apache.commons.lang3.StringUtils;
+import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.exception.CommonException;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author: linxiunan
@@ -16,5 +20,11 @@ public class JwtUtilFactory {
             return JwtAdminUtil.getInstance();
         }
         throw new CommonException(ResultEnum.FACTORY_GET_ERROR);
+    }
+
+    public static AbstractJwtUtil getJwtUtil(HttpServletRequest request) {
+        String header = request.getHeader(GlobalConstant.SYSTEM_CODE_KEY);
+        if (StringUtils.isBlank(header)) throw new CommonException(ResultEnum.FACTORY_GET_ERROR);
+        return getJwtUtil(Integer.valueOf(header));
     }
 }

@@ -2,7 +2,8 @@ package org.linitly.boot.base.config;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
-import org.linitly.boot.base.interceptor.AdminTokenInterceptor;
+import org.linitly.boot.base.enums.SystemEnum;
+import org.linitly.boot.base.interceptor.web.AdminTokenInterceptor;
 import org.linitly.boot.base.utils.xss.XssDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(adminTokenInterceptor).addPathPatterns(AdminCommonConstant.URL_PREFIX + "/**");
+		registry.addInterceptor(adminTokenInterceptor).addPathPatterns(SystemEnum.ADMIN.getUrlPrefix() + "/**");
 	}
 
 	@Bean

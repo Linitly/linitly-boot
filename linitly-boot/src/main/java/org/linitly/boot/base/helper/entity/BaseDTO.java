@@ -2,6 +2,7 @@ package org.linitly.boot.base.helper.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
 import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.helper.groups.DeleteValidGroup;
@@ -16,6 +17,7 @@ import java.io.Serializable;
  * @descrption: 基础DTO，查询对象
  */
 @Data
+@Accessors(chain = true)
 public class BaseDTO implements Serializable {
 
     @ApiModelProperty(value = "id")

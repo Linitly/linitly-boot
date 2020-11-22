@@ -7,7 +7,7 @@ package org.linitly.boot.base.enums;
  */
 public enum SystemEnum {
 
-    ADMIN(1, "/admin"),
+    ADMIN(101, "/admin"),
     ;
 
     private Integer systemCode;

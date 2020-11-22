@@ -1,4 +1,4 @@
-package org.linitly.boot.base.interceptor;
+package org.linitly.boot.base.interceptor.web;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +56,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
             if (AntPathMatcher.getInstance().matches(unCheckUri, uri))
                 return true;
         }
-        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(SystemEnum.ADMIN.getSystemCode());
+        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
         String token = jwtUtil.getToken(request);
         String refreshToken = jwtUtil.getRefreshToken(request);
         if (StringUtils.isBlank(token) || StringUtils.isBlank(refreshToken)) {

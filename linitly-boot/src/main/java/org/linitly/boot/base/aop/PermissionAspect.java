@@ -55,7 +55,7 @@ public class PermissionAspect {
 			Object target = joinPoint.getTarget();
 			MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
-            AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(SystemEnum.ADMIN.getSystemCode());
+            AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
 			String token = jwtUtil.getRefreshToken(request);
 			Set<String> rolesOrPermissions = targetClass == RequireRole.class ?
 					redisOperator.setMembers(AdminJwtConstant.ADMIN_ROLES_PREFIX + token) :

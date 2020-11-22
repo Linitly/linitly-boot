@@ -45,6 +45,7 @@ public class ValidAspect {
     private void aspectAround(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         Arrays.asList(args).forEach(e -> {
+            if (e == null) return;
             if (e instanceof BindingResult) validResult((BindingResult) e);
             if (e.getClass().isAnnotationPresent(PathVariable.class)) validPath(e);
         });

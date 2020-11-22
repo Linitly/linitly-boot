@@ -47,4 +47,9 @@ public interface GlobalConstant {
 	 * redis存储key前缀
 	 */
 	String REDIS_KEY_PREFIX = "linitly:boot:";
+
+	/**
+	 * request存储system_code请求头的key
+	 */
+	String SYSTEM_CODE_KEY = "system_code";
 }

@@ -72,6 +72,7 @@ public class JwtAdminUtil extends AbstractJwtUtil {
         response.setHeader(AdminCommonConstant.ADMIN_REFRESH_TOKEN, tokens[1]);
     }
 
+    @Override
     public String getUserId(HttpServletRequest request) {
         String refreshToken = getRefreshToken(request);
         if (StringUtils.isBlank(refreshToken)) {

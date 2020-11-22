@@ -2,6 +2,7 @@ package org.linitly.boot.base.helper.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @date 2018年10月18日
  */
 @Data
+@Accessors(chain = true)
 public class BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "id")

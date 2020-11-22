@@ -38,9 +38,10 @@
     </select>
 
     <insert id="insert" parameterType="sysQuartzJob">
-        INSERT INTO sys_quartz_job (job_name, job_class_name, cron_expression, description, status)
+        INSERT INTO sys_quartz_job (job_name, job_class_name, cron_expression, description, status, created_user_id)
         VALUES (#{jobName,jdbcType=VARCHAR}, #{jobClassName,jdbcType=VARCHAR},
-                #{cronExpression,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
+                #{cronExpression,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{status,jdbcType=BIT},
+                #{createdUserId})
     </insert>
 
     <update id="updateStatusById">
@@ -62,7 +63,8 @@
           job_class_name = #{jobClassName,jdbcType=VARCHAR},
           cron_expression = #{cronExpression,jdbcType=VARCHAR},
           description = #{description,jdbcType=VARCHAR},
-          status = #{status,jdbcType=INTEGER}
+          status = #{status,jdbcType=INTEGER},
+          last_modified_user_id = #{lastModifiedUserId}
         WHERE id = #{id,jdbcType=BIGINT}
     </update>
 </mapper>

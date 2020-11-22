@@ -27,4 +27,6 @@ interface JwtUtil {
     String getRefreshToken(HttpServletRequest request);
 
     void setToken(HttpServletResponse response, BaseEntity baseEntity);
+
+    String getUserId(HttpServletRequest request);
 }

@@ -55,6 +55,9 @@ public class SysQuartzJobService {
      */
     public ResponseResult updateJob(SysQuartzJobInsertAndUpdateDTO dto) {
         SysQuartzJob job = jobMapper.findById(dto.getId());
+        if (job == null) {
+            throw new CommonException(GlobalConstant.GENERAL_ERROR, "未找到对应任务");
+        }
         if (!job.getJobClassName().equals(dto.getJobClassName())) {
             quartzUtil.removeJob(job.getJobClassName());
         } else {

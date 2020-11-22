@@ -1,6 +1,7 @@
 package org.linitly.boot.base.helper.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author: linxiunan
@@ -8,7 +9,7 @@ import lombok.Data;
  * @descrption: 基础VO，返回对象
  */
 @Data
+@Accessors(chain = true)
 public class BaseVO extends BaseEntity {
-
 
 }
