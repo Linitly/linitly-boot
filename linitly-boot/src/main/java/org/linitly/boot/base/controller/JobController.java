@@ -51,15 +51,15 @@ public class JobController {
         return jobService.findQuartzJobs(dto);
     }
 
-    @PostMapping("/pause_or_resume/{encryptId}")
+    @PostMapping("/pause_or_resume/{id}")
     @ApiOperation(value = "启动或暂停一个任务")
-    public void pauseOrResume(@PathVariable String encryptId) {
-        jobService.pauseOrResumeJob(encryptId);
+    public void pauseOrResume(@PathVariable Long id) {
+        jobService.pauseOrResumeJob(id);
     }
 
-    @PostMapping("/delete/{encryptId}")
+    @PostMapping("/delete/{id}")
     @ApiOperation(value = "删除任务")
-    public void delete(@PathVariable String encryptId) {
-        jobService.deleteById(encryptId);
+    public void delete(@PathVariable Long id) {
+        jobService.deleteById(id);
     }
 }

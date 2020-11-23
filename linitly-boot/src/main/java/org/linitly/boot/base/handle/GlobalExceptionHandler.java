@@ -77,12 +77,6 @@ public class GlobalExceptionHandler {
         return new ResponseResult(ResultEnum.DUPLICATE_KEY_ERROR);
     }
 
-    @ExceptionHandler({AESDecryptKeyException.class})
-    public ResponseResult aesDecryptErrorKeyHandle(AESDecryptKeyException e) {
-        e.printStackTrace();
-        return new ResponseResult(ResultEnum.AES_DECRYPT_KEY_ERROR);
-    }
-
     @ExceptionHandler({QuartzException.class})
     public ResponseResult quartzExceptionHandle(QuartzException e) {
         e.printStackTrace();

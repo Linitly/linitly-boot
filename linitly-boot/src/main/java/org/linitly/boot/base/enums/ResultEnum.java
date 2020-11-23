@@ -20,10 +20,6 @@ public enum ResultEnum {
 	PARAM_EMPTY_ERROR(420, "所需参数未传入"),
 	PATH_PARAM_ERROR(421, "所需路径参数传入错误"),
 
-	ENCRYPT_ERROR(421, "加密失败"),
-	DECRYPT_ERROR(422, "解密失败"),
-	AES_DECRYPT_KEY_ERROR(423, "解密失败，请检查传入的加密Key"),
-
 	EXCEL_UPLOAD_FORMAT_ERROR(431, "上传文件仅限.xls、.xlsx格式，请重新上传"),
 	EXCEL_SHEET_ANALYSE_ERROR(432, "excel文件页解析错误，请确认"),
 	EXCEL_ROW_NUMBER_ERROR(433, "excel文件有效行不足，请确认"),

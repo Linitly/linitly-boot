@@ -1,8 +1,3 @@
-/**
- * @author: linxiunan
- * @date: 2020/4/29 10:33
- * @descrption:
- */
 package org.linitly.boot.base.exception;
 
 import org.linitly.boot.base.enums.ResultEnum;

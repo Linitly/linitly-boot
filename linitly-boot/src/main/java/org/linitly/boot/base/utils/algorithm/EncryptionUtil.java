@@ -1,16 +1,13 @@
-package org.linitly.boot.base.utils.encrypt;
+package org.linitly.boot.base.utils.algorithm;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.MessageDigest;
 
 /**
- * Description: 加密工具类
- *
- * @author: wubaoguo
- * @email: wustrive2008@gmail.com
- * @date: 2018/9/20 14:28
- * @Copyright: 2017-2018 dgztc Inc. All rights reserved.
+ * @author linxiunan
+ * @date 10:08 2020/11/23
+ * @description 加密工具类
  */
 public class EncryptionUtil {
 
@@ -68,15 +65,39 @@ public class EncryptionUtil {
 
     /**
      * 字节数组转16进制字符串
-     *
-     * @param data
-     * @return
      */
     public static String byteToHex(byte[] data) {
         final StringBuilder builder = new StringBuilder();
-        for(byte b : data) {
+        for (byte b : data) {
             builder.append(String.format("%02x", b));
         }
         return builder.toString();
+    }
+
+    /**
+     * hex字符串转字节数组
+     */
+    public static byte[] hexToByteArray(String data) {
+        int hexlen = data.length();
+        byte[] result;
+        if (hexlen % 2 == 1) {
+            //奇数
+            hexlen++;
+            result = new byte[(hexlen / 2)];
+            data = "0" + data;
+        } else {
+            //偶数
+            result = new byte[(hexlen / 2)];
+        }
+        int j = 0;
+        for (int i = 0; i < hexlen; i += 2) {
+            result[j] = hexToByte(data.substring(i, i + 2));
+            j++;
+        }
+        return result;
+    }
+
+    public static byte hexToByte(String data) {
+        return (byte) Integer.parseInt(data, 16);
     }
 }

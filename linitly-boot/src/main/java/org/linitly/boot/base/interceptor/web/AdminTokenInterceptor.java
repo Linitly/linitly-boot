@@ -12,7 +12,7 @@ import org.linitly.boot.base.constant.admin.AdminJwtConstant;
 import org.linitly.boot.base.constant.entity.AdminUserConstant;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.helper.entity.BaseEntity;
-import org.linitly.boot.base.utils.encrypt.EncryptionUtil;
+import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.utils.permission.AntPathMatcher;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,8 +9,6 @@ import org.linitly.boot.base.dto.sys_quatrtz_job.SysQuartzJobSearchDTO;
 import org.linitly.boot.base.utils.QuartzUtil;
 import org.linitly.boot.base.utils.log.ClassUtil;
 import org.linitly.boot.base.entity.SysQuartzJob;
-import org.linitly.boot.base.helper.entity.ResponseResult;
-import org.linitly.boot.base.utils.encrypt.AESUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,10 +38,9 @@ public class SysQuartzJobService {
      * @description 首先根据任务名称查询是否存在任务，如果存在返回错误信息，若不存在将dto中信息复制到任务信息中，初始化任务状态为停止，
      * 保存任务信息，但是不立即启动(添加时任务不立刻启动原则)
      */
-    public ResponseResult insertJob(SysQuartzJobInsertAndUpdateDTO dto) {
+    public void insertJob(SysQuartzJobInsertAndUpdateDTO dto) {
         SysQuartzJob job = insertOrUpdateJob(dto);
         jobMapper.insert(job);
-        return new ResponseResult();
     }
 
     /**
@@ -53,7 +50,7 @@ public class SysQuartzJobService {
      * 根据任务名称查询是否存在任务，如果存在返回错误信息，若不存在将dto中信息复制到任务信息中，同时设置定时任务状态为停止，
      * 修改定时任务信息(修改时任务不立刻启动原则)
      */
-    public ResponseResult updateJob(SysQuartzJobInsertAndUpdateDTO dto) {
+    public void updateJob(SysQuartzJobInsertAndUpdateDTO dto) {
         SysQuartzJob job = jobMapper.findById(dto.getId());
         if (job == null) {
             throw new CommonException(GlobalConstant.GENERAL_ERROR, "未找到对应任务");
@@ -67,7 +64,6 @@ public class SysQuartzJobService {
         }
         job = insertOrUpdateJob(dto);
         jobMapper.updateById(job);
-        return new ResponseResult();
     }
 
     /**
@@ -75,8 +71,7 @@ public class SysQuartzJobService {
      * @date 15:15 2020/5/27
      * @description 删除任务：首先解密id，通过解密后的id查询对应的job信息，如果job信息不为空，删除quartz中的job，再删除对应的job信息
      */
-    public void deleteById(String encryptId) {
-        Long id = AESUtil.getAdminId(encryptId);
+    public void deleteById(Long id) {
         SysQuartzJob job = jobMapper.findById(id);
         if (job != null) {
             quartzUtil.removeJob(job.getJobClassName());
@@ -99,8 +94,7 @@ public class SysQuartzJobService {
      * @date 15:29 2020/5/27
      * @description
      */
-    public void pauseOrResumeJob(String encryptId) {
-        Long id = AESUtil.getAdminId(encryptId);
+    public void pauseOrResumeJob(Long id) {
         SysQuartzJob job = jobMapper.findById(id);
         if (job == null) return;
         if (job.getStatus().equals(JobStatusEnum.RUNNING.getStatus())) {
