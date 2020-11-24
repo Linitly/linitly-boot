@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.linitly.boot.base.dao.SysAdminUserMapper">
+    <resultMap extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap" id="BaseResultMap" type="org.linitly.boot.base.entity.SysAdminUser">
+        <result column="mobile_number" jdbcType="VARCHAR" property="mobileNumber" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="sex" jdbcType="BIT" property="sex" />
+        <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
+        <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, mobile_number, password, nick_name, real_name, email, sex, head_img_url, sys_dept_id, 
+        enabled, created_user_id, created_time, last_modified_user_id, last_modified_time
+    </sql>
+
+    <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM sys_admin_user
+        WHERE id = #{id, jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM sys_admin_user
+        WHERE id = #{id, jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="org.linitly.boot.base.entity.SysAdminUser">
+        INSERT INTO sys_admin_user (id, mobile_number, password, 
+            nick_name, real_name, email, 
+            sex, head_img_url, sys_dept_id, 
+            created_user_id, last_modified_user_id)
+        VALUES (#{id, jdbcType=BIGINT}, #{mobileNumber, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, 
+            #{nickName, jdbcType=VARCHAR}, #{realName, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, 
+            #{sex, jdbcType=BIT}, #{headImgUrl, jdbcType=VARCHAR}, #{sysDeptId, jdbcType=BIGINT}, 
+            #{createdUserId, jdbcType=BIGINT}, #{lastModifiedUserId, jdbcType=BIGINT})
+    </insert>
+
+    <update id="updateById" parameterType="org.linitly.boot.base.entity.SysAdminUser">
+        UPDATE sys_admin_user
+        SET mobile_number = #{mobileNumber, jdbcType=VARCHAR},
+            password = #{password, jdbcType=VARCHAR},
+            nick_name = #{nickName, jdbcType=VARCHAR},
+            real_name = #{realName, jdbcType=VARCHAR},
+            email = #{email, jdbcType=VARCHAR},
+            sex = #{sex, jdbcType=BIT},
+            head_img_url = #{headImgUrl, jdbcType=VARCHAR},
+            sys_dept_id = #{sysDeptId, jdbcType=BIGINT},
+            last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT}
+        WHERE id = #{id, jdbcType=BIGINT}
+    </update>
+
+    <select id="findAll" parameterType="org.linitly.boot.base.entity.SysAdminUser" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM sys_admin_user
+        <where>
+            <if test="mobileNumber != null and mobileNumber != ''">
+                mobile_number LIKE CONCAT('%' #{mobileNumber, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="password != null and password != ''">
+                AND password LIKE CONCAT('%' #{password, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                AND nick_name LIKE CONCAT('%' #{nickName, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="realName != null and realName != ''">
+                AND real_name LIKE CONCAT('%' #{realName, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                AND email LIKE CONCAT('%' #{email, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="sex != null">
+                AND sex = #{sex, jdbcType=BIT}
+            </if>
+            <if test="headImgUrl != null and headImgUrl != ''">
+                AND head_img_url LIKE CONCAT('%' #{headImgUrl, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="sysDeptId != null">
+                AND sys_dept_id = #{sysDeptId, jdbcType=BIGINT}
+            </if>
+            <if test="enabled != null">
+                AND enabled = #{enabled, jdbcType=INTEGER}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime, jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertSelective" parameterType="org.linitly.boot.base.entity.SysAdminUser">
+        INSERT INTO sys_admin_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="mobileNumber != null">
+                mobile_number,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="realName != null">
+                real_name,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="headImgUrl != null">
+                head_img_url,
+            </if>
+            <if test="sysDeptId != null">
+                sys_dept_id,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+            <if test="createdUserId != null">
+                created_user_id,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="lastModifiedUserId != null">
+                last_modified_user_id,
+            </if>
+            <if test="lastModifiedTime != null">
+                last_modified_time,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=BIGINT},
+            </if>
+            <if test="mobileNumber != null">
+                #{mobileNumber, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                #{nickName, jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                #{realName, jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email, jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex, jdbcType=BIT},
+            </if>
+            <if test="headImgUrl != null">
+                #{headImgUrl, jdbcType=VARCHAR},
+            </if>
+            <if test="sysDeptId != null">
+                #{sysDeptId, jdbcType=BIGINT},
+            </if>
+            <if test="enabled != null">
+                #{enabled, jdbcType=INTEGER},
+            </if>
+            <if test="createdUserId != null">
+                #{createdUserId, jdbcType=BIGINT},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifiedUserId != null">
+                #{lastModifiedUserId, jdbcType=BIGINT},
+            </if>
+            <if test="lastModifiedTime != null">
+                #{lastModifiedTime, jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysAdminUser">
+        UPDATE sys_admin_user
+        <set>
+            <if test="mobileNumber != null">
+                mobile_number = #{mobileNumber, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName, jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName, jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email, jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex, jdbcType=BIT},
+            </if>
+            <if test="headImgUrl != null">
+                head_img_url = #{headImgUrl, jdbcType=VARCHAR},
+            </if>
+            <if test="sysDeptId != null">
+                sys_dept_id = #{sysDeptId, jdbcType=BIGINT},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled, jdbcType=INTEGER},
+            </if>
+            <if test="createdUserId != null">
+                created_user_id = #{createdUserId, jdbcType=BIGINT},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifiedUserId != null">
+                last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT},
+            </if>
+            <if test="lastModifiedTime != null">
+                last_modified_time = #{lastModifiedTime, jdbcType=TIMESTAMP},
+            </if>
+        </set>
+
+        where id = #{id, jdbcType=BIGINT}
+    </update>
+
+</mapper>
