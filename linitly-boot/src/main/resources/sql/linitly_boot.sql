@@ -192,11 +192,31 @@ CREATE TABLE `sys_dept` (
   `level`                       VARCHAR(255)      NOT NULL  DEFAULT ''        COMMENT '部门层级',
   `sort`                        int(11)           NOT NULL  DEFAULT 0         COMMENT '当前层级的排序',
   `enabled`                     int(1)            DEFAULT 1                   COMMENT '启用状态: 1 启用(默认),0 禁用',
-  `created_user_id`             bigint            DEFAULT NULL                COMMENT '创建人id',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
   `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
-  `last_modified_user_id`       bigint            DEFAULT NULL                COMMENT '最后修改人id',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
   `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   PRIMARY KEY (id)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统部门' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_admin_user`;
+CREATE TABLE `sys_admin_user` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `mobile_number`               VARCHAR(13)       NOT NULL  DEFAULT ''        COMMENT '手机号',
+  `password`                    VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '加密密码',
+  `nick_name`                   VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '昵称',
+  `real_name`                   VARCHAR(16)       NOT NULL  DEFAULT ''        COMMENT '真实姓名',
+  `email`                       VARCHAR(255)      NOT NULL  DEFAULT ''        COMMENT '邮箱',
+  `sex`                         tinyint(1)        NOT NULL  DEFAULT 0         COMMENT '性别(1:男;2:女;)',
+  `head_img_url`                VARCHAR(255)      NOT NULL  DEFAULT ''        COMMENT '用户头像url地址',
+  `sys_dept_id`                 bigint            NOT NULL  DEFAULT 0         COMMENT '用户所在部门的id',
+  `enabled`                     int(1)            DEFAULT 1                   COMMENT '启用状态: 1 启用(默认),0 禁用',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY un_mobile_number (`mobile_number`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS=1;
