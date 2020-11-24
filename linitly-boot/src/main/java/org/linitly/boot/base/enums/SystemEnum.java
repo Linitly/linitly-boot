@@ -7,23 +7,16 @@ package org.linitly.boot.base.enums;
  */
 public enum SystemEnum {
 
-    ADMIN(101, "/admin"),
+    ADMIN(101),
     ;
 
     private Integer systemCode;
 
-    private String urlPrefix;
-
-    SystemEnum(Integer systemCode, String urlPrefix) {
+    SystemEnum(Integer systemCode) {
         this.systemCode = systemCode;
-        this.urlPrefix = urlPrefix;
     }
 
     public Integer getSystemCode() {
         return systemCode;
-    }
-
-    public String getUrlPrefix() {
-        return urlPrefix;
     }
 }

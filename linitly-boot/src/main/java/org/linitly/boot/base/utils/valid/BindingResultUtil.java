@@ -13,7 +13,7 @@ import org.springframework.validation.FieldError;
 public class BindingResultUtil {
 
 	public static String getBindingResultErrMsg(BindingResult bindingResult) {
-		StringBuffer errorMsg = new StringBuffer("");
+		StringBuffer errorMsg = new StringBuffer();
 		bindingResult.getAllErrors().forEach(e -> {
 			if(e instanceof FieldError){
 				FieldError fe = (FieldError)e;
@@ -24,7 +24,7 @@ public class BindingResultUtil {
 			}
 			errorMsg.append(e.getDefaultMessage()).append(";");
 		});
-		return errorMsg.toString();
+		return errorMsg.toString().substring(0, errorMsg.length() - 1);
 	}
 
 	/**

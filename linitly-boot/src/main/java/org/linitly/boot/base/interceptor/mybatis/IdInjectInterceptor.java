@@ -74,13 +74,8 @@ public class IdInjectInterceptor implements Interceptor {
     private void dealInsertSql(Object parameter, AbstractJwtUtil jwtUtil) throws Throwable {
         Field[] fields = ClassUtil.getAllFields(parameter, true);
         for (Field field : fields) {
-            if ("createdUserId".equals(field.getName())) {
-                field.setAccessible(true);
-                Object localCreateUserId = field.get(parameter);
-                if (localCreateUserId == null) {
-                    setId(jwtUtil.getUserId(request), parameter, field);
-                }
-                field.setAccessible(false);
+            if ("createdUserId".equals(field.getName()) || "lastModifiedUserId".equals(field.getName())) {
+                dealField(field, parameter, jwtUtil);
             }
         }
     }
@@ -88,14 +83,18 @@ public class IdInjectInterceptor implements Interceptor {
     private void dealUpdateSql(Field[] fields, Object parameter, AbstractJwtUtil jwtUtil) throws Throwable {
         for (Field field : fields) {
             if ("lastModifiedUserId".equals(field.getName())) {
-                field.setAccessible(true);
-                Object localLastModifiedUserId = field.get(parameter);
-                if (localLastModifiedUserId == null) {
-                    setId(jwtUtil.getUserId(request), parameter, field);
-                }
-                field.setAccessible(false);
+                dealField(field, parameter, jwtUtil);
             }
         }
+    }
+
+    private void dealField(Field field, Object parameter, AbstractJwtUtil jwtUtil) throws Throwable {
+        field.setAccessible(true);
+        Object localCreateUserId = field.get(parameter);
+        if (localCreateUserId == null) {
+            setId(jwtUtil.getUserId(request), parameter, field);
+        }
+        field.setAccessible(false);
     }
 
     private void setId(String idString, Object parameter, Field field) throws Throwable {

@@ -7,6 +7,7 @@ import org.linitly.boot.base.exception.*;
 import org.linitly.boot.base.helper.entity.ResponseResult;
 import org.linitly.boot.base.utils.valid.BindingResultUtil;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -81,6 +82,12 @@ public class GlobalExceptionHandler {
     public ResponseResult quartzExceptionHandle(QuartzException e) {
         e.printStackTrace();
         return new ResponseResult(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler({RedisConnectionFailureException.class})
+    public ResponseResult redisConnectionFailureException(RedisConnectionFailureException e) {
+        e.printStackTrace();
+        return new ResponseResult(GlobalConstant.GENERAL_ERROR, "redis连接失败");
     }
 
     @ExceptionHandler(Exception.class)

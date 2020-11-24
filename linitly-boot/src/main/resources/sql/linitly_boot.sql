@@ -169,7 +169,7 @@ CREATE TABLE `qrtz_triggers` (
 
 DROP TABLE IF EXISTS `sys_quartz_job`;
 CREATE TABLE `sys_quartz_job` (
-  `id`                          bigint            NOT NULL                    COMMENT '主键',
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
   `job_name`                    varchar(20)       NOT NULL                    COMMENT '任务名称',
   `job_class_name`              varchar(100)      NOT NULL                    COMMENT '执行类',
   `cron_expression`             varchar(100)      NOT NULL                    COMMENT 'cron表达式',
@@ -184,16 +184,19 @@ CREATE TABLE `sys_quartz_job` (
   UNIQUE KEY un_group_name (job_name)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务信息表' ROW_FORMAT = Dynamic;
 
-DROP TABLE IF EXISTS `test_mybatis`;
-CREATE TABLE `test_mybatis` (
-  `id`                          bigint            NOT NULL                    COMMENT '主键',
-  `test`                        VARCHAR(100)      DEFAULT NULL                COMMENT '测试',
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `name`                        VARCHAR(20)       NOT NULL  DEFAULT ''        COMMENT '部门名称',
+  `parent_id`                   bigint            NOT NULL  DEFAULT 0         COMMENT '上级部门id',
+  `level`                       VARCHAR(255)      NOT NULL  DEFAULT ''        COMMENT '部门层级',
+  `sort`                        int(11)           NOT NULL  DEFAULT 0         COMMENT '当前层级的排序',
   `enabled`                     int(1)            DEFAULT 1                   COMMENT '启用状态: 1 启用(默认),0 禁用',
-  `create_user_id`              bigint            DEFAULT NULL                COMMENT '创建人id',
+  `created_user_id`             bigint            DEFAULT NULL                COMMENT '创建人id',
   `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
   `last_modified_user_id`       bigint            DEFAULT NULL                COMMENT '最后修改人id',
   `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   PRIMARY KEY (id)
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统部门' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS=1;

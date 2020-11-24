@@ -25,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(adminTokenInterceptor).addPathPatterns(SystemEnum.ADMIN.getUrlPrefix() + "/**");
+		registry.addInterceptor(adminTokenInterceptor).addPathPatterns(AdminCommonConstant.URL_PREFIX + "/**");
 	}
 
 	@Bean
