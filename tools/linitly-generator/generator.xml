@@ -7,7 +7,7 @@
 <generatorConfiguration>
 
     <!-- 数据库驱动:选择你的本地硬盘上面的数据库驱动包-->
-    <classPathEntry location="E:\idea-project\linitly-boot\tools\linitly-generator\mysql-connector-java-3.1.13-bin.jar"/>
+    <classPathEntry location="D:\Linitly\git_project\linitly-boot\tools\linitly-generator\mysql-connector-java-3.1.13-bin.jar"/>
 
     <context id="mysql" targetRuntime="MyBatis3">
 
@@ -31,28 +31,28 @@
         </javaTypeResolver>
 
         <!-- 生成模型的包名和位置-->
-        <javaModelGenerator targetPackage="org.linitly.boot.business.entity" targetProject="src">
+        <javaModelGenerator targetPackage="org.linitly.boot.base.entity" targetProject="src">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="true"/>
         </javaModelGenerator>
 		
 		<!-- 生成dto的包名和位置 -->
-		<javaModelDtoGenerator targetPackage="org.linitly.boot.business.dto" targetProject="src"/>
+		<javaModelDtoGenerator targetPackage="org.linitly.boot.base.dto" targetProject="src"/>
 		
 		<!-- 生成vo的包名和位置 -->
-		<javaModelVoGenerator targetPackage="org.linitly.boot.business.vo" targetProject="src"/>
+		<javaModelVoGenerator targetPackage="org.linitly.boot.base.vo" targetProject="src"/>
 
         <!-- 生成controller的包名和位置 -->
-        <javaControllerGenerator targetPackage="org.linitly.boot.business.controller" targetProject="src"/>
+        <javaControllerGenerator targetPackage="org.linitly.boot.base.controller" targetProject="src"/>
 
         <!-- 生成service的包名和位置 -->
-        <javaServiceGenerator targetPackage="org.linitly.boot.business.service" targetProject="src"/>
+        <javaServiceGenerator targetPackage="org.linitly.boot.base.service" targetProject="src"/>
 		
 		<!-- 生成constant的包名和位置 -->
-		<javaConstantGenerator targetPackage="org.linitly.boot.business.constant" targetProject="src"/>
+		<javaConstantGenerator targetPackage="org.linitly.boot.base.constant" targetProject="src"/>
 
         <!-- 生成DAO的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="org.linitly.boot.business.dao" targetProject="src">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="org.linitly.boot.base.dao" targetProject="src">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
@@ -62,10 +62,12 @@
         </sqlMapGenerator>
 
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
+		<!-- 
         <table tableName="test_mybatis" domainObjectName="TestMybatis">
             <columnOverride column="test_blob" jdbcType="BLOB"/>
         </table>
-        <table tableName="sys_quartz_job" domainObjectName="SysQuartzJob"/>
+		 -->
+        <table tableName="sys_dept" domainObjectName="SysDept"/>
 
     </context>
 
