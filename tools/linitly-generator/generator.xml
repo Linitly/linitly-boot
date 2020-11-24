@@ -18,6 +18,7 @@
             <property name="addRemarkComments" value="true"/>
             <!-- 是否生成注释代时间戳 -->
             <property name="suppressDate" value="false"/>
+			<property name="javaFileEncoding" value="UTF-8"/>
         </commentGenerator>
 
         <!--数据库链接URL，用户名、密码 -->
