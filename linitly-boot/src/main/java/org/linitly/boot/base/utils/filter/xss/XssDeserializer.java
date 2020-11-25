@@ -1,4 +1,4 @@
-package org.linitly.boot.base.utils.xss;
+package org.linitly.boot.base.utils.filter.xss;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

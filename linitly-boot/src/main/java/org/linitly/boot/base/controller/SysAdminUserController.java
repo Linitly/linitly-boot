@@ -8,6 +8,7 @@ import org.linitly.boot.base.annotation.Pagination;
 import org.linitly.boot.base.annotation.Result;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.dto.sys_admin_user.SysAdminUserDTO;
+import org.linitly.boot.base.dto.sys_admin_user.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: linitly-generator
- * @date: 2020-11-24 21:26
+ * @date: 2020-11-25 10:26
  * @description: 
  */
 @Result
@@ -52,9 +53,11 @@ public class SysAdminUserController {
     @Pagination
     @PostMapping("/findAll")
     @ApiOperation(value = "查询系统用户列表")
-    public List<SysAdminUser> findAll(@RequestParam(defaultValue = AdminCommonConstant.PAGE_NUMBER) int pageNumber, @RequestParam(defaultValue = AdminCommonConstant.PAGE_SIZE) int pageSize, @RequestBody(required = false) SysAdminUser sysAdminUser) {
+    public List<SysAdminUser> findAll(@RequestParam(defaultValue = AdminCommonConstant.PAGE_NUMBER) int pageNumber,
+                                      @RequestParam(defaultValue = AdminCommonConstant.PAGE_SIZE) int pageSize,
+                                      @RequestBody(required = false) SysAdminUserSearchDTO dto) {
         PageHelper.startPage(pageNumber, pageSize, "id desc");
-        return sysAdminUserService.findAll(sysAdminUser);
+        return sysAdminUserService.findAll(dto);
     }
 
     @PostMapping("/deleteById/{id}")

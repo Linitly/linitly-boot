@@ -3,11 +3,6 @@ package org.linitly.boot.base.constant.global;
 
 public interface GlobalConstant {
 
-    /**
-     * 自定义线程池名字
-     */
-	String THREAD_POOL_NAME = "taskExecutor";
-
 	/**
 	 * 常规错误码
 	 */

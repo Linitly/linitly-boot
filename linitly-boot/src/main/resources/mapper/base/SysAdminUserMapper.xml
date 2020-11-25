@@ -3,20 +3,50 @@
 
 <mapper namespace="org.linitly.boot.base.dao.SysAdminUserMapper">
     <resultMap extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap" id="BaseResultMap" type="org.linitly.boot.base.entity.SysAdminUser">
+        <result column="username" jdbcType="VARCHAR" property="username" />
         <result column="mobile_number" jdbcType="VARCHAR" property="mobileNumber" />
+        <result column="salt" jdbcType="VARCHAR" property="salt" />
         <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
         <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
         <result column="real_name" jdbcType="VARCHAR" property="realName" />
         <result column="email" jdbcType="VARCHAR" property="email" />
-        <result column="sex" jdbcType="BIT" property="sex" />
+        <result column="sex" jdbcType="INTEGER" property="sex" />
         <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
         <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, mobile_number, password, nick_name, real_name, email, sex, head_img_url, sys_dept_id, 
-        enabled, created_user_id, created_time, last_modified_user_id, last_modified_time
+        id, username, mobile_number, salt, password, job_number, nick_name, real_name, email, 
+        sex, head_img_url, sys_dept_id, enabled, created_user_id, created_time, last_modified_user_id, 
+        last_modified_time
     </sql>
+
+    <select id="findByUsername" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_admin_user
+        WHERE username = #{username}
+    </select>
+
+    <select id="countByMobileOrUsernameOrJobNumber" resultType="int">
+        SELECT COUNT(id)
+        FROM sys_admin_user
+        <where>
+            <if test="mobileNumber != null and mobileNumber != ''">
+                mobile_number = #{mobileNumber}
+            </if>
+            <if test="username != null and username != ''">
+                username = #{username}
+            </if>
+            <if test="jobNumber != null and jobNumber != ''">
+                job_number = #{jobNumber}
+            </if>
+            <if test="id != null">
+                AND id != #{id}
+            </if>
+        </where>
+    </select>
 
     <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT 
@@ -31,55 +61,57 @@
     </delete>
 
     <insert id="insert" parameterType="org.linitly.boot.base.entity.SysAdminUser">
-        INSERT INTO sys_admin_user (id, mobile_number, password, 
+        INSERT INTO sys_admin_user (id, username, mobile_number, 
+            salt, password, job_number, 
             nick_name, real_name, email, 
             sex, head_img_url, sys_dept_id, 
             created_user_id, last_modified_user_id)
-        VALUES (#{id, jdbcType=BIGINT}, #{mobileNumber, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, 
+        VALUES (#{id, jdbcType=BIGINT}, #{username, jdbcType=VARCHAR}, #{mobileNumber, jdbcType=VARCHAR}, 
+            #{salt, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{jobNumber, jdbcType=VARCHAR}, 
             #{nickName, jdbcType=VARCHAR}, #{realName, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, 
-            #{sex, jdbcType=BIT}, #{headImgUrl, jdbcType=VARCHAR}, #{sysDeptId, jdbcType=BIGINT}, 
+            #{sex, jdbcType=INTEGER}, #{headImgUrl, jdbcType=VARCHAR}, #{sysDeptId, jdbcType=BIGINT}, 
             #{createdUserId, jdbcType=BIGINT}, #{lastModifiedUserId, jdbcType=BIGINT})
     </insert>
 
     <update id="updateById" parameterType="org.linitly.boot.base.entity.SysAdminUser">
         UPDATE sys_admin_user
-        SET mobile_number = #{mobileNumber, jdbcType=VARCHAR},
+        SET username = #{username, jdbcType=VARCHAR},
+            mobile_number = #{mobileNumber, jdbcType=VARCHAR},
+            salt = #{salt, jdbcType=VARCHAR},
             password = #{password, jdbcType=VARCHAR},
+            job_number = #{jobNumber, jdbcType=VARCHAR},
             nick_name = #{nickName, jdbcType=VARCHAR},
             real_name = #{realName, jdbcType=VARCHAR},
             email = #{email, jdbcType=VARCHAR},
-            sex = #{sex, jdbcType=BIT},
+            sex = #{sex, jdbcType=INTEGER},
             head_img_url = #{headImgUrl, jdbcType=VARCHAR},
             sys_dept_id = #{sysDeptId, jdbcType=BIGINT},
             last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT}
         WHERE id = #{id, jdbcType=BIGINT}
     </update>
 
-    <select id="findAll" parameterType="org.linitly.boot.base.entity.SysAdminUser" resultMap="BaseResultMap">
+    <select id="findAll" parameterType="sysAdminUserSearchDTO" resultMap="BaseResultMap">
         SELECT 
         <include refid="Base_Column_List" />
         FROM sys_admin_user
         <where>
-            <if test="mobileNumber != null and mobileNumber != ''">
-                mobile_number LIKE CONCAT('%' #{mobileNumber, jdbcType=VARCHAR}, '%')
+            <if test="username != null and username != ''">
+                username LIKE CONCAT('%' #{username, jdbcType=VARCHAR}, '%')
             </if>
-            <if test="password != null and password != ''">
-                AND password LIKE CONCAT('%' #{password, jdbcType=VARCHAR}, '%')
+            <if test="mobileNumber != null and mobileNumber != ''">
+                AND mobile_number LIKE CONCAT('%', #{mobileNumber, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="jobNumber != null and jobNumber != ''">
+                AND job_number LIKE CONCAT('%', #{jobNumber, jdbcType=VARCHAR}, '%')
             </if>
             <if test="nickName != null and nickName != ''">
-                AND nick_name LIKE CONCAT('%' #{nickName, jdbcType=VARCHAR}, '%')
+                AND nick_name LIKE CONCAT('%', #{nickName, jdbcType=VARCHAR}, '%')
             </if>
             <if test="realName != null and realName != ''">
-                AND real_name LIKE CONCAT('%' #{realName, jdbcType=VARCHAR}, '%')
-            </if>
-            <if test="email != null and email != ''">
-                AND email LIKE CONCAT('%' #{email, jdbcType=VARCHAR}, '%')
+                AND real_name LIKE CONCAT('%', #{realName, jdbcType=VARCHAR}, '%')
             </if>
             <if test="sex != null">
-                AND sex = #{sex, jdbcType=BIT}
-            </if>
-            <if test="headImgUrl != null and headImgUrl != ''">
-                AND head_img_url LIKE CONCAT('%' #{headImgUrl, jdbcType=VARCHAR}, '%')
+                AND sex = #{sex, jdbcType=INTEGER}
             </if>
             <if test="sysDeptId != null">
                 AND sys_dept_id = #{sysDeptId, jdbcType=BIGINT}
@@ -87,8 +119,11 @@
             <if test="enabled != null">
                 AND enabled = #{enabled, jdbcType=INTEGER}
             </if>
-            <if test="createdTime != null">
-                AND created_time = #{createdTime, jdbcType=TIMESTAMP}
+            <if test="startTime != null">
+                AND created_time &gt;= #{startTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime != null">
+                AND created_time &lt; #{endTime, jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
@@ -99,11 +134,20 @@
             <if test="id != null">
                 id,
             </if>
+            <if test="username != null">
+                username,
+            </if>
             <if test="mobileNumber != null">
                 mobile_number,
             </if>
+            <if test="salt != null">
+                salt,
+            </if>
             <if test="password != null">
                 password,
+            </if>
+            <if test="jobNumber != null">
+                job_number,
             </if>
             <if test="nickName != null">
                 nick_name,
@@ -144,11 +188,20 @@
             <if test="id != null">
                 #{id, jdbcType=BIGINT},
             </if>
+            <if test="username != null">
+                #{username, jdbcType=VARCHAR},
+            </if>
             <if test="mobileNumber != null">
                 #{mobileNumber, jdbcType=VARCHAR},
             </if>
+            <if test="salt != null">
+                #{salt, jdbcType=VARCHAR},
+            </if>
             <if test="password != null">
                 #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="jobNumber != null">
+                #{jobNumber, jdbcType=VARCHAR},
             </if>
             <if test="nickName != null">
                 #{nickName, jdbcType=VARCHAR},
@@ -160,7 +213,7 @@
                 #{email, jdbcType=VARCHAR},
             </if>
             <if test="sex != null">
-                #{sex, jdbcType=BIT},
+                #{sex, jdbcType=INTEGER},
             </if>
             <if test="headImgUrl != null">
                 #{headImgUrl, jdbcType=VARCHAR},
@@ -190,11 +243,20 @@
     <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysAdminUser">
         UPDATE sys_admin_user
         <set>
+            <if test="username != null">
+                username = #{username, jdbcType=VARCHAR},
+            </if>
             <if test="mobileNumber != null">
                 mobile_number = #{mobileNumber, jdbcType=VARCHAR},
             </if>
+            <if test="salt != null">
+                salt = #{salt, jdbcType=VARCHAR},
+            </if>
             <if test="password != null">
                 password = #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="jobNumber != null">
+                job_number = #{jobNumber, jdbcType=VARCHAR},
             </if>
             <if test="nickName != null">
                 nick_name = #{nickName, jdbcType=VARCHAR},
@@ -206,7 +268,7 @@
                 email = #{email, jdbcType=VARCHAR},
             </if>
             <if test="sex != null">
-                sex = #{sex, jdbcType=BIT},
+                sex = #{sex, jdbcType=INTEGER},
             </if>
             <if test="headImgUrl != null">
                 head_img_url = #{headImgUrl, jdbcType=VARCHAR},

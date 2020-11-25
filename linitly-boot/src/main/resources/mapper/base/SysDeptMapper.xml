@@ -51,7 +51,7 @@
         FROM sys_dept
         <where>
             <if test="name != null and name != ''">
-                name LIKE CONCAT('%' #{name, jdbcType=VARCHAR}, '%')
+                name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
             </if>
             <if test="parentId != null">
                 AND parent_id = #{parentId, jdbcType=BIGINT}
@@ -60,7 +60,7 @@
                 AND sort = #{sort, jdbcType=INTEGER}
             </if>
             <if test="remark != null and remark != ''">
-                AND remark LIKE CONCAT('%' #{remark, jdbcType=VARCHAR}, '%')
+                AND remark LIKE CONCAT('%', #{remark, jdbcType=VARCHAR}, '%')
             </if>
             <if test="enabled != null">
                 AND enabled = #{enabled, jdbcType=INTEGER}
@@ -72,13 +72,13 @@
     </select>
 
     <select id="countByParentId" parameterType="long" resultType="int">
-        SELECT COUNT(1)
+        SELECT COUNT(id)
         FROM sys_dept
         WHERE parent_id = #{parentId}
     </select>
 
     <select id="countByNameAndParentId" resultType="int">
-        SELECT COUNT(1)
+        SELECT COUNT(id)
         FROM sys_dept
         WHERE name = #{name} AND parent_id = #{parentId}
         <if test="id != null">

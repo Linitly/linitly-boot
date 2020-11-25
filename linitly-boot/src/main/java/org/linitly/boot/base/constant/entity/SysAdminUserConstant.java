@@ -2,10 +2,18 @@ package org.linitly.boot.base.constant.entity;
 
 /**
  * @author: linitly-generator
- * @date: 2020-11-24 21:26
+ * @date: 2020-11-25 10:26
  * @description: 
  */
 public interface SysAdminUserConstant {
+
+    String DEFAULT_PASSWORD = "123456";
+
+    String USERNAME_EMPTY_ERROR = "登录用户名不能为空";
+
+    int MAX_USERNAME_SIZE = 32;
+
+    String USERNAME_SIZE_ERROR = "登录用户名长度不符合限制";
 
     String MOBILE_NUMBER_EMPTY_ERROR = "手机号不能为空";
 
@@ -13,11 +21,13 @@ public interface SysAdminUserConstant {
 
     String MOBILE_NUMBER_SIZE_ERROR = "手机号长度不符合限制";
 
-    String PASSWORD_EMPTY_ERROR = "加密密码不能为空";
+    int MAX_SALT_SIZE = 32;
 
-    int MAX_PASSWORD_SIZE = 32;
+    String JOB_NUMBER_EMPTY_ERROR = "工号不能为空";
 
-    String PASSWORD_SIZE_ERROR = "加密密码长度不符合限制";
+    int MAX_JOB_NUMBER_SIZE = 32;
+
+    String JOB_NUMBER_SIZE_ERROR = "工号长度不符合限制";
 
     String NICK_NAME_EMPTY_ERROR = "昵称不能为空";
 
@@ -32,6 +42,8 @@ public interface SysAdminUserConstant {
     int MAX_EMAIL_SIZE = 255;
 
     String EMAIL_SIZE_ERROR = "邮箱长度不符合限制";
+
+    int MAX_SEX_RANGE = 2;
 
     String SEX_EMPTY_ERROR = "性别不能为空";
 

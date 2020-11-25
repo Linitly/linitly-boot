@@ -201,8 +201,11 @@ CREATE TABLE `sys_dept` (
 DROP TABLE IF EXISTS `sys_admin_user`;
 CREATE TABLE `sys_admin_user` (
   `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `username`                    VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '登录用户名',
   `mobile_number`               VARCHAR(13)       NOT NULL  DEFAULT ''        COMMENT '手机号',
+  `salt`                        VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '密码盐',
   `password`                    VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '加密密码',
+  `job_number`                  VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '工号',
   `nick_name`                   VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '昵称',
   `real_name`                   VARCHAR(16)                 DEFAULT ''        COMMENT '真实姓名',
   `email`                       VARCHAR(255)                DEFAULT ''        COMMENT '邮箱',
@@ -215,7 +218,33 @@ CREATE TABLE `sys_admin_user` (
   `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
   `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   PRIMARY KEY (id),
-  UNIQUE KEY un_mobile_number (`mobile_number`)
+  UNIQUE KEY un_mobile_number (`mobile_number`),
+  UNIQUE KEY un_username (`username`),
+  UNIQUE KEY un_job_number (`job_number`)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `name`                        VARCHAR(16)       NOT NULL  DEFAULT ''        COMMENT '角色名',
+  `code`                        VARCHAR(100)      NOT NULL  DEFAULT ''        COMMENT '角色代码',
+  `description`                 VARCHAR(255)                DEFAULT ''        COMMENT '角色描述',
+  `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY un_name (`name`),
+  UNIQUE KEY un_code (`code`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统角色' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_admin_user_role`;
+CREATE TABLE `sys_admin_user_role` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `admin_user_id`               bigint            NOT NULL  DEFAULT 0         COMMENT '用户id',
+  `role_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '角色id',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户-角色关联表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS=1;

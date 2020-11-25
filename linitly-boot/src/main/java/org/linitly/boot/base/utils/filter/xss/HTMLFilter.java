@@ -1,4 +1,4 @@
-package org.linitly.boot.base.utils.xss;
+package org.linitly.boot.base.utils.filter.xss;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

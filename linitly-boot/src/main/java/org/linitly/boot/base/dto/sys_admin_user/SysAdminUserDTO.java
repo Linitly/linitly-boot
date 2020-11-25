@@ -7,13 +7,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
 import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
+import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.helper.entity.BaseDTO;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
 
 /**
  * @author: linitly-generator
- * @date: 2020-11-24 21:26
+ * @date: 2020-11-25 10:26
  * @description: 
  */
 @Data
@@ -21,15 +22,21 @@ import org.linitly.boot.base.helper.groups.UpdateValidGroup;
 @ApiModel(value = "系统用户DTO")
 public class SysAdminUserDTO extends BaseDTO {
 
+    @ApiModelProperty(value = "登录用户名", required = true)
+    @NotBlank(message = SysAdminUserConstant.USERNAME_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    @Size(max = SysAdminUserConstant.MAX_USERNAME_SIZE, message = SysAdminUserConstant.USERNAME_SIZE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    private String username;
+
     @ApiModelProperty(value = "手机号", required = true)
     @NotBlank(message = SysAdminUserConstant.MOBILE_NUMBER_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
     @Size(max = SysAdminUserConstant.MAX_MOBILE_NUMBER_SIZE, message = SysAdminUserConstant.MOBILE_NUMBER_SIZE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    @Pattern(regexp = GlobalConstant.MOBILE_NUMBER_REG, message = GlobalConstant.MOBILE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
     private String mobileNumber;
 
-    @ApiModelProperty(value = "加密密码", required = true)
-    @NotBlank(message = SysAdminUserConstant.PASSWORD_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    @Size(max = SysAdminUserConstant.MAX_PASSWORD_SIZE, message = SysAdminUserConstant.PASSWORD_SIZE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    private String password;
+    @ApiModelProperty(value = "工号", required = true)
+    @NotBlank(message = SysAdminUserConstant.JOB_NUMBER_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    @Size(max = SysAdminUserConstant.MAX_JOB_NUMBER_SIZE, message = SysAdminUserConstant.JOB_NUMBER_SIZE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    private String jobNumber;
 
     @ApiModelProperty(value = "昵称", required = true)
     @NotBlank(message = SysAdminUserConstant.NICK_NAME_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
@@ -46,7 +53,7 @@ public class SysAdminUserDTO extends BaseDTO {
 
     @ApiModelProperty(value = "性别(1:男;2:女;)", required = true)
     @NotNull(message = SysAdminUserConstant.SEX_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    @Range(message = SysAdminUserConstant.SEX_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    @Range(max = SysAdminUserConstant.MAX_SEX_RANGE, message = SysAdminUserConstant.SEX_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
     private Integer sex;
 
     @ApiModelProperty(value = "用户头像url地址")

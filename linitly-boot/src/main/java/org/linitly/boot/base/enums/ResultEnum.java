@@ -35,7 +35,7 @@ public enum ResultEnum {
 	FILE_DOWNLOAD_ERROR(459, "文件下载失败"),
 
 
-	DUPLICATE_KEY_ERROR(461, "系统错误，请刷新重试"),
+	DUPLICATE_KEY_ERROR(461, "唯一键已存在，请检查或刷新重试"),
 
 	SEND_MSG_ERROR(471, "发送短信验证码失败，请稍后重试并检查手机号是否正确"),
 	BUSINESS_LIMIT_CONTROL(472, "发送短信过于频繁，请稍后重试并检查手机号是否正确"),

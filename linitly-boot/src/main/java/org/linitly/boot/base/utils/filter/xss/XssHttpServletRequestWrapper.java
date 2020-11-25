@@ -1,4 +1,4 @@
-package org.linitly.boot.base.utils.xss;
+package org.linitly.boot.base.utils.filter.xss;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +23,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public String getParameter(String name) {
-        String value = super.getParameter(xssEncode(name));
+        String value = super.getParameter(name);
         if (StringUtils.isNotBlank(value)) {
             value = xssEncode(value);
         }
@@ -55,12 +55,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             map.put(key, values);
         }
         return map;
-    }
-
-    @Override
-    public String getHeader(String name) {
-        String value = super.getHeader(xssEncode(name));
-        return StringUtils.isNotBlank(value) ? xssEncode(value) : value;
     }
 
     private String xssEncode(String input) {
