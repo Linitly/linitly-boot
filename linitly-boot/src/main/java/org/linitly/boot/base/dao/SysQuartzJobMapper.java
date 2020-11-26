@@ -1,7 +1,7 @@
 package org.linitly.boot.base.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.linitly.boot.base.dto.sys_quatrtz_job.SysQuartzJobSearchDTO;
+import org.linitly.boot.base.dto.SysQuartzJobSearchDTO;
 import org.linitly.boot.base.entity.SysQuartzJob;
 
 import java.util.List;

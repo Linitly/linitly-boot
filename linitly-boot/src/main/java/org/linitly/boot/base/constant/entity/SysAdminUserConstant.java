@@ -52,8 +52,4 @@ public interface SysAdminUserConstant {
     int MAX_HEAD_IMG_URL_SIZE = 255;
 
     String HEAD_IMG_URL_SIZE_ERROR = "用户头像url地址长度不符合限制";
-
-    String SYS_DEPT_ID_EMPTY_ERROR = "用户所在部门的id不能为空";
-
-    String SYS_DEPT_ID_RANGE_ERROR = "用户所在部门的id大小不符合限制";
 }

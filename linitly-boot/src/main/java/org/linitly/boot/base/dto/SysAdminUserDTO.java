@@ -1,4 +1,4 @@
-package org.linitly.boot.base.dto.sys_admin_user;
+package org.linitly.boot.base.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -59,9 +59,4 @@ public class SysAdminUserDTO extends BaseDTO {
     @ApiModelProperty(value = "用户头像url地址")
     @Size(max = SysAdminUserConstant.MAX_HEAD_IMG_URL_SIZE, message = SysAdminUserConstant.HEAD_IMG_URL_SIZE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
     private String headImgUrl;
-
-    @ApiModelProperty(value = "用户所在部门的id", required = true)
-    @NotNull(message = SysAdminUserConstant.SYS_DEPT_ID_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    @Range(message = SysAdminUserConstant.SYS_DEPT_ID_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    private Long sysDeptId;
 }

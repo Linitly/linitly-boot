@@ -1,4 +1,4 @@
-package org.linitly.boot.base.dto.sys_admin_user;
+package org.linitly.boot.base.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

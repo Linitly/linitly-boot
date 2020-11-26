@@ -45,7 +45,4 @@ public class SysAdminUser extends BaseEntity {
 
     @ApiModelProperty(value = "用户头像url地址")
     private String headImgUrl;
-
-    @ApiModelProperty(value = "用户所在部门的id")
-    private Long sysDeptId;
 }

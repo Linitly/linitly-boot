@@ -15,13 +15,21 @@ public interface SysDeptMapper {
 
     int insert(SysDept sysDept);
 
+    int insertSelective(SysDept sysDept);
+
     SysDept findById(Long id);
 
     int updateById(SysDept sysDept);
+
+    int updateByIdSelective(SysDept sysDept);
 
     List<SysDept> findAll(SysDept sysDept);
 
     int countByNameAndParentId(@Param("parentId") Long parentId, @Param("name") String name, @Param("id") Long id);
 
     int countByParentId(Long parentId);
+
+    void updateChildNumberIncrById(Long id);
+
+    void updateChildNumberDecrById(Long id);
 }

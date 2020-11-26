@@ -7,7 +7,7 @@ import java.util.List;
 import org.linitly.boot.base.annotation.Pagination;
 import org.linitly.boot.base.annotation.Result;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
-import org.linitly.boot.base.dto.sys_admin_user.SysRoleDTO;
+import org.linitly.boot.base.dto.SysRoleDTO;
 import org.linitly.boot.base.entity.SysRole;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;

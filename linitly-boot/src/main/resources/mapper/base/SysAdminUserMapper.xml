@@ -13,12 +13,11 @@
         <result column="email" jdbcType="VARCHAR" property="email" />
         <result column="sex" jdbcType="INTEGER" property="sex" />
         <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
-        <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
     </resultMap>
 
     <sql id="Base_Column_List">
         id, username, mobile_number, salt, password, job_number, nick_name, real_name, email, 
-        sex, head_img_url, sys_dept_id, enabled, created_user_id, created_time, last_modified_user_id, 
+        sex, head_img_url, enabled, created_user_id, created_time, last_modified_user_id,
         last_modified_time
     </sql>
 
@@ -64,12 +63,12 @@
         INSERT INTO sys_admin_user (id, username, mobile_number, 
             salt, password, job_number, 
             nick_name, real_name, email, 
-            sex, head_img_url, sys_dept_id, 
+            sex, head_img_url,
             created_user_id, last_modified_user_id)
         VALUES (#{id, jdbcType=BIGINT}, #{username, jdbcType=VARCHAR}, #{mobileNumber, jdbcType=VARCHAR}, 
             #{salt, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{jobNumber, jdbcType=VARCHAR}, 
             #{nickName, jdbcType=VARCHAR}, #{realName, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, 
-            #{sex, jdbcType=INTEGER}, #{headImgUrl, jdbcType=VARCHAR}, #{sysDeptId, jdbcType=BIGINT}, 
+            #{sex, jdbcType=INTEGER}, #{headImgUrl, jdbcType=VARCHAR},
             #{createdUserId, jdbcType=BIGINT}, #{lastModifiedUserId, jdbcType=BIGINT})
     </insert>
 
@@ -85,7 +84,6 @@
             email = #{email, jdbcType=VARCHAR},
             sex = #{sex, jdbcType=INTEGER},
             head_img_url = #{headImgUrl, jdbcType=VARCHAR},
-            sys_dept_id = #{sysDeptId, jdbcType=BIGINT},
             last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT}
         WHERE id = #{id, jdbcType=BIGINT}
     </update>
@@ -112,9 +110,6 @@
             </if>
             <if test="sex != null">
                 AND sex = #{sex, jdbcType=INTEGER}
-            </if>
-            <if test="sysDeptId != null">
-                AND sys_dept_id = #{sysDeptId, jdbcType=BIGINT}
             </if>
             <if test="enabled != null">
                 AND enabled = #{enabled, jdbcType=INTEGER}
@@ -163,9 +158,6 @@
             </if>
             <if test="headImgUrl != null">
                 head_img_url,
-            </if>
-            <if test="sysDeptId != null">
-                sys_dept_id,
             </if>
             <if test="enabled != null">
                 enabled,
@@ -218,9 +210,6 @@
             <if test="headImgUrl != null">
                 #{headImgUrl, jdbcType=VARCHAR},
             </if>
-            <if test="sysDeptId != null">
-                #{sysDeptId, jdbcType=BIGINT},
-            </if>
             <if test="enabled != null">
                 #{enabled, jdbcType=INTEGER},
             </if>
@@ -272,9 +261,6 @@
             </if>
             <if test="headImgUrl != null">
                 head_img_url = #{headImgUrl, jdbcType=VARCHAR},
-            </if>
-            <if test="sysDeptId != null">
-                sys_dept_id = #{sysDeptId, jdbcType=BIGINT},
             </if>
             <if test="enabled != null">
                 enabled = #{enabled, jdbcType=INTEGER},

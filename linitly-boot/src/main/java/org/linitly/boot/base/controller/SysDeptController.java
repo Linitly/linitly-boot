@@ -7,7 +7,7 @@ import java.util.List;
 import org.linitly.boot.base.annotation.Pagination;
 import org.linitly.boot.base.annotation.Result;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
-import org.linitly.boot.base.dto.sys_dept.SysDeptDTO;
+import org.linitly.boot.base.dto.SysDeptDTO;
 import org.linitly.boot.base.entity.SysDept;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
@@ -58,13 +58,6 @@ public class SysDeptController {
                                  @RequestBody(required = false) SysDept sysDept) {
         PageHelper.startPage(pageNumber, pageSize, "sort asc, id desc");
         return sysDeptService.findAll(sysDept);
-    }
-
-    @PostMapping("/findByParentId/{parentId}")
-    @ApiOperation(value = "根据父部门id查询系统部门列表")
-    public List<SysDept> findByParentId(@PathVariable Long parentId) {
-        PageHelper.startPage(1, Integer.MAX_VALUE - 1, "sort asc, id desc");
-        return sysDeptService.findByParentId(parentId);
     }
 
     @PostMapping("/deleteById/{id}")

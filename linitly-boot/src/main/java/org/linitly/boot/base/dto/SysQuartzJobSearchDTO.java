@@ -3,7 +3,7 @@
  * @date: 2020/5/27 11:12
  * @descrption:
  */
-package org.linitly.boot.base.dto.sys_quatrtz_job;
+package org.linitly.boot.base.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

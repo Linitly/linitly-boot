@@ -1,4 +1,4 @@
-package org.linitly.boot.base.dto.sys_admin_user;
+package org.linitly.boot.base.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,9 +34,6 @@ public class SysAdminUserSearchDTO {
 
     @ApiModelProperty(value = "性别(1:男;2:女;)")
     private Integer sex;
-
-    @ApiModelProperty(value = "用户所在部门的id")
-    private Long sysDeptId;
 
     @ApiModelProperty(value = "创建起始时间")
     private Date startTime;

@@ -3,7 +3,7 @@ package org.linitly.boot.base.dao;
 import java.util.List;
 
 import io.lettuce.core.dynamic.annotation.Param;
-import org.linitly.boot.base.dto.sys_admin_user.SysAdminUserSearchDTO;
+import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
 
 /**

@@ -2,12 +2,11 @@ package org.linitly.boot.base.service;
 
 import java.util.List;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
 import org.linitly.boot.base.dao.SysAdminUserMapper;
-import org.linitly.boot.base.dto.sys_admin_user.SysAdminUserDTO;
-import org.linitly.boot.base.dto.sys_admin_user.SysAdminUserSearchDTO;
+import org.linitly.boot.base.dto.SysAdminUserDTO;
+import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
@@ -68,7 +67,7 @@ public class SysAdminUserService {
 
     @Transactional
     public void deleteById(Long id) {
-        // TODO 删除对应用户角色关联表
+        // TODO 删除对应关联表
         sysAdminUserMapper.deleteById(id);
     }
 }

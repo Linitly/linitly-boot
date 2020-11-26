@@ -2,7 +2,7 @@ package org.linitly.boot.base.service;
 
 import java.util.List;
 import org.linitly.boot.base.dao.SysRoleMapper;
-import org.linitly.boot.base.dto.sys_admin_user.SysRoleDTO;
+import org.linitly.boot.base.dto.SysRoleDTO;
 import org.linitly.boot.base.entity.SysRole;
 import org.linitly.boot.base.exception.CommonException;
 import org.springframework.beans.BeanUtils;

@@ -2,12 +2,13 @@ package org.linitly.boot.base.service;
 
 import java.util.List;
 import org.linitly.boot.base.dao.SysDeptMapper;
-import org.linitly.boot.base.dto.sys_dept.SysDeptDTO;
+import org.linitly.boot.base.dto.SysDeptDTO;
 import org.linitly.boot.base.entity.SysDept;
 import org.linitly.boot.base.exception.CommonException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author: linitly-generator
@@ -20,18 +21,32 @@ public class SysDeptService {
     @Autowired
     private SysDeptMapper sysDeptMapper;
 
+    @Transactional
     public void insert(SysDeptDTO dto) {
         checkExist(dto.getParentId(), dto.getName(), dto.getId());
         SysDept sysDept = new SysDept();
         BeanUtils.copyProperties(dto, sysDept);
-        sysDeptMapper.insert(sysDept);
+        sysDeptMapper.insertSelective(sysDept);
+        if (sysDept.getParentId() > 0) {
+            sysDeptMapper.updateChildNumberIncrById(sysDept.getParentId());
+        }
     }
 
+    @Transactional
     public void updateById(SysDeptDTO dto) {
         checkExist(dto.getParentId(), dto.getName(), dto.getId());
-        SysDept sysDept = new SysDept();
-        BeanUtils.copyProperties(dto, sysDept);
-        sysDeptMapper.updateById(sysDept);
+        if (dto.getId().equals(dto.getParentId())) {
+            throw new CommonException("父部门不可以指向自己");
+        }
+        SysDept before = sysDeptMapper.findById(dto.getId());
+        if (!before.getParentId().equals(dto.getParentId()) && dto.getParentId() > 0) {
+            sysDeptMapper.updateChildNumberIncrById(dto.getParentId());
+        }
+        if (!before.getParentId().equals(dto.getParentId()) && before.getParentId() > 0) {
+            sysDeptMapper.updateChildNumberDecrById(before.getParentId());
+        }
+        BeanUtils.copyProperties(dto, before);
+        sysDeptMapper.updateByIdSelective(before);
     }
 
     public SysDept findById(Long id) {
@@ -41,14 +56,7 @@ public class SysDeptService {
     public List<SysDept> findAll(SysDept sysDept) {
         if (sysDept == null) {
             sysDept = new SysDept().setParentId(0L);
-        } else if (sysDept.getParentId() == null) {
-            sysDept.setParentId(0L);
         }
-        return sysDeptMapper.findAll(sysDept);
-    }
-
-    public List<SysDept> findByParentId(Long parentId) {
-        SysDept sysDept = new SysDept().setParentId(parentId);
         return sysDeptMapper.findAll(sysDept);
     }
 
@@ -56,7 +64,7 @@ public class SysDeptService {
         if (sysDeptMapper.countByParentId(id) > 0) {
             throw new CommonException("当前部门存在子部门，无法删除");
         }
-        // TODO 判断部门下是否有用户
+        // TODO 先不做删除
 
         sysDeptMapper.deleteById(id);
     }

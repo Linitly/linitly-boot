@@ -1,73 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.linitly.boot.base.dao.SysDeptMapper">
-    <resultMap extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap" id="BaseResultMap" type="org.linitly.boot.base.entity.SysDept">
+<mapper namespace="org.linitly.boot.base.dao.SysMenuMapper">
+    <resultMap extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap" id="BaseResultMap" type="org.linitly.boot.base.entity.SysMenu">
         <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="parent_id" jdbcType="BIGINT" property="parentId" />
         <result column="sort" jdbcType="INTEGER" property="sort" />
-        <result column="remark" jdbcType="VARCHAR" property="remark" />
-        <result column="child_number" jdbcType="INT" property="childNumber"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, parent_id, sort, remark, child_number, enabled, created_user_id, created_time, last_modified_user_id,
-        last_modified_time
+        id, name, url, description, parent_id, sort, enabled, created_user_id,
+        created_time, last_modified_user_id, last_modified_time
     </sql>
 
     <update id="updateChildNumberIncrById" parameterType="long">
-        UPDATE sys_dept
+        UPDATE sys_menu
         SET child_number = child_number + 1
         WHERE id = #{id}
     </update>
-    
+
     <update id="updateChildNumberDecrById" parameterType="long">
-        UPDATE sys_dept
+        UPDATE sys_menu
         SET child_number = child_number - 1
         WHERE id = #{id}
     </update>
 
+    <select id="countByNameAndParentId" resultType="int">
+        SELECT COUNT(id)
+        FROM sys_menu
+        WHERE name = #{name} AND parent_id = #{parentId}
+        <if test="id != null">
+            AND id != #{id}
+        </if>
+    </select>
+
+    <select id="countByParentId" parameterType="long" resultType="int">
+        SELECT COUNT(id)
+        FROM sys_menu
+        WHERE parent_id = #{parentId}
+    </select>
+
     <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        SELECT
+        SELECT 
         <include refid="Base_Column_List" />
-        FROM sys_dept
+        FROM sys_menu
         WHERE id = #{id, jdbcType=BIGINT}
     </select>
 
     <delete id="deleteById" parameterType="java.lang.Long">
-        DELETE FROM sys_dept
+        DELETE FROM sys_menu
         WHERE id = #{id, jdbcType=BIGINT}
     </delete>
 
-    <insert id="insert" parameterType="org.linitly.boot.base.entity.SysDept">
-        INSERT INTO sys_dept (id, name, parent_id,
-            sort, remark,
-            created_user_id, last_modified_user_id)
-        VALUES (#{id, jdbcType=BIGINT}, #{name, jdbcType=VARCHAR}, #{parentId, jdbcType=BIGINT},
-            #{sort, jdbcType=INTEGER}, #{remark, jdbcType=VARCHAR},
-            #{createdUserId, jdbcType=BIGINT}, #{lastModifiedUserId, jdbcType=BIGINT})
+    <insert id="insert" parameterType="org.linitly.boot.base.entity.SysMenu">
+        INSERT INTO sys_menu (id, name, url, 
+            description, parent_id, sort, 
+            created_user_id, last_modified_user_id
+            )
+        VALUES (#{id, jdbcType=BIGINT}, #{name, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR}, 
+            #{description, jdbcType=VARCHAR}, #{parentId, jdbcType=BIGINT}, #{sort, jdbcType=INTEGER}, 
+            #{createdUserId, jdbcType=BIGINT}, #{lastModifiedUserId, jdbcType=BIGINT}
+            )
     </insert>
 
-    <update id="updateById" parameterType="org.linitly.boot.base.entity.SysDept">
-        UPDATE sys_dept
+    <update id="updateById" parameterType="org.linitly.boot.base.entity.SysMenu">
+        UPDATE sys_menu
         SET name = #{name, jdbcType=VARCHAR},
+            url = #{url, jdbcType=VARCHAR},
+            description = #{description, jdbcType=VARCHAR},
             parent_id = #{parentId, jdbcType=BIGINT},
             sort = #{sort, jdbcType=INTEGER},
-            remark = #{remark, jdbcType=VARCHAR},
             last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT}
         WHERE id = #{id, jdbcType=BIGINT}
     </update>
 
-    <select id="findAll" parameterType="org.linitly.boot.base.entity.SysDept" resultMap="BaseResultMap">
-        SELECT
+    <select id="findAll" parameterType="org.linitly.boot.base.entity.SysMenu" resultMap="BaseResultMap">
+        SELECT 
         <include refid="Base_Column_List" />
-        FROM sys_dept
+        FROM sys_menu
         <where>
             <if test="name != null and name != ''">
                 name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
             </if>
+            <if test="url != null and url != ''">
+                AND url LIKE CONCAT('%', #{url, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="description != null and description != ''">
+                AND description LIKE CONCAT('%', #{description, jdbcType=VARCHAR}, '%')
+            </if>
             <if test="parentId != null">
                 AND parent_id = #{parentId, jdbcType=BIGINT}
+            </if>
+            <if test="sort != null">
+                AND sort = #{sort, jdbcType=INTEGER}
             </if>
             <if test="enabled != null">
                 AND enabled = #{enabled, jdbcType=INTEGER}
@@ -78,29 +105,20 @@
         </where>
     </select>
 
-    <select id="countByParentId" parameterType="long" resultType="int">
-        SELECT COUNT(id)
-        FROM sys_dept
-        WHERE parent_id = #{parentId}
-    </select>
-
-    <select id="countByNameAndParentId" resultType="int">
-        SELECT COUNT(id)
-        FROM sys_dept
-        WHERE name = #{name} AND parent_id = #{parentId}
-        <if test="id != null">
-            AND id != #{id}
-        </if>
-    </select>
-
-    <insert id="insertSelective" parameterType="sysDept">
-        INSERT INTO sys_dept
+    <insert id="insertSelective" parameterType="org.linitly.boot.base.entity.SysMenu">
+        INSERT INTO sys_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
             <if test="name != null">
                 name,
             </if>
-            <if test="remark != null">
-                remark,
+            <if test="url != null">
+                url,
+            </if>
+            <if test="description != null">
+                description,
             </if>
             <if test="parentId != null">
                 parent_id,
@@ -117,11 +135,17 @@
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=BIGINT},
+            </if>
             <if test="name != null">
                 #{name, jdbcType=VARCHAR},
             </if>
-            <if test="remark != null">
-                #{remark, jdbcType=VARCHAR},
+            <if test="url != null">
+                #{url, jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description, jdbcType=VARCHAR},
             </if>
             <if test="parentId != null">
                 #{parentId, jdbcType=BIGINT},
@@ -136,16 +160,20 @@
                 #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </trim>
+
     </insert>
 
-    <update id="updateByIdSelective" parameterType="sysDept">
-        UPDATE sys_dept
+    <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysMenu">
+        UPDATE sys_menu
         <set>
             <if test="name != null">
                 name = #{name, jdbcType=VARCHAR},
             </if>
-            <if test="remark != null">
-                remark = #{remark, jdbcType=VARCHAR},
+            <if test="url != null">
+                url = #{url, jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description, jdbcType=VARCHAR},
             </if>
             <if test="parentId != null">
                 parent_id = #{parentId, jdbcType=BIGINT},
@@ -153,10 +181,14 @@
             <if test="sort != null">
                 sort = #{sort, jdbcType=INTEGER},
             </if>
+            <if test="childNumber != null">
+                child_number = #{childNumber, jdbcType=INTEGER},
+            </if>
             <if test="lastModifiedUserId != null">
                 last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </set>
-        WHERE id = #{id, jdbcType=BIGINT}
+        where id = #{id, jdbcType=BIGINT}
     </update>
+
 </mapper>

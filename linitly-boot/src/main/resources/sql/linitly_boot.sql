@@ -190,6 +190,7 @@ CREATE TABLE `sys_dept` (
   `name`                        VARCHAR(20)       NOT NULL  DEFAULT ''        COMMENT '部门名称',
   `parent_id`                   bigint            NOT NULL  DEFAULT 0         COMMENT '上级部门id',
   `sort`                        int(11)           NOT NULL  DEFAULT 0         COMMENT '当前层级的排序',
+  `child_number`                int(11)                     DEFAULT 0         COMMENT '子部门数',
   `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
   `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
   `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
@@ -197,6 +198,19 @@ CREATE TABLE `sys_dept` (
   `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   PRIMARY KEY (id)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统部门' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_post`;
+CREATE TABLE `sys_post` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `name`                        VARCHAR(20)       NOT NULL  DEFAULT ''        COMMENT '岗位名称',
+  `sys_dept_id`                 bigint            NOT NULL                    COMMENT '系统部门id',
+  `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统岗位' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `sys_admin_user`;
 CREATE TABLE `sys_admin_user` (
@@ -211,7 +225,6 @@ CREATE TABLE `sys_admin_user` (
   `email`                       VARCHAR(255)                DEFAULT ''        COMMENT '邮箱',
   `sex`                         INT(1)            NOT NULL  DEFAULT 0         COMMENT '性别(1:男;2:女;)',
   `head_img_url`                VARCHAR(255)                DEFAULT ''        COMMENT '用户头像url地址',
-  `sys_dept_id`                 bigint            NOT NULL  DEFAULT 0         COMMENT '用户所在部门的id',
   `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
   `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
   `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
@@ -246,5 +259,56 @@ CREATE TABLE `sys_admin_user_role` (
   `role_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '角色id',
   PRIMARY KEY (id)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户-角色关联表' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_menu`;
+CREATE TABLE `sys_menu` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `name`                        VARCHAR(16)       NOT NULL  DEFAULT ''        COMMENT '菜单名',
+  `url`                         VARCHAR(100)                DEFAULT ''        COMMENT '菜单url',
+  `description`                 VARCHAR(255)                DEFAULT ''        COMMENT '菜单描述',
+  `parent_id`                   bigint            NOT NULL  DEFAULT 0         COMMENT '上级菜单id',
+  `sort`                        int(11)           NOT NULL  DEFAULT 0         COMMENT '当前层级的排序',
+  `child_number`                int(11)                     DEFAULT 0         COMMENT '子菜单数',
+  `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY un_name (`name`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统菜单' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_role_menu`;
+CREATE TABLE `sys_role_menu` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `role_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '角色id',
+  `menu_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '菜单id',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统角色-菜单关联表' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_function_permission`;
+CREATE TABLE `sys_function_permission` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `name`                        VARCHAR(16)       NOT NULL  DEFAULT ''        COMMENT '权限名',
+  `code`                        VARCHAR(100)      NOT NULL  DEFAULT ''        COMMENT '权限代码',
+  `description`                 VARCHAR(255)                DEFAULT ''        COMMENT '权限描述',
+  `sys_menu_id`                 bigint            NOT NULL                    COMMENT '所属菜单id',
+  `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY un_name (`name`),
+  UNIQUE KEY un_code (`code`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统功能权限' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_role_function_permission`;
+CREATE TABLE `sys_role_function_permission` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `role_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '角色id',
+  `function_permission_id`      bigint            NOT NULL  DEFAULT 0         COMMENT '功能权限id',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统角色-功能权限关联表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS=1;
