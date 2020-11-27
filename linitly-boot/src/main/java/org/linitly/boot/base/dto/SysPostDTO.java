@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
 import org.linitly.boot.base.constant.entity.SysPostConstant;
+import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.helper.entity.BaseDTO;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
@@ -28,6 +29,6 @@ public class SysPostDTO extends BaseDTO {
 
     @ApiModelProperty(value = "系统部门id", required = true)
     @NotNull(message = SysPostConstant.SYS_DEPT_ID_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    @Range(message = SysPostConstant.SYS_DEPT_ID_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    @Range(min = GlobalConstant.ID_MIN, message = SysPostConstant.SYS_DEPT_ID_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
     private Long sysDeptId;
 }

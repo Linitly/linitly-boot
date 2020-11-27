@@ -1,10 +1,12 @@
 package org.linitly.boot.base.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
+import org.linitly.boot.base.vo.SysPostDeptIdVO;
 
 /**
  * @author: linitly-generator
@@ -23,9 +25,28 @@ public interface SysAdminUserMapper {
 
     List<SysAdminUser> findAll(SysAdminUserSearchDTO dto);
 
+    SysAdminUser findByUsername(String username);
+
+    SysAdminUser findByMobileNumber(String mobileNumber);
+
     int insertSelective(SysAdminUser sysAdminUser);
 
     int updateByIdSelective(SysAdminUser sysAdminUser);
 
     int countByMobileOrUsernameOrJobNumber(@Param("mobileNumber") String mobileNumber, @Param("username") String username, @Param("jobNumber") String jobNumber, @Param("id") Long id);
+
+
+    void deleteRolesByAdminUserId(Long id);
+
+    void deletePostsByAdminUserId(Long id);
+
+    void insertAdminUserRole(@Param("id") Long id, @Param("roleIds") List<Long> roleIds);
+
+    void insertAdminUserPost(@Param("id") Long id, @Param("postIds") List<Long> postIds);
+
+    List<SysPostDeptIdVO> findPostAndDeptIdsByAdminUserId(Long id);
+
+    Set<String> findRoleCodesByAdminUserId(Long id);
+
+    Set<String> findFunctionPermissionCodesByAdminUserId(Long id);
 }

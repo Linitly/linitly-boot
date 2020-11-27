@@ -7,7 +7,7 @@
         <result column="parent_id" jdbcType="BIGINT" property="parentId" />
         <result column="sort" jdbcType="INTEGER" property="sort" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
-        <result column="child_number" jdbcType="INT" property="childNumber"/>
+        <result column="child_number" jdbcType="INTEGER" property="childNumber"/>
     </resultMap>
 
     <sql id="Base_Column_List">

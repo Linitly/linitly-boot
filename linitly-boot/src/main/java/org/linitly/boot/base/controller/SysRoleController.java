@@ -8,6 +8,7 @@ import org.linitly.boot.base.annotation.Pagination;
 import org.linitly.boot.base.annotation.Result;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.dto.SysRoleDTO;
+import org.linitly.boot.base.dto.SysRoleEmpowerDTO;
 import org.linitly.boot.base.entity.SysRole;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author: linitly-generator
@@ -43,6 +46,12 @@ public class SysRoleController {
         sysRoleService.updateById(dto);
     }
 
+    @PostMapping("/empower")
+    @ApiOperation(value = "为角色添加或修改权限")
+    public void updatePermissionsById(@RequestBody @Validated({UpdateValidGroup.class}) SysRoleEmpowerDTO dto, BindingResult bindingResult) {
+        sysRoleService.empower(dto);
+    }
+
     @PostMapping("/findById/{id}")
     @ApiOperation(value = "根据id查询系统角色")
     public SysRole findById(@PathVariable Long id) {
@@ -57,9 +66,9 @@ public class SysRoleController {
         return sysRoleService.findAll(sysRole);
     }
 
-    @PostMapping("/deleteById/{id}")
-    @ApiOperation(value = "根据id删除系统角色")
-    public void deleteById(@PathVariable Long id) {
-        sysRoleService.deleteById(id);
-    }
+//    @PostMapping("/deleteById/{id}")
+//    @ApiOperation(value = "根据id删除系统角色")
+//    public void deleteById(@PathVariable Long id) {
+//        sysRoleService.deleteById(id);
+//    }
 }

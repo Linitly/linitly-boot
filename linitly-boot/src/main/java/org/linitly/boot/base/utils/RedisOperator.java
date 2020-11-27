@@ -284,7 +284,7 @@ public class RedisOperator {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
 
-    public void hPutAll(String key, Map<String, String> maps) {
+    public void hPutAll(String key, Map<String, Object> maps) {
         redisTemplate.opsForHash().putAll(key, maps);
     }
 

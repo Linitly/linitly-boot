@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.linitly.boot.base.annotation.RequirePermission;
 import org.linitly.boot.base.annotation.RequireRole;
+import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.utils.RedisOperator;
@@ -58,8 +59,8 @@ public class PermissionAspect {
             AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
 			String token = jwtUtil.getRefreshToken(request);
 			Set<String> rolesOrPermissions = targetClass == RequireRole.class ?
-					redisOperator.setMembers(AdminJwtConstant.ADMIN_ROLES_PREFIX + token) :
-					redisOperator.setMembers(AdminJwtConstant.ADMIN_PERMISSIONS_PREFIX + token);
+					redisOperator.setMembers(AdminCommonConstant.ADMIN_ROLES_PREFIX + token) :
+					redisOperator.setMembers(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + token);
 
 			String[] requireRolesOrPermissions = PermissionAnnotationUtil.parseRoleOrPermission(target.getClass(),
 					methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);

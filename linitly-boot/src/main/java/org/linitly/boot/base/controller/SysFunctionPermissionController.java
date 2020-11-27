@@ -57,9 +57,15 @@ public class SysFunctionPermissionController {
         return sysFunctionPermissionService.findAll(sysFunctionPermission);
     }
 
-    @PostMapping("/deleteById/{id}")
-    @ApiOperation(value = "根据id删除系统功能权限")
-    public void deleteById(@PathVariable Long id) {
-        sysFunctionPermissionService.deleteById(id);
+    @PostMapping("/findBySysMenuId/{sysMenuId}")
+    @ApiOperation(value = "根据菜单id查询功能权限列表")
+    public List<SysFunctionPermission> findBySysMenuId(@PathVariable Long sysMenuId) {
+        return sysFunctionPermissionService.findBySysMenuId(sysMenuId);
     }
+
+//    @PostMapping("/deleteById/{id}")
+//    @ApiOperation(value = "根据id删除系统功能权限")
+//    public void deleteById(@PathVariable Long id) {
+//        sysFunctionPermissionService.deleteById(id);
+//    }
 }

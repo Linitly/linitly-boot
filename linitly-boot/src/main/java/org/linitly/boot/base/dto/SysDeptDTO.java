@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
 import org.linitly.boot.base.constant.entity.SysDeptConstant;
+import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
 import org.linitly.boot.base.helper.entity.BaseDTO;
@@ -28,7 +29,7 @@ public class SysDeptDTO extends BaseDTO {
 
     @ApiModelProperty(value = "上级部门id", required = true)
     @NotNull(message = SysDeptConstant.PARENT_ID_EMPTY_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
-    @Range(message = SysDeptConstant.PARENT_ID_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
+    @Range(min = GlobalConstant.ID_MIN, message = SysDeptConstant.PARENT_ID_RANGE_ERROR, groups = {InsertValidGroup.class, UpdateValidGroup.class})
     private Long parentId;
 
     @ApiModelProperty(value = "当前层级的排序")

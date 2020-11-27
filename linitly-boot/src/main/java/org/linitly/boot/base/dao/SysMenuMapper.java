@@ -26,7 +26,7 @@ public interface SysMenuMapper {
 
     int updateByIdSelective(SysMenu sysMenu);
 
-    int countByName(@Param("name") String name, @Param("parentId") Long parentId, @Param("id") Long id);
+    int countByNameAndParentId(@Param("name") String name, @Param("parentId") Long parentId, @Param("id") Long id);
 
     int countByParentId(Long parentId);
 

@@ -26,4 +26,8 @@ public interface SysRoleConstant {
     int MAX_DESCRIPTION_SIZE = 255;
 
     String DESCRIPTION_SIZE_ERROR = "角色描述长度不符合限制";
+
+    String MENU_IDS_EMPTY_ERROR  = "菜单id集合不能为空";
+
+    String FUNCTION_PERMISSION_IDS_EMPTY_ERROR  = "功能权限id集合不能为空";
 }

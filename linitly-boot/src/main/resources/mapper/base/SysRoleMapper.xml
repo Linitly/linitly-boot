@@ -125,7 +125,6 @@
                 #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </trim>
-
     </insert>
 
     <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysRole">
@@ -144,8 +143,32 @@
                 last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </set>
-
         where id = #{id, jdbcType=BIGINT}
     </update>
 
+    <delete id="deleteMenusByRoleId" parameterType="long">
+        DELETE FROM sys_role_menu
+        WHERE role_id = #{id}
+    </delete>
+
+    <delete id="deleteFunctionPermissionsByRoleId" parameterType="long">
+        DELETE FROM sys_role_function_permission
+        WHERE role_id = #{id}
+    </delete>
+
+    <insert id="insertRoleMenus">
+        INSERT INTO sys_role_menu(role_id, menu_id)
+        VALUES
+        <foreach collection="menuIds" item="menuId" separator=",">
+            (#{id}, #{menuId})
+        </foreach>
+    </insert>
+
+    <insert id="insertRoleFunctionPermissions">
+        INSERT INTO sys_role_function_permission(role_id, function_permission_id)
+        VALUES
+        <foreach collection="permissionIds" item="pId" separator=",">
+            (#{id}, #{pId})
+        </foreach>
+    </insert>
 </mapper>

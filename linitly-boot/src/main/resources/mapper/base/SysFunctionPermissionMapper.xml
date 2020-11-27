@@ -14,6 +14,29 @@
         last_modified_user_id, last_modified_time
     </sql>
 
+    <select id="findBySysMenuId" parameterType="long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_function_permission
+        WHERE sys_menu_id = #{sysMenuId}
+    </select>
+
+    <select id="countByNameOrCode" resultType="int">
+        SELECT COUNT(id)
+        FROM sys_function_permission
+        <where>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="code != null">
+                code = #{code}
+            </if>
+            <if test="id != null">
+                AND id != #{id}
+            </if>
+        </where>
+    </select>
+
     <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT 
         <include refid="Base_Column_List" />

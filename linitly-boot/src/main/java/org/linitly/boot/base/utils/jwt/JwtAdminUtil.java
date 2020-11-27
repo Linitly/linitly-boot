@@ -50,8 +50,8 @@ public class JwtAdminUtil extends AbstractJwtUtil {
     public String[] generateToken(BaseEntity entity) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(AdminJwtConstant.ADMIN_USER_ID, entity.getId());
-        String token = generateJwt(claims, entity.getId().toString(), AdminJwtConstant.ADMIN_TOKEN_EXPIRE_SECOND);
-        String refresh_token = generateJwt(claims, entity.getId().toString(), AdminJwtConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
+        String token = generateJwt(claims, entity.getId().toString(), AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
+        String refresh_token = generateJwt(claims, entity.getId().toString(), AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
         return new String[]{token, refresh_token};
     }
 

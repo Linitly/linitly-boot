@@ -47,7 +47,7 @@ public class SysMenuService {
     }
 
     private void checkExists(String name, Long parentId, Long id) {
-        int count = sysMenuMapper.countByName(name, parentId, id);
+        int count = sysMenuMapper.countByNameAndParentId(name, parentId, id);
         if (count > 0) {
             throw new CommonException("存在相同名称的菜单");
         }
@@ -58,9 +58,7 @@ public class SysMenuService {
     }
 
     public List<SysMenu> findAll(SysMenu sysMenu) {
-        if (sysMenu == null) {
-            sysMenu = new SysMenu().setParentId(0L);
-        }
+        sysMenu = sysMenu == null ? new SysMenu().setParentId(0L) : sysMenu;
         return sysMenuMapper.findAll(sysMenu);
     }
 

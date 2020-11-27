@@ -108,7 +108,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
 
     private boolean validRefreshToken(AbstractJwtUtil jwtUtil, Map<String, Object> claims, String refreshToken, HttpServletResponse response, boolean generateNewTokens) {
         String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
-        String redisKey = AdminJwtConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
+        String redisKey = AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
         String redisRefreshToken = redisOperator.get(redisKey);
         if (StringUtils.isBlank(redisRefreshToken)) {
             throw new CommonException(ResultEnum.LOGIN_FAILURE);
@@ -120,8 +120,8 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
             BaseEntity baseEntity = new BaseEntity();
             baseEntity.setId(Long.valueOf(userId));
             String[] tokens = jwtUtil.generateToken(baseEntity);
-            redisOperator.set(AdminJwtConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT), tokens[0], AdminJwtConstant.ADMIN_TOKEN_EXPIRE_SECOND);
-            redisOperator.set(AdminJwtConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT), tokens[1], AdminJwtConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
+            redisOperator.set(AdminCommonConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT), tokens[0], AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
+            redisOperator.set(AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT), tokens[1], AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
             response.setHeader(AdminCommonConstant.ADMIN_TOKEN, tokens[0]);
             response.setHeader(AdminCommonConstant.ADMIN_REFRESH_TOKEN, tokens[1]);
             // 如果需要存储用户权限信息，需要设置和refresh_token相同的过期时间，并且此处更新token的同时需要刷新在redis中的过期时间
@@ -131,7 +131,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
 
     private boolean validToken(AbstractJwtUtil jwtUtil, Map<String, Object> claims, String token, String refreshToken, HttpServletResponse response) {
         String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
-        String redisKey = AdminJwtConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
+        String redisKey = AdminCommonConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, AdminUserConstant.TOKEN_ID_SALT);
         String redisToken = redisOperator.get(redisKey);
         if (StringUtils.isBlank(redisToken)) {
             throw new CommonException(ResultEnum.LOGIN_FAILURE);

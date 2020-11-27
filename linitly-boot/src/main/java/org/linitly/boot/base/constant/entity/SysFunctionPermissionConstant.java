@@ -15,6 +15,10 @@ public interface SysFunctionPermissionConstant {
 
     String CODE_EMPTY_ERROR = "权限代码不能为空";
 
+    String CODE_REG = "[A-Za-z0-9:]*";
+
+    String CODE_REG_ERROR = "权限代码格式错误";
+
     int MAX_CODE_SIZE = 100;
 
     String CODE_SIZE_ERROR = "权限代码长度不符合限制";

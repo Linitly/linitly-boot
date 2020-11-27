@@ -1,5 +1,7 @@
 package org.linitly.boot.base.constant.admin;
 
+import org.linitly.boot.base.constant.global.GlobalConstant;
+
 /**
  * @author: linxiunan
  * @date: 2020/5/25 10:38
@@ -47,4 +49,49 @@ public interface AdminCommonConstant {
      * AES加密解密测试:AES/CBC/PKCS5Padding,iv=key,结果输出为base64,128位。由于将key当iv，所以限制key必须为16位，否则iv会报错
      */
     String ADMIN_REST_AES_KEY = "06f1MQd42U9wcI11";
+
+    /**
+     * 后台token过期时间(秒)
+     */
+    long ADMIN_TOKEN_EXPIRE_SECOND = 30 * 60;
+
+    /**
+     * 后台refresh_token过期时间(秒)
+     */
+    long ADMIN_REFRESH_TOKEN_EXPIRE_SECOND = 15 * 24 * 60 * 60;
+
+    /**
+     * 后台token对应角色信息、权限信息、岗位信息、部门信息过期时间(秒)
+     */
+    long ADMIN_RPPD_EXPIRE_SECOND = 30 * 60 + 10;
+
+    /**
+     * 后台token存入redis的前缀
+     */
+    String ADMIN_TOKEN_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "token:";
+
+    /**
+     * 后台refresh_token存入redis的前缀
+     */
+    String ADMIN_REFRESH_TOKEN_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "refresh_token:";
+
+    /**
+     * 后台用户对应角色set存储前缀
+     */
+    String ADMIN_ROLES_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "roles:";
+
+    /**
+     * 后台用户对应权限set存储前缀
+     */
+    String ADMIN_FUNCTION_PERMISSIONS_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "permissions:";
+
+    /**
+     * 后台用户对应岗位set存储前缀
+     */
+    String ADMIN_POSTS_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "posts:";
+
+    /**
+     * 后台用户对应部门set存储前缀
+     */
+    String ADMIN_DEPTS_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "depts:";
 }

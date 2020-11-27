@@ -1,13 +1,17 @@
 package org.linitly.boot.base.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.linitly.boot.base.dao.SysRoleMapper;
 import org.linitly.boot.base.dto.SysRoleDTO;
+import org.linitly.boot.base.dto.SysRoleEmpowerDTO;
 import org.linitly.boot.base.entity.SysRole;
 import org.linitly.boot.base.exception.CommonException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author: linitly-generator
@@ -55,5 +59,13 @@ public class SysRoleService {
 
     public void deleteById(Long id) {
         sysRoleMapper.deleteById(id);
+    }
+
+    @Transactional
+    public void empower(SysRoleEmpowerDTO dto) {
+        sysRoleMapper.deleteMenusByRoleId(dto.getId());
+        sysRoleMapper.deleteFunctionPermissionsByRoleId(dto.getId());
+        sysRoleMapper.insertRoleMenus(dto.getId(), dto.getSysMenuIds());
+        sysRoleMapper.insertRoleFunctionPermissions(dto.getId(), dto.getFunctionPermissionIds());
     }
 }

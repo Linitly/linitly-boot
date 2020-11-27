@@ -15,11 +15,23 @@
         <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
     </resultMap>
 
+    <resultMap id="postDeptIdMap" type="sysPostDeptIdVO">
+        <result column="post_id" jdbcType="BIGINT" property="postId" />
+        <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         id, username, mobile_number, salt, password, job_number, nick_name, real_name, email, 
         sex, head_img_url, enabled, created_user_id, created_time, last_modified_user_id,
         last_modified_time
     </sql>
+
+    <select id="findByMobileNumber" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_admin_user
+        WHERE mobile_number = #{mobileNumber}
+    </select>
 
     <select id="findByUsername" parameterType="string" resultMap="BaseResultMap">
         SELECT
@@ -72,7 +84,7 @@
             #{createdUserId, jdbcType=BIGINT}, #{lastModifiedUserId, jdbcType=BIGINT})
     </insert>
 
-    <update id="updateById" parameterType="org.linitly.boot.base.entity.SysAdminUser">
+    <update id="updateById" parameterType="org.linitly.boot.base.entity.SysAdminUser" useGeneratedKeys="true" keyProperty="id">
         UPDATE sys_admin_user
         SET username = #{username, jdbcType=VARCHAR},
             mobile_number = #{mobileNumber, jdbcType=VARCHAR},
@@ -123,7 +135,7 @@
         </where>
     </select>
 
-    <insert id="insertSelective" parameterType="org.linitly.boot.base.entity.SysAdminUser">
+    <insert id="insertSelective" parameterType="org.linitly.boot.base.entity.SysAdminUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_admin_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -226,7 +238,6 @@
                 #{lastModifiedTime, jdbcType=TIMESTAMP},
             </if>
         </trim>
-
     </insert>
 
     <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysAdminUser">
@@ -278,8 +289,51 @@
                 last_modified_time = #{lastModifiedTime, jdbcType=TIMESTAMP},
             </if>
         </set>
-
         where id = #{id, jdbcType=BIGINT}
     </update>
 
+    <delete id="deleteRolesByAdminUserId" parameterType="long">
+        DELETE FROM sys_admin_user_role
+        WHERE admin_user_id = #{id}
+    </delete>
+
+    <delete id="deletePostsByAdminUserId" parameterType="long">
+        DELETE FROM sys_admin_user_post
+        WHERE admin_user_id = #{id}
+    </delete>
+
+    <insert id="insertAdminUserRole">
+        INSERT INTO sys_admin_user_role(admin_user_id, role_id)
+        VALUES
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{id}, #{roleId})
+        </foreach>
+    </insert>
+
+    <insert id="insertAdminUserPost">
+        INSERT INTO sys_admin_user_post(admin_user_id, post_id)
+        VALUES
+        <foreach collection="postIds" item="postId" separator=",">
+            (#{id}, #{postId})
+        </foreach>
+    </insert>
+
+    <select id="findPostAndDeptIdsByAdminUserId" parameterType="long" resultMap="postDeptIdMap">
+        SELECT sp.`id` post_id, sp.`sys_dept_id` dept_id
+        FROM sys_admin_user sau, sys_admin_user_post saup, sys_post sp
+        WHERE sau.`id` = #{id} AND sau.`id` = saup.`admin_user_id` AND saup.`post_id` = sp.`id`;
+    </select>
+
+    <select id="findRoleCodesByAdminUserId" parameterType="long" resultType="string">
+        SELECT sr.`code`
+        FROM sys_admin_user sau, sys_admin_user_role saur, sys_role sr
+        WHERE sau.`id` = #{id} AND sau.`id` = saur.`admin_user_id` AND saur.`role_id` = sr.`id`
+    </select>
+
+    <select id="findFunctionPermissionCodesByAdminUserId" parameterType="long" resultType="string">
+        SELECT sfp.`code`
+        FROM sys_admin_user sau, sys_admin_user_role saur, sys_role sr, sys_role_function_permission srfp, sys_function_permission sfp
+        WHERE sau.`id` = #{id} AND sau.`id` = saur.`admin_user_id` AND saur.`role_id` = sr.`id` AND sr.`id` = srfp.`role_id`
+        AND srfp.`function_permission_id` = sfp.`id`
+    </select>
 </mapper>

@@ -23,6 +23,10 @@ public interface SysAdminUserConstant {
 
     int MAX_SALT_SIZE = 32;
 
+    String PASSWORD_REG = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z\\W]{8,}$";
+
+    String PASSWORD_REG_ERROR = "密码不符合规则";
+
     String JOB_NUMBER_EMPTY_ERROR = "工号不能为空";
 
     int MAX_JOB_NUMBER_SIZE = 32;
@@ -43,6 +47,8 @@ public interface SysAdminUserConstant {
 
     String EMAIL_SIZE_ERROR = "邮箱长度不符合限制";
 
+    int MIN_SEX_RANGE = 1;
+
     int MAX_SEX_RANGE = 2;
 
     String SEX_EMPTY_ERROR = "性别不能为空";
@@ -52,4 +58,11 @@ public interface SysAdminUserConstant {
     int MAX_HEAD_IMG_URL_SIZE = 255;
 
     String HEAD_IMG_URL_SIZE_ERROR = "用户头像url地址长度不符合限制";
+
+    String ROLE_IDS_EMPTY_ERROR = "所属角色不能为空";
+
+    String POST_IDS_EMPTY_ERROR = "所属岗位不能为空";
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    String PASSWORD_EMPTY_ERROR = "登陆密码不能为空";
 }

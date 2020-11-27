@@ -27,4 +27,13 @@ public interface SysRoleMapper {
     int updateByIdSelective(SysRole sysRole);
 
     int countByNameOrCode(@Param("name") String name, @Param("code") String code, @Param("id") Long id);
+
+
+    void deleteMenusByRoleId(Long id);
+
+    void deleteFunctionPermissionsByRoleId(Long id);
+
+    void insertRoleMenus(@Param("id") Long id, @Param("menuIds") List<Long> menuIds);
+
+    void insertRoleFunctionPermissions(@Param("id") Long id, @Param("permissionIds") List<Long> permissionIds);
 }

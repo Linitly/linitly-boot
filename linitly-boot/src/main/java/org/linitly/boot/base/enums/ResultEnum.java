@@ -13,10 +13,13 @@ public enum ResultEnum {
 	SYSTEM_CODE_ERROR(503, "系统码错误"),
 
 	NO_PERMISSION(401, "您没有权限访问该内容"),
-	UNAUTHORIZED(403, "未认证,token为空"),
-	LOGIN_FAILURE(412, "登录失效,请重新登录"),
+	UNAUTHORIZED(403, "未认证，token为空"),
+
+	USERNAME_ERROR(410, "用户名错误"),
+	PASSWORD_ERROR(411, "密码错误"),
+	LOGIN_FAILURE(412, "登录失效，请重新登录"),
 	TOKEN_ANALYSIS_ERROR(413, "token解析失败"),
-	REMOTE_LOGIN(417, "您的账号在异地登录,请重新登录"),
+	REMOTE_LOGIN(417, "您的账号在异地登录，请重新登录"),
 
 	PARAM_EMPTY_ERROR(420, "所需参数未传入"),
 	PATH_PARAM_ERROR(421, "所需路径参数传入错误"),

@@ -1,11 +1,9 @@
 package org.linitly.boot.base.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -33,8 +31,7 @@ public class JsonUtils {
 
 	public static String objectToJsonNull(Object data) {
 		try {
-			String string = MAPPER.writeValueAsString(data);
-			return string;
+			return MAPPER.writeValueAsString(data);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -44,8 +41,7 @@ public class JsonUtils {
 	public static String objectToJsonNotNull(Object data) {
 		MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		try {
-			String string = MAPPER.writeValueAsString(data);
-			return string;
+			return MAPPER.writeValueAsString(data);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -54,15 +50,6 @@ public class JsonUtils {
 
 	/**
 	 * 将对象转换成json字符串。
-	 * <p>
-	 * Title: entityToJson
-	 * </p>
-	 * <p>
-	 * Description:
-	 * </p>
-	 *
-	 * @param data
-	 * @return
 	 */
 	public static String objectToJson(Object data, boolean notNull) {
 		if (notNull) {
@@ -72,28 +59,19 @@ public class JsonUtils {
 		}
 	}
 
-	private static <T> T jsonToEntityUnknownError(String jsonData, Class<T> beanType) throws JsonParseException, JsonMappingException, IOException {
-		T t = MAPPER.readValue(jsonData, beanType);
-		return t;
+	private static <T> T jsonToEntityUnknownError(String jsonData, Class<T> beanType) throws IOException {
+		return MAPPER.readValue(jsonData, beanType);
 	}
 
-	private static <T> T jsonToEntityIgnoreUnknown(String jsonData, Class<T> beanType) throws JsonParseException, JsonMappingException, IOException {
+	private static <T> T jsonToEntityIgnoreUnknown(String jsonData, Class<T> beanType) throws IOException {
 		MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		T t = MAPPER.readValue(jsonData, beanType);
-		return t;
+		return MAPPER.readValue(jsonData, beanType);
 	}
 
 	/**
 	 * 将json结果集转化为对象
-	 *
-	 * @param jsonData
-	 *            json数据
-	 * @return
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
 	 */
-	public static <T> T jsonToEntity(String jsonData, Class<T> beanType, boolean ignoreUnknown) throws JsonParseException, JsonMappingException, IOException {
+	public static <T> T jsonToEntity(String jsonData, Class<T> beanType, boolean ignoreUnknown) throws IOException {
 		if (ignoreUnknown) {
 			return jsonToEntityIgnoreUnknown(jsonData, beanType);
 		} else {
@@ -103,24 +81,11 @@ public class JsonUtils {
 
 	/**
 	 * 将json数据转换成entity对象list
-	 * <p>
-	 * Title: jsonToList
-	 * </p>
-	 * <p>
-	 * Description:
-	 * </p>
-	 * 
-	 * @param jsonData
-	 * @param beanType
-	 * @return
-	 * @throws IOException 
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
 	 */
-	public static <T> List<T> jsonToList(String jsonData, Class<T> beanType) throws JsonParseException, JsonMappingException, IOException {
+	public static <T> List<T> jsonToList(String jsonData, Class<T> beanType) throws IOException {
 		JavaType javaType = MAPPER.getTypeFactory().constructParametricType(List.class, beanType);
-		List<T> list = MAPPER.readValue(jsonData, javaType);
-		return list;
+		return MAPPER.readValue(jsonData, javaType);
 	}
+
 
 }

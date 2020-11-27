@@ -60,9 +60,9 @@ public class SysAdminUserController {
         return sysAdminUserService.findAll(dto);
     }
 
-    @PostMapping("/deleteById/{id}")
-    @ApiOperation(value = "根据id删除系统用户")
-    public void deleteById(@PathVariable Long id) {
-        sysAdminUserService.deleteById(id);
-    }
+//    @PostMapping("/deleteById/{id}")
+//    @ApiOperation(value = "根据id删除系统用户")
+//    public void deleteById(@PathVariable Long id) {
+//        sysAdminUserService.deleteById(id);
+//    }
 }

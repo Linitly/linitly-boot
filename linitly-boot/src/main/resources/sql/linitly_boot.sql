@@ -191,12 +191,14 @@ CREATE TABLE `sys_dept` (
   `parent_id`                   bigint            NOT NULL  DEFAULT 0         COMMENT '上级部门id',
   `sort`                        int(11)           NOT NULL  DEFAULT 0         COMMENT '当前层级的排序',
   `child_number`                int(11)                     DEFAULT 0         COMMENT '子部门数',
+  `remark`                      VARCHAR(255)                DEFAULT ''        COMMENT '备注',
   `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
   `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
   `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
   `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
   `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  INDEX (`name`)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统部门' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `sys_post`;
@@ -259,6 +261,14 @@ CREATE TABLE `sys_admin_user_role` (
   `role_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '角色id',
   PRIMARY KEY (id)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户-角色关联表' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_admin_user_post`;
+CREATE TABLE `sys_admin_user_post` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `admin_user_id`               bigint            NOT NULL  DEFAULT 0         COMMENT '用户id',
+  `post_id`                     bigint            NOT NULL  DEFAULT 0         COMMENT '岗位id',
+  PRIMARY KEY (id)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统用户-岗位关联表' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu` (

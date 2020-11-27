@@ -8,10 +8,11 @@
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="parent_id" jdbcType="BIGINT" property="parentId" />
         <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="child_number" jdbcType="INTEGER" property="childNumber"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, url, description, parent_id, sort, enabled, created_user_id,
+        id, name, url, description, parent_id, sort, child_number, enabled, created_user_id,
         created_time, last_modified_user_id, last_modified_time
     </sql>
 
@@ -92,9 +93,6 @@
             </if>
             <if test="parentId != null">
                 AND parent_id = #{parentId, jdbcType=BIGINT}
-            </if>
-            <if test="sort != null">
-                AND sort = #{sort, jdbcType=INTEGER}
             </if>
             <if test="enabled != null">
                 AND enabled = #{enabled, jdbcType=INTEGER}

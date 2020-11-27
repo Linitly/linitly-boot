@@ -1,6 +1,8 @@
 package org.linitly.boot.base.dao;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.linitly.boot.base.entity.SysFunctionPermission;
 
 /**
@@ -23,4 +25,8 @@ public interface SysFunctionPermissionMapper {
     int insertSelective(SysFunctionPermission sysFunctionPermission);
 
     int updateByIdSelective(SysFunctionPermission sysFunctionPermission);
+
+    int countByNameOrCode(@Param("name") String name, @Param("code") String code, @Param("id") Long id);
+
+    List<SysFunctionPermission> findBySysMenuId(Long sysMenuId);
 }
