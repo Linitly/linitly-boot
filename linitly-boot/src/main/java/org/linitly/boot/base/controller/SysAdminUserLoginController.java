@@ -8,11 +8,9 @@ import org.linitly.boot.base.dto.SysAdminUserLoginDTO;
 import org.linitly.boot.base.service.SysAdminUserLoginService;
 import org.linitly.boot.base.vo.SysAdminUserLoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,9 +19,10 @@ import javax.validation.Valid;
  * @date: 2020/11/27 14:23
  * @descrption:
  */
+@Lazy
 @Result
 @RestController
-//@RequestMapping(AdminCommonConstant.URL_PREFIX)
+@RequestMapping(AdminCommonConstant.URL_PREFIX)
 @Api(tags = "系统后台用户登陆管理")
 public class SysAdminUserLoginController {
 
@@ -34,5 +33,11 @@ public class SysAdminUserLoginController {
     @ApiModelProperty(value = "后台用户登陆")
     public SysAdminUserLoginVO login(@RequestBody @Valid SysAdminUserLoginDTO dto, BindingResult bindingResult) {
         return loginService.login(dto);
+    }
+
+    @PostMapping("/logout/{userId}")
+    @ApiModelProperty(value = "后台用户退出登陆")
+    public void logout(@PathVariable Long userId) {
+        loginService.logout(userId);
     }
 }

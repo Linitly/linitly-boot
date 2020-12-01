@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Result
 @RestController
-@RequestMapping("/sysAdminUser")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysAdminUser")
 @Api(tags = "系统用户管理")
 public class SysAdminUserController {
 

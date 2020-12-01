@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Result
 @RestController
-@RequestMapping("/sysMenu")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysMenu")
 @Api(tags = "系统菜单管理")
 public class SysMenuController {
 

@@ -10,7 +10,8 @@ public enum ResultEnum {
 	SUCCESS(200, "成功"),
 	SYSTEM_ERROR(500, "服务器开小差，请稍后重试"),
 	UN_SUPPORT_REQUEST(502, "不支持的请求类型"),
-	SYSTEM_CODE_ERROR(503, "系统码错误"),
+	SYSTEM_CODE_EMPTY(504, "系统码为空，非法请求"),
+	SYSTEM_CODE_ERROR(505, "系统码错误"),
 
 	NO_PERMISSION(401, "您没有权限访问该内容"),
 	UNAUTHORIZED(403, "未认证，token为空"),

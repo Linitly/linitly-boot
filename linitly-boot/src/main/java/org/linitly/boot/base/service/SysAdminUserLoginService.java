@@ -1,42 +1,49 @@
 package org.linitly.boot.base.service;
 
-import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.dao.SysAdminUserMapper;
 import org.linitly.boot.base.dto.SysAdminUserLoginDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
 import org.linitly.boot.base.enums.ResultEnum;
+import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.utils.Precondition;
 import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
+import org.linitly.boot.base.utils.auth.AbstractAuth;
+import org.linitly.boot.base.utils.auth.AuthFactory;
 import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
 import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.vo.SysAdminUserLoginVO;
 import org.linitly.boot.base.vo.SysPostDeptIdVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: linxiunan
  * @date: 2020/11/27 14:52
  * @descrption:
  */
+@Lazy
 @Service
 public class SysAdminUserLoginService {
 
-    @Autowired
-    private HttpServletRequest request;
+    @PostConstruct
+    public void init() {
+        adminAuth = AuthFactory.getAuth(SystemEnum.ADMIN.getSystemCode());
+        jwtUtil = JwtUtilFactory.getJwtUtil(SystemEnum.ADMIN.getSystemCode());
+    }
+
     @Autowired
     private SysAdminUserMapper sysAdminUserMapper;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+
+    private AbstractJwtUtil jwtUtil;
+    private AbstractAuth adminAuth;
 
     public SysAdminUserLoginVO login(SysAdminUserLoginDTO dto) {
         SysAdminUser sysAdminUser = check(dto);
@@ -49,8 +56,8 @@ public class SysAdminUserLoginService {
         });
         Set<String> roleCodes = sysAdminUserMapper.findRoleCodesByAdminUserId(sysAdminUser.getId());
         Set<String> functionPermissionCodes = sysAdminUserMapper.findFunctionPermissionCodesByAdminUserId(sysAdminUser.getId());
-        String[] tokens = getToken(sysAdminUser);
-        setRedis(postIds, deptIds, roleCodes, functionPermissionCodes, tokens, sysAdminUser.getId());
+        String[] tokens = getTokens(sysAdminUser);
+        adminAuth.loginRedisSet(sysAdminUser.getId().toString(), tokens[0], tokens[1], deptIds, postIds, roleCodes, functionPermissionCodes);
         SysAdminUserLoginVO loginVO = new SysAdminUserLoginVO().setToken(tokens[0]).setRefreshToken(tokens[1]);
         BeanUtils.copyProperties(sysAdminUser, loginVO);
         return loginVO;
@@ -68,21 +75,13 @@ public class SysAdminUserLoginService {
         return sysAdminUser;
     }
 
-    private String[] getToken(SysAdminUser sysAdminUser) {
-        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
-        return jwtUtil.generateToken(sysAdminUser);
+    private String[] getTokens(SysAdminUser sysAdminUser) {
+        String token = jwtUtil.generateToken(sysAdminUser);
+        String refreshToken = jwtUtil.generateRefreshToken(sysAdminUser);
+        return new String[]{token, refreshToken};
     }
 
-    private void setRedis(Set<Long> postIds, Set<Long> deptIds, Set<String> roleCodes, Set<String> functionPermissionCodes, String[] tokens, Long id) {
-        redisTemplate.opsForValue().set(AdminCommonConstant.ADMIN_TOKEN_PREFIX + id, tokens[0], AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
-        redisTemplate.opsForValue().set(AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + id, tokens[1], AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
-        redisTemplate.opsForSet().add(AdminCommonConstant.ADMIN_POSTS_PREFIX + id, postIds.toArray());
-        redisTemplate.opsForSet().add(AdminCommonConstant.ADMIN_DEPTS_PREFIX + id, deptIds.toArray(), AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
-        redisTemplate.opsForSet().add(AdminCommonConstant.ADMIN_ROLES_PREFIX + id, roleCodes.toArray(), AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
-        redisTemplate.opsForSet().add(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + id, functionPermissionCodes.toArray(), AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
-        redisTemplate.expire(AdminCommonConstant.ADMIN_POSTS_PREFIX + id, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND, TimeUnit.SECONDS);
-        redisTemplate.expire(AdminCommonConstant.ADMIN_DEPTS_PREFIX + id, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND, TimeUnit.SECONDS);
-        redisTemplate.expire(AdminCommonConstant.ADMIN_ROLES_PREFIX + id, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND, TimeUnit.SECONDS);
-        redisTemplate.expire(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + id, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND, TimeUnit.SECONDS);
+    public void logout(Long userId) {
+        adminAuth.logoutRedisDel(userId.toString());
     }
 }

@@ -9,11 +9,9 @@ import org.linitly.boot.base.annotation.RequirePermission;
 import org.linitly.boot.base.annotation.RequireRole;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.enums.ResultEnum;
-import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.utils.RedisOperator;
-import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
-import org.linitly.boot.base.constant.admin.AdminJwtConstant;
 import org.linitly.boot.base.exception.CommonException;
+import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
 import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.utils.permission.PermissionAnnotationUtil;
 import org.linitly.boot.base.utils.permission.RoleAndPermissionUtil;
@@ -56,11 +54,11 @@ public class PermissionAspect {
 			Object target = joinPoint.getTarget();
 			MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
-            AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
-			String token = jwtUtil.getRefreshToken(request);
+			AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
+			String userId = jwtUtil.getUserId(request);
 			Set<String> rolesOrPermissions = targetClass == RequireRole.class ?
-					redisOperator.setMembers(AdminCommonConstant.ADMIN_ROLES_PREFIX + token) :
-					redisOperator.setMembers(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + token);
+					redisOperator.setMembers(AdminCommonConstant.ADMIN_ROLES_PREFIX + userId) :
+					redisOperator.setMembers(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + userId);
 
 			String[] requireRolesOrPermissions = PermissionAnnotationUtil.parseRoleOrPermission(target.getClass(),
 					methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);

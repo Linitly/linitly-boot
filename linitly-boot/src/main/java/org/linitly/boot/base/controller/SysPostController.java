@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Result
 @RestController
-@RequestMapping("/sysPost")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysPost")
 @Api(tags = "系统岗位管理")
 public class SysPostController {
 

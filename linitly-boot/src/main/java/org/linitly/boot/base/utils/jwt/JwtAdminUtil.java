@@ -1,19 +1,24 @@
 package org.linitly.boot.base.utils.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.constant.admin.AdminJwtConstant;
+import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
 import org.linitly.boot.base.constant.global.JwtConstant;
+import org.linitly.boot.base.enums.ResultEnum;
+import org.linitly.boot.base.enums.SystemEnum;
+import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.helper.entity.BaseEntity;
+import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
+import org.linitly.boot.base.utils.auth.AuthFactory;
+import org.linitly.boot.base.utils.bean.SpringBeanUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class JwtAdminUtil extends AbstractJwtUtil {
 
@@ -28,6 +33,7 @@ public class JwtAdminUtil extends AbstractJwtUtil {
             synchronized (JwtAdminUtil.class) {
                 if (jwtAdminUtil == null) {
                     jwtAdminUtil = new JwtAdminUtil(AdminJwtConstant.ADMIN_ALGORITHM, AdminJwtConstant.JWT_SALT);
+                    abstractAuth = AuthFactory.getAuth(SystemEnum.ADMIN.getSystemCode());
                 }
             }
         }
@@ -47,12 +53,17 @@ public class JwtAdminUtil extends AbstractJwtUtil {
     }
 
     @Override
-    public String[] generateToken(BaseEntity entity) {
+    public String generateToken(BaseEntity entity) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(AdminJwtConstant.ADMIN_USER_ID, entity.getId());
-        String token = generateJwt(claims, entity.getId().toString(), AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
-        String refresh_token = generateJwt(claims, entity.getId().toString(), AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
-        return new String[]{token, refresh_token};
+        return generateJwt(claims, entity.getId().toString(), AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
+    }
+
+    @Override
+    public String generateRefreshToken(BaseEntity entity) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(AdminJwtConstant.ADMIN_USER_ID, entity.getId());
+        return generateJwt(claims, entity.getId().toString(), AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
     }
 
     @Override
@@ -66,13 +77,6 @@ public class JwtAdminUtil extends AbstractJwtUtil {
     }
 
     @Override
-    public void setToken(HttpServletResponse response, BaseEntity baseEntity) {
-        String[] tokens = generateToken(baseEntity);
-        response.setHeader(AdminCommonConstant.ADMIN_TOKEN, tokens[0]);
-        response.setHeader(AdminCommonConstant.ADMIN_REFRESH_TOKEN, tokens[1]);
-    }
-
-    @Override
     public String getUserId(HttpServletRequest request) {
         String refreshToken = getRefreshToken(request);
         if (StringUtils.isBlank(refreshToken)) {
@@ -82,7 +86,80 @@ public class JwtAdminUtil extends AbstractJwtUtil {
         return claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
     }
 
-    public String getUserId(Map<String, Object> claims) {
-        return claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
+    @Override
+    public void interceptorValid(HttpServletRequest request) {
+        String token = getToken(request);
+        String refreshToken = getRefreshToken(request);
+        if (StringUtils.isBlank(token) || StringUtils.isBlank(refreshToken)) {
+            throw new CommonException(ResultEnum.UNAUTHORIZED);
+        }
+        Map<String, Object> claims;
+        try {
+            claims = parseToken(token);
+        } catch (ExpiredJwtException e) {
+            tokenExpired(token, refreshToken);
+            return;
+        }
+        validToken(token, claims);
+        claims = parseRefreshToken(refreshToken);
+        validRefreshToken(refreshToken, claims);
+    }
+
+    private void tokenExpired(String token, String refreshToken) {
+        Map<String, Object> claims = parseRefreshToken(refreshToken);
+        validRefreshToken(refreshToken, claims);
+        validExpiredToken(token);
+        generateNewToken();
+    }
+
+    @Override
+    public void validToken(String token, Map<String, Object> claims) {
+        String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
+        String redisKey = AdminCommonConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, SysAdminUserConstant.TOKEN_ID_SALT);
+        String redisToken = String.valueOf(redisTemplate.opsForValue().get(redisKey));
+        if (StringUtils.isBlank(redisToken)) {
+            throw new CommonException(ResultEnum.LOGIN_FAILURE);
+        } else if (!token.equals(redisToken)) {
+            throw new CommonException(ResultEnum.REMOTE_LOGIN);
+        }
+    }
+
+    @Override
+    public void validExpiredToken(String token) {
+        String userId = getUserId(SpringBeanUtil.getRequest());
+        String lastExpiredToken = String.valueOf(redisTemplate.opsForHash().get(AdminCommonConstant.ADMIN_LAST_EXPIRED_TOKEN_KEY, userId));
+        if (StringUtils.isBlank(lastExpiredToken)) {
+            redisTemplate.opsForHash().put(AdminCommonConstant.ADMIN_LAST_EXPIRED_TOKEN_KEY, userId, token);
+            redisTemplate.expire(AdminCommonConstant.ADMIN_LAST_EXPIRED_TOKEN_KEY, AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND * 2, TimeUnit.SECONDS);
+            return;
+        }
+        if (!token.equals(lastExpiredToken)) {
+            redisTemplate.opsForHash().put(AdminCommonConstant.ADMIN_LAST_EXPIRED_TOKEN_KEY, userId, token);
+            return;
+        }
+        if (token.equals(lastExpiredToken)) {
+            throw new CommonException(ResultEnum.LOGIN_FAILURE);
+        }
+    }
+
+    @Override
+    public void validRefreshToken(String refreshToken, Map<String, Object> claims) {
+        String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
+        String redisKey = AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, SysAdminUserConstant.TOKEN_ID_SALT);
+        String redisRefreshToken = String.valueOf(redisTemplate.opsForValue().get(redisKey));
+        if (StringUtils.isBlank(redisRefreshToken)) {
+            throw new CommonException(ResultEnum.LOGIN_FAILURE);
+        } else if (!refreshToken.equals(redisRefreshToken)) {
+            throw new CommonException(ResultEnum.REMOTE_LOGIN);
+        }
+    }
+
+    @Override
+    public void generateNewToken() {
+        String userId = getUserId(SpringBeanUtil.getRequest());
+        BaseEntity baseEntity = new BaseEntity().setId(Long.valueOf(userId));
+        String token = generateToken(baseEntity);
+        SpringBeanUtil.getResponse().setHeader(AdminCommonConstant.ADMIN_TOKEN, token);
+        abstractAuth.newTokenRedisSet(userId, token);
     }
 }

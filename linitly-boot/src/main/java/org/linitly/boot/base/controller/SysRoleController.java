@@ -27,7 +27,7 @@ import javax.validation.Valid;
  */
 @Result
 @RestController
-@RequestMapping("/sysRole")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysRole")
 @Api(tags = "系统角色管理")
 public class SysRoleController {
 

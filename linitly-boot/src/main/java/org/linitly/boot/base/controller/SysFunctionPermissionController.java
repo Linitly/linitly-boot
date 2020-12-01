@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Result
 @RestController
-@RequestMapping("/sysFunctionPermission")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysFunctionPermission")
 @Api(tags = "系统功能权限管理")
 public class SysFunctionPermissionController {
 

@@ -24,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Result
 @RestController
-//@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysDept")
-@RequestMapping("/sysDept")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysDept")
 @Api(tags = "系统部门管理")
 public class SysDeptController {
 

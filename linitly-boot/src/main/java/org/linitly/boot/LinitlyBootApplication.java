@@ -1,6 +1,7 @@
 package org.linitly.boot;
 
 import lombok.extern.slf4j.Slf4j;
+import org.linitly.boot.base.utils.bean.SpringBeanUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,7 @@ public class LinitlyBootApplication {
     public static void main(String[] args) throws UnknownHostException {
 
         ConfigurableApplicationContext application = SpringApplication.run(LinitlyBootApplication.class, args);
+        SpringBeanUtil.applicationContext = application;
 
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();

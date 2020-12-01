@@ -65,4 +65,11 @@ public interface SysAdminUserConstant {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     String PASSWORD_EMPTY_ERROR = "登陆密码不能为空";
+
+
+
+    /**
+     * 后台用户token存入redis时对于用户id加密使用盐
+     */
+    String TOKEN_ID_SALT = "UWOQMFSdsaffa……*……&@@($)!)(@#KJSLKASJRW(E*QW)(RUOIWJFKSAHFOIYR*O&YWQIPOHRFIOAESYI";
 }

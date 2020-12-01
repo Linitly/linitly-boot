@@ -94,4 +94,9 @@ public interface AdminCommonConstant {
      * 后台用户对应部门set存储前缀
      */
     String ADMIN_DEPTS_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "depts:";
+
+    /**
+     * 后台最后一次过期token存入redis的前缀
+     */
+    String ADMIN_LAST_EXPIRED_TOKEN_KEY = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "expire_tokens";
 }

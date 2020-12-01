@@ -37,6 +37,7 @@ public class IdInjectInterceptor implements Interceptor {
         }
 
         AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
+
         if (SqlCommandType.INSERT == sqlCommandType) {
             dealInsertSql(parameter, jwtUtil);
         }
