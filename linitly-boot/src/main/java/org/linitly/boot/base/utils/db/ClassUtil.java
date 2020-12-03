@@ -1,5 +1,6 @@
-package org.linitly.boot.base.utils.log;
+package org.linitly.boot.base.utils.db;
 
+import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.exception.CommonException;
 
@@ -10,8 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ClassUtil {
+
+    private static final String MAPPER_CLASS_NAME_SUFFIX = "Mapper";
 
 	public static Long getEntityId(Object object, Field[] fields) throws Exception {
 		Class<?> classes = object.getClass();
@@ -102,5 +107,49 @@ public class ClassUtil {
 			throw new CommonException(GlobalConstant.GENERAL_ERROR, "获取class对象出错");
 		}
 		return classes;
+	}
+
+	public static String getTableName(String mapperClassName) {
+		StringBuffer tableName = new StringBuffer();
+		if (StringUtils.isNotBlank(mapperClassName)) {
+			if (mapperClassName.contains(".")) {
+				int last = mapperClassName.lastIndexOf(".");
+				mapperClassName = mapperClassName.substring(last + 1);
+			}
+			mapperClassName = String.valueOf(mapperClassName.charAt(0)).toLowerCase().concat(mapperClassName.substring(1));
+			mapperClassName = mapperClassName.replace(MAPPER_CLASS_NAME_SUFFIX, "");
+			Pattern pattern = Pattern.compile("[A-Z]");
+			Matcher matcher = pattern.matcher(mapperClassName);
+			while (matcher.find()) {
+				matcher.appendReplacement(tableName, "_" + matcher.group(0).toLowerCase());
+			}
+			matcher.appendTail(tableName);
+		}
+		return StringUtils.isBlank(tableName) ? null : tableName.toString();
+	}
+
+    public static <T> String getTableName(T interfaze) {
+        String className = interfaze.getClass().getName();
+        return getTableName(className);
+    }
+
+    public static <T> String getLogTableName(T interfaze) {
+        String tableName = getTableName(interfaze);
+        return StringUtils.isBlank(tableName) ? null : tableName + GlobalConstant.LOG_TABLE_SUFFIX;
+    }
+
+    public static <T> String getDeleteTableName(T interfaze) {
+        String tableName = getTableName(interfaze);
+        return StringUtils.isBlank(tableName) ? null : tableName + GlobalConstant.DELETE_TABLE_SUFFIX;
+    }
+
+    public static String getLogTableName(String mapperClassName) {
+		String tableName = getTableName(mapperClassName);
+		return StringUtils.isBlank(tableName) ? null : tableName + GlobalConstant.LOG_TABLE_SUFFIX;
+	}
+
+	public static <T> String getDeleteTableName(String mapperClassName) {
+		String tableName = getTableName(mapperClassName);
+		return StringUtils.isBlank(tableName) ? null : tableName + GlobalConstant.DELETE_TABLE_SUFFIX;
 	}
 }

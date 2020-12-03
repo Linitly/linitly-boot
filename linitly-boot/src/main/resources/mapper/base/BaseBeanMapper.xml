@@ -14,5 +14,71 @@
     <resultMap id="BaseDeleteEntityMap" type="org.linitly.boot.base.helper.entity.BaseDeleteEntity" extends="BaseEntityMap">
         <result column="deleted_time" jdbcType="TIMESTAMP" property="deletedTime" />
         <result column="deleted_user_id" jdbcType="BIGINT" property="deletedUserId" />
+        <result column="system_code" jdbcType="INTEGER" property="systemCode" />
     </resultMap>
+
+    <resultMap id="tableColumn" type="org.linitly.boot.base.helper.entity.TableColumn">
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
+        <result column="COLUMN_NAME" jdbcType="VARCHAR" property="columnName"/>
+        <result column="COLUMN_DEFAULT" jdbcType="LONGVARCHAR" property="columnDefault"/>
+        <result column="IS_NULLABLE" jdbcType="VARCHAR" property="isNullable"/>
+        <result column="COLUMN_TYPE" jdbcType="LONGVARCHAR" property="columnType"/>
+        <result column="EXTRA" jdbcType="VARCHAR" property="extra"/>
+        <result column="COLUMN_COMMENT" jdbcType="VARCHAR" property="columnComment"/>
+    </resultMap>
+
+    <sql id="table_column_list">
+        TABLE_NAME, COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, COLUMN_TYPE, EXTRA, COLUMN_COMMENT
+    </sql>
+
+    <select id="findTableNames" resultType="string">
+        SELECT TABLE_NAME
+        FROM information_schema.TABLES WHERE TABLE_SCHEMA=(SELECT database())
+    </select>
+
+    <select id="findColumnsByTableName" parameterType="string" resultMap="tableColumn">
+        SELECT <include refid="table_column_list" />
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = (SELECT DATABASE()) AND TABLE_NAME = #{tableName}
+        ORDER BY ORDINAL_POSITION
+    </select>
+
+    <select id="createTables" parameterType="list">
+        SET FOREIGN_KEY_CHECKS = 0;
+        <foreach collection="ddls" item="ddl">
+            ${ddl}
+        </foreach>
+        SET FOREIGN_KEY_CHECKS = 1;
+    </select>
+
+    <insert id="insertAllLog">
+        INSERT INTO ${tableName} (ip, operation, entity_id, log, change_json, operator_id, system_code)
+        VALUES
+        <foreach collection="baseLogs" separator="," item="baseLog" index="index">
+            (#{baseLog.ip}, #{baseLog.operation}, #{baseLog.entityId}, #{baseLog.log},
+            #{baseLog.changeJson}, #{baseLog.operatorId}, #{baseLog.systemCode})
+        </foreach>
+    </insert>
+
+    <select id="findByIds" resultType="map">
+        SELECT *
+        FROM ${tableName}
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertDeleteData">
+        INSERT INTO ${tableName}
+        <foreach collection="columnMap.keys" item="key" open="(" close=")" separator=",">
+            ${key}
+        </foreach>
+        VALUES
+        <foreach collection="datas" item="data" separator="," open="(" close=")">
+            <foreach collection="data.values" item="value" separator=",">
+                #{value}
+            </foreach>
+        </foreach>
+    </insert>
 </mapper>

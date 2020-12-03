@@ -24,6 +24,11 @@ public interface GlobalConstant {
 	String LOG_TABLE_SUFFIX = "_log";
 
 	/**
+	 * 删除表后缀
+	 */
+	String DELETE_TABLE_SUFFIX = "_delete";
+
+	/**
 	 * restful使用的aes加密算法key值
 	 * AES加密解密测试:AES/CBC/PKCS5Padding,iv=key,结果输出为base64,128位。由于将key当iv，所以限制key必须为16位，否则iv会报错
 	 */

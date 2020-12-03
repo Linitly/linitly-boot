@@ -58,7 +58,6 @@ public class SysAdminUserService {
 
     @Transactional
     public void deleteById(Long id) {
-        // TODO 删除对应关联表
         sysAdminUserMapper.deleteById(id);
     }
 

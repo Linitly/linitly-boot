@@ -2,6 +2,7 @@ package org.linitly.boot.base.interceptor.web;
 
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.constant.global.GlobalConstant;
+import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.exception.CommonException;
@@ -40,6 +41,8 @@ public class SystemInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        MyBatisConstant.LOG_HELPER.remove();
+        MyBatisConstant.DELETE_HELPER.remove();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }

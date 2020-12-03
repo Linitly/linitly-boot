@@ -224,7 +224,7 @@ CREATE TABLE `sys_admin_user` (
   `job_number`                  VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '工号',
   `nick_name`                   VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '昵称',
   `real_name`                   VARCHAR(16)                 DEFAULT ''        COMMENT '真实姓名',
-  `email`                       VARCHAR(255)                DEFAULT ''        COMMENT '邮箱',
+  `email`                       VARCHAR(32)                 DEFAULT ''        COMMENT '邮箱',
   `sex`                         INT(1)            NOT NULL  DEFAULT 0         COMMENT '性别(1:男;2:女;)',
   `head_img_url`                VARCHAR(255)                DEFAULT ''        COMMENT '用户头像url地址',
   `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',

@@ -168,6 +168,11 @@
             <artifactId>poi-ooxml</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <!-- webSocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
         <!-- Thumbnailator 图片压缩 -->
         <dependency>
             <groupId>net.coobird</groupId>

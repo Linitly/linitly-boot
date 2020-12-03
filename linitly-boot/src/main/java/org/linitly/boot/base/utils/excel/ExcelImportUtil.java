@@ -8,7 +8,7 @@ import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.ExcelException;
 import org.linitly.boot.base.utils.IDateUtil;
 import org.linitly.boot.base.utils.NumberUtil;
-import org.linitly.boot.base.utils.log.ClassUtil;
+import org.linitly.boot.base.utils.db.ClassUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;

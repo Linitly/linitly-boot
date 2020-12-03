@@ -7,7 +7,7 @@ import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.dto.SysQuartzJobInsertAndUpdateDTO;
 import org.linitly.boot.base.dto.SysQuartzJobSearchDTO;
 import org.linitly.boot.base.utils.QuartzUtil;
-import org.linitly.boot.base.utils.log.ClassUtil;
+import org.linitly.boot.base.utils.db.ClassUtil;
 import org.linitly.boot.base.entity.SysQuartzJob;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

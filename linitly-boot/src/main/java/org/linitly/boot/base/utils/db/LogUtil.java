@@ -1,18 +1,23 @@
-package org.linitly.boot.base.utils.log;
+package org.linitly.boot.base.utils.db;
 
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.annotation.LogIgnore;
-import org.linitly.boot.base.constant.global.GlobalConstant;
 import org.linitly.boot.base.enums.DateFormat;
+import org.linitly.boot.base.helper.entity.BaseLog;
+import org.linitly.boot.base.helper.entity.LogHelper;
 import org.linitly.boot.base.utils.IDateUtil;
+import org.linitly.boot.base.utils.JsonUtils;
+import org.linitly.boot.base.utils.bean.SpringBeanUtil;
+import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
+import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author: linxiunan
@@ -20,45 +25,28 @@ import java.util.regex.Pattern;
  * @descrption:
  */
 public class LogUtil {
-    
-    public static <T> String getLogTableName(T entity) {
-        String className = entity.getClass().getName();
-        StringBuffer logTableName = new StringBuffer();
-        if (StringUtils.isNotBlank(className)) {
-            if (className.contains(".")) {
-                int last = className.lastIndexOf(".");
-                className = className.substring(last + 1);
+
+    public static String generatorLogJson(Object object) {
+        Field[] fields = ClassUtil.getAllFields(object, true);
+        String json = JsonUtils.objectToJson(object, false);
+        JSONObject jsonObject = JSONObject.parseObject(json);
+        for (Field field : fields) {
+            LogIgnore logIgnoreAnno = field.getAnnotation(LogIgnore.class);
+            if (logIgnoreAnno != null) {
+                jsonObject.remove(field.getName());
             }
-            className = String.valueOf(className.charAt(0)).toLowerCase().concat(className.substring(1));
-            Pattern pattern = Pattern.compile("[A-Z]");
-            Matcher matcher = pattern.matcher(className);
-            while (matcher.find()) {
-                matcher.appendReplacement(logTableName, "_" + matcher.group(0).toLowerCase());
-            }
-            matcher.appendTail(logTableName);
-            logTableName.append(GlobalConstant.LOG_TABLE_SUFFIX);
         }
-        return StringUtils.isBlank(logTableName) ? null : logTableName.toString();
+        return jsonObject.toJSONString();
     }
 
-    //	public static String generatorLogJson(Object object) {
-//		Field[] fields = ClassUtil.getAllFields(object);
-//		String json = JsonUtils.objectToJson(object, false);
-//		JSONObject jsonObject = JSONObject.parseObject(json);
-//		for (Field field : fields) {
-//			LogIgnore logIgnoreAnno = field.getAnnotation(LogIgnore.class);
-//			if (logIgnoreAnno != null) {
-//				jsonObject.remove(field.getName());
-//			}
-//		}
-//		return jsonObject.toJSONString();
-//	}
-
-    public static String getEntityLog(Object object, Field[] fields, String operation, String entityProperty)
+    public static String getEntityLog(Object object, LogHelper helper)
             throws Exception {
-        StringBuffer log = new StringBuffer();
+        String logBegin = GeneratorHelperUtil.getLogBegin(object, helper);
+        if (StringUtils.isBlank(logBegin)) return null;
+
+        StringBuilder log = new StringBuilder(logBegin + ":: ");
+        Field[] fields = ClassUtil.getAllFields(object, true);
         Class<?> classes = object.getClass();
-        log.append(operation + entityProperty + ":: ");
         for (Field field : fields) {
             ApiModelProperty propertyAnno = field.getAnnotation(ApiModelProperty.class);
             LogIgnore logIgnoreAnno = field.getAnnotation(LogIgnore.class);
@@ -123,5 +111,17 @@ public class LogUtil {
             }
         }
         return log.toString();
+    }
+
+    public static BaseLog generatorCommonBaseLog(LogHelper helper) {
+        BaseLog baseLog = new BaseLog();
+        HttpServletRequest request = SpringBeanUtil.getRequest();
+        Integer systemCode = RequestUtil.getSystemCode(request);
+        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(systemCode);
+        baseLog.setSystemCode(systemCode);
+        baseLog.setIp(RequestUtil.getIp(request));
+        baseLog.setOperation(GeneratorHelperUtil.getOperation(helper));
+        baseLog.setOperatorId(jwtUtil.getUserId(request));
+        return baseLog;
     }
 }

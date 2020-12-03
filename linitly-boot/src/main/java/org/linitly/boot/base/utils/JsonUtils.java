@@ -49,7 +49,7 @@ public class JsonUtils {
 	}
 
 	/**
-	 * 将对象转换成json字符串。
+	 * 将对象转换成json字符串
 	 */
 	public static String objectToJson(Object data, boolean notNull) {
 		if (notNull) {

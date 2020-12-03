@@ -2,7 +2,7 @@ package org.linitly.boot.base.utils.excel;
 
 import com.alibaba.fastjson.JSONObject;
 import org.linitly.boot.base.annotation.ExcelProperty;
-import org.linitly.boot.base.utils.log.ClassUtil;
+import org.linitly.boot.base.utils.db.ClassUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;

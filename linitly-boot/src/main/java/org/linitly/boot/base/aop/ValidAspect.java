@@ -34,15 +34,15 @@ public class ValidAspect {
 
     @Before("baseAspect()")
     public void baseAspectBefore(JoinPoint joinPoint) {
-        aspectAround(joinPoint);
+        aspectBefore(joinPoint);
     }
 
     @Before("businessAspect()")
     public void businessAspectBefore(JoinPoint joinPoint) {
-        aspectAround(joinPoint);
+        aspectBefore(joinPoint);
     }
 
-    private void aspectAround(JoinPoint joinPoint) {
+    private void aspectBefore(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         Arrays.asList(args).forEach(e -> {
             if (e == null) return;

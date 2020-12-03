@@ -1,5 +1,6 @@
 package org.linitly.boot.base.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,9 +24,11 @@ public class SysAdminUser extends BaseEntity {
     private String mobileNumber;
 
     @ApiModelProperty(value = "密码盐")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String salt;
 
     @ApiModelProperty(value = "加密密码")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @ApiModelProperty(value = "工号")

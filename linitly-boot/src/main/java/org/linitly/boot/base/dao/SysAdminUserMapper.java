@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.lettuce.core.dynamic.annotation.Param;
+import org.linitly.boot.base.annotation.LogIgnore;
 import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
 import org.linitly.boot.base.vo.SysPostDeptIdVO;
@@ -36,8 +37,10 @@ public interface SysAdminUserMapper {
     int countByMobileOrUsernameOrJobNumber(@Param("mobileNumber") String mobileNumber, @Param("username") String username, @Param("jobNumber") String jobNumber, @Param("id") Long id);
 
 
+    @LogIgnore
     void deleteRolesByAdminUserId(Long id);
 
+    @LogIgnore
     void deletePostsByAdminUserId(Long id);
 
     void insertAdminUserRole(@Param("id") Long id, @Param("roleIds") List<Long> roleIds);
