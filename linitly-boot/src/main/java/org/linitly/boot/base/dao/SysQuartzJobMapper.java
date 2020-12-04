@@ -1,6 +1,6 @@
 package org.linitly.boot.base.dao;
 
-import org.apache.ibatis.annotations.Param;
+import org.linitly.boot.base.annotation.DeleteBackup;
 import org.linitly.boot.base.dto.SysQuartzJobSearchDTO;
 import org.linitly.boot.base.entity.SysQuartzJob;
 
@@ -16,9 +16,10 @@ public interface SysQuartzJobMapper {
 
     void insert(SysQuartzJob job);
 
-    void updateStatusById(@Param("id") Long id, @Param("status") Integer status);
+    void updateStatusById(SysQuartzJob job);
 
     void updateById(SysQuartzJob job);
 
+    @DeleteBackup
     void deleteById(Long id);
 }

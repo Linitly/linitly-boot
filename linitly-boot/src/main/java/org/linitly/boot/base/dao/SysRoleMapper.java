@@ -13,6 +13,7 @@ import org.linitly.boot.base.entity.SysRole;
  */
 public interface SysRoleMapper {
 
+    @DeleteBackup
     int deleteById(Long id);
 
     int insert(SysRole sysRole);
@@ -25,7 +26,6 @@ public interface SysRoleMapper {
 
     int insertSelective(SysRole sysRole);
 
-    @DeleteBackup
     int updateByIdSelective(SysRole sysRole);
 
     int countByNameOrCode(@Param("name") String name, @Param("code") String code, @Param("id") Long id);

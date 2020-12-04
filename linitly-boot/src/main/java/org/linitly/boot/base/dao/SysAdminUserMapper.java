@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.lettuce.core.dynamic.annotation.Param;
+import org.linitly.boot.base.annotation.DeleteBackup;
 import org.linitly.boot.base.annotation.LogIgnore;
 import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
@@ -16,6 +17,7 @@ import org.linitly.boot.base.vo.SysPostDeptIdVO;
  */
 public interface SysAdminUserMapper {
 
+    @DeleteBackup
     int deleteById(Long id);
 
     int insert(SysAdminUser sysAdminUser);
@@ -36,7 +38,6 @@ public interface SysAdminUserMapper {
 
     int countByMobileOrUsernameOrJobNumber(@Param("mobileNumber") String mobileNumber, @Param("username") String username, @Param("jobNumber") String jobNumber, @Param("id") Long id);
 
-
     @LogIgnore
     void deleteRolesByAdminUserId(Long id);
 
@@ -52,4 +53,6 @@ public interface SysAdminUserMapper {
     Set<String> findRoleCodesByAdminUserId(Long id);
 
     Set<String> findFunctionPermissionCodesByAdminUserId(Long id);
+
+    void changePassword(SysAdminUser sysAdminUser);
 }

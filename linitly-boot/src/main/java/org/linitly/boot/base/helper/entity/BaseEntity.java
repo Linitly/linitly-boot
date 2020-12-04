@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.linitly.boot.base.annotation.Dict;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class BaseEntity implements Serializable {
     @ApiModelProperty(value = "最后一次更新时间")
     private Date lastModifiedTime;
 
+    @Dict
     @ApiModelProperty(value = "启用禁用状态", notes = "1:启用(默认);0:禁用")
     private Integer enabled;
 }

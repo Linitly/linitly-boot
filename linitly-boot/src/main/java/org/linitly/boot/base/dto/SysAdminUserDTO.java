@@ -36,7 +36,7 @@ public class SysAdminUserDTO extends BaseDTO {
     private String mobileNumber;
 
     @ApiModelProperty(value = "密码")
-    @Pattern(regexp = SysAdminUserConstant.PASSWORD_REG, message = SysAdminUserConstant.PASSWORD_REG_ERROR)
+    @Pattern(regexp = SysAdminUserConstant.PASSWORD_REG, message = SysAdminUserConstant.PASSWORD_REG_ERROR, groups = {InsertValidGroup.class})
     private String password;
 
     @ApiModelProperty(value = "工号", required = true)

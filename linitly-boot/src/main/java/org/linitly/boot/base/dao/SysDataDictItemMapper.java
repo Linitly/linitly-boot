@@ -3,6 +3,7 @@ package org.linitly.boot.base.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.linitly.boot.base.annotation.DeleteBackup;
 import org.linitly.boot.base.entity.SysDataDictItem;
 
 /**
@@ -12,6 +13,7 @@ import org.linitly.boot.base.entity.SysDataDictItem;
  */
 public interface SysDataDictItemMapper {
 
+    @DeleteBackup
     int deleteById(Long id);
 
     int insert(SysDataDictItem sysDataDictItem);

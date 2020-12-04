@@ -64,8 +64,11 @@ public interface SysAdminUserConstant {
     String POST_IDS_EMPTY_ERROR = "所属岗位不能为空";
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    String PASSWORD_EMPTY_ERROR = "登陆密码不能为空";
+    String PASSWORD_EMPTY_ERROR = "密码不能为空";
 
+    String BEFORE_PASSWORD_EMPTY_ERROR = "原密码不能为空";
+
+    String CONFIRM_PASSWORD_EMPTY_ERROR = "确认密码不能为空";
 
 
     /**

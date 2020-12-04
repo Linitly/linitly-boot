@@ -3,6 +3,7 @@ package org.linitly.boot.base.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.linitly.boot.base.annotation.DeleteBackup;
 import org.linitly.boot.base.entity.SysFunctionPermission;
 
 /**
@@ -12,6 +13,7 @@ import org.linitly.boot.base.entity.SysFunctionPermission;
  */
 public interface SysFunctionPermissionMapper {
 
+    @DeleteBackup
     int deleteById(Long id);
 
     int insert(SysFunctionPermission sysFunctionPermission);

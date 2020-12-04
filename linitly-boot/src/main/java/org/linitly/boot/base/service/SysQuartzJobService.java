@@ -100,7 +100,10 @@ public class SysQuartzJobService {
         if (job.getStatus().equals(JobStatusEnum.RUNNING.getStatus())) {
             // 目前为运行状态，即希望停止任务
             quartzUtil.pauseJob(job.getJobClassName());
-            jobMapper.updateStatusById(id, JobStatusEnum.PAUSED.getStatus());
+            SysQuartzJob sysQuartzJob = new SysQuartzJob();
+            sysQuartzJob.setStatus(JobStatusEnum.PAUSED.getStatus());
+            sysQuartzJob.setId(id);
+            jobMapper.updateStatusById(sysQuartzJob);
         } else if (job.getStatus().equals(JobStatusEnum.PAUSED.getStatus())) {
             // 目前为停止状态，即希望启动
             if (quartzUtil.checkExistJobAndTrigger(ClassUtil.getClassByName(job.getJobClassName().trim()))) {
@@ -108,7 +111,10 @@ public class SysQuartzJobService {
             } else {
                 schedulerJob(job);
             }
-            jobMapper.updateStatusById(id, JobStatusEnum.RUNNING.getStatus());
+            SysQuartzJob sysQuartzJob = new SysQuartzJob();
+            sysQuartzJob.setStatus(JobStatusEnum.RUNNING.getStatus());
+            sysQuartzJob.setId(id);
+            jobMapper.updateStatusById(sysQuartzJob);
         }
     }
 

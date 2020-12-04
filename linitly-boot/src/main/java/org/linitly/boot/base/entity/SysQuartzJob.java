@@ -3,9 +3,11 @@ package org.linitly.boot.base.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.linitly.boot.base.helper.entity.BaseEntity;
 
 @Data
+@Accessors(chain = true)
 @ApiModel(value = "定时任务实体类")
 public class SysQuartzJob extends BaseEntity {
 

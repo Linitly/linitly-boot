@@ -24,7 +24,7 @@ public class GeneratorHelperUtil {
         return baseLog;
     }
 
-    public static BaseLog generatorUpdateLog(BaseEntity baseEntity, LogHelper helper, BaseLog baseLog) {
+    public static BaseLog generatorUpdateLog(BaseEntity baseEntity, BaseLog baseLog) {
         baseLog.setEntityId(baseEntity.getId());
         return baseLog;
     }

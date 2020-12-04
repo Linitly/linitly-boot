@@ -26,6 +26,12 @@
         last_modified_time
     </sql>
 
+    <update id="changePassword" parameterType="sysAdminUser">
+        UPDATE sys_admin_user
+        SET password = #{password}
+        WHERE id = #{id} AND last_modified_user_id = #{lastModifiedUserId}
+    </update>
+
     <select id="findByMobileNumber" parameterType="string" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />

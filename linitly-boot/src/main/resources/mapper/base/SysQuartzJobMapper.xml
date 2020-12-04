@@ -44,7 +44,7 @@
                 #{createdUserId})
     </insert>
 
-    <update id="updateStatusById">
+    <update id="updateStatusById" parameterType="sysQuartzJob">
         UPDATE
           sys_quartz_job
         SET

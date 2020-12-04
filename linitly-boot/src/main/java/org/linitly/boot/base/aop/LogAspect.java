@@ -121,7 +121,7 @@ public class LogAspect {
         List<BaseLog> baseLogList = new ArrayList<>();
         String logTableName = ClassUtil.getLogTableName(mapperClassName);
         for (BaseEntity baseEntity : changeEntities) {
-            baseLogList.add(GeneratorHelperUtil.generatorUpdateLog(baseEntity, helper, baseLog));
+            baseLogList.add(GeneratorHelperUtil.generatorUpdateLog(baseEntity, baseLog));
         }
         baseBeanMapper.insertAllLog(logTableName, baseLogList);
     }

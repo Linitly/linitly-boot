@@ -7,6 +7,7 @@ import java.util.List;
 import org.linitly.boot.base.annotation.Pagination;
 import org.linitly.boot.base.annotation.Result;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
+import org.linitly.boot.base.dto.SysAdminUserChangePasswordDTO;
 import org.linitly.boot.base.dto.SysAdminUserDTO;
 import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author: linitly-generator
@@ -58,6 +61,11 @@ public class SysAdminUserController {
                                       @RequestBody(required = false) SysAdminUserSearchDTO dto) {
         PageHelper.startPage(pageNumber, pageSize, "id desc");
         return sysAdminUserService.findAll(dto);
+    }
+
+    @PostMapping("/changePassword")
+    public void changePassword(@RequestBody @Valid SysAdminUserChangePasswordDTO dto, BindingResult bindingResult) {
+        sysAdminUserService.changePassword(dto);
     }
 
 //    @PostMapping("/deleteById/{id}")

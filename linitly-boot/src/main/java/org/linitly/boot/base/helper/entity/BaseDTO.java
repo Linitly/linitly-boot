@@ -9,6 +9,7 @@ import org.linitly.boot.base.helper.groups.DeleteValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import java.io.Serializable;
 
 /**
@@ -21,7 +22,7 @@ import java.io.Serializable;
 public class BaseDTO implements Serializable {
 
     @ApiModelProperty(value = "id")
-    @NotNull(message = GlobalConstant.ID_NOTNULL_TIP, groups = {UpdateValidGroup.class, DeleteValidGroup.class})
+    @NotNull(message = GlobalConstant.ID_NOTNULL_TIP, groups = {Default.class, UpdateValidGroup.class, DeleteValidGroup.class})
     @Range(min = GlobalConstant.ID_MIN, message = GlobalConstant.ID_ERROR_TIP)
     private Long id;
 }

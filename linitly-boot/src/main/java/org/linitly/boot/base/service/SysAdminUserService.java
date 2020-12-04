@@ -6,10 +6,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
 import org.linitly.boot.base.dao.SysAdminUserMapper;
+import org.linitly.boot.base.dto.SysAdminUserChangePasswordDTO;
 import org.linitly.boot.base.dto.SysAdminUserDTO;
 import org.linitly.boot.base.dto.SysAdminUserSearchDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
 import org.linitly.boot.base.exception.CommonException;
+import org.linitly.boot.base.helper.entity.BaseEntity;
 import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,17 @@ public class SysAdminUserService {
 
     @Autowired
     private SysAdminUserMapper sysAdminUserMapper;
+
+    public void changePassword(SysAdminUserChangePasswordDTO dto) {
+        SysAdminUser adminUser = sysAdminUserMapper.findById(dto.getId());
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) throw new CommonException("两次密码输入不一致");
+        if (adminUser == null) throw new CommonException("不存在该用户");
+        String password = EncryptionUtil.md5(dto.getBeforePassword(), adminUser.getSalt());
+        if (!adminUser.getPassword().equals(password)) throw new CommonException("原密码输入错误");
+        SysAdminUser sysAdminUser = new SysAdminUser();
+        BeanUtils.copyProperties(dto, sysAdminUser);
+        sysAdminUserMapper.changePassword(sysAdminUser);
+    }
 
     @Transactional
     public void insert(SysAdminUserDTO dto) {
