@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ServerEndpoint(value = "/socket/{systemCode}/{userId}", configurator = MyEndpointConfigure.class)
 public class WebSocket {
 
-    private static AtomicInteger onlineCount = new AtomicInteger(0);
+    private static AtomicInteger onlineCount = new AtomicInteger();
 
     private static ConcurrentHashMap<Integer, Map<Long, WebSocket>> sockets = new ConcurrentHashMap<>();
 
@@ -43,7 +43,7 @@ public class WebSocket {
      */
     @OnClose
     public void onClose(@PathParam("systemCode") Integer systemCode, @PathParam("userId") Long userId) {
-        log.info("一个客户端关闭连接");
+        log.info("客户端关闭连接：系统码：{}，用户id：{}", systemCode, userId);
         sockets.get(systemCode).remove(userId);
         subOnlineCount();
     }

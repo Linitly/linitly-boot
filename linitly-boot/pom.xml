@@ -106,7 +106,6 @@
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
-
         <!-- swagger依赖jar包 -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -130,7 +129,7 @@
             <artifactId>jjwt</artifactId>
             <version>0.6.0</version>
         </dependency>
-        <!-- http -->
+        <!-- httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -145,11 +144,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
             <version>4.1</version>
-        </dependency>
-        <!-- 阿里云短信 -->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
         </dependency>
         <!-- fastjson -->
         <dependency>
