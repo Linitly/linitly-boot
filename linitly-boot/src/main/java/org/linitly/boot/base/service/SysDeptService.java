@@ -64,8 +64,6 @@ public class SysDeptService {
         if (sysDeptMapper.countByParentId(id) > 0) {
             throw new CommonException("当前部门存在子部门，无法删除");
         }
-        // TODO 先不做删除
-
         sysDeptMapper.deleteById(id);
     }
 

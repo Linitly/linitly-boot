@@ -43,6 +43,7 @@ public class SystemInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         MyBatisConstant.LOG_HELPER.remove();
         MyBatisConstant.DELETE_HELPER.remove();
+        MyBatisConstant.MYBATIS_INTERCEPT_PASS.remove();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }

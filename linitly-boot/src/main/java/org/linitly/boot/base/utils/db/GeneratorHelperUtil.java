@@ -13,33 +13,30 @@ import org.linitly.boot.base.helper.entity.LogHelper;
  */
 public class GeneratorHelperUtil {
 
-    public static BaseLog generatorInsertLog(BaseEntity baseEntity, LogHelper helper) {
-        BaseLog baseLog = LogUtil.generatorCommonBaseLog(helper);
+    public static BaseLog generatorInsertLog(BaseEntity baseEntity, LogHelper helper, BaseLog baseLog) {
         baseLog.setChangeJson(LogUtil.generatorLogJson(baseEntity));
         try {
             baseLog.setLog(LogUtil.getEntityLog(baseEntity, helper));
         } catch (Exception e) {
+            baseLog.setLog("");
             e.printStackTrace();
         }
         return baseLog;
     }
 
-    public static BaseLog generatorUpdateLog(BaseEntity baseEntity, LogHelper helper) {
-        BaseLog baseLog = generatorInsertLog(baseEntity, helper);
+    public static BaseLog generatorUpdateLog(BaseEntity baseEntity, LogHelper helper, BaseLog baseLog) {
         baseLog.setEntityId(baseEntity.getId());
         return baseLog;
     }
 
-    public static BaseLog generatorDeleteLog(BaseEntity baseEntity, LogHelper helper) {
-        BaseLog baseLog = LogUtil.generatorCommonBaseLog(helper);
+    public static BaseLog generatorDeleteLog(BaseEntity baseEntity, LogHelper helper, BaseLog baseLog) {
         baseLog.setEntityId(baseEntity.getId());
         baseLog.setOperation(getOperation(helper));
         baseLog.setLog(getLogBegin(baseEntity, helper));
         return baseLog;
     }
 
-    public static BaseLog generatorDeleteLog(Long entityId, LogHelper helper) {
-        BaseLog baseLog = LogUtil.generatorCommonBaseLog(helper);
+    public static BaseLog generatorDeleteLog(Long entityId, LogHelper helper, BaseLog baseLog) {
         baseLog.setEntityId(entityId);
         baseLog.setOperation(getOperation(helper));
         baseLog.setLog(getOperation(helper));

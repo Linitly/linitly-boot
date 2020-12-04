@@ -321,4 +321,36 @@ CREATE TABLE `sys_role_function_permission` (
   PRIMARY KEY (id)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统角色-功能权限关联表' ROW_FORMAT = Dynamic;
 
+DROP TABLE IF EXISTS `sys_data_dict`;
+CREATE TABLE `sys_data_dict` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `name`                        VARCHAR(16)       NOT NULL  DEFAULT ''        COMMENT '字典名称',
+  `code`                        VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '字典编码',
+  `description`                 VARCHAR(100)                DEFAULT ''        COMMENT '字典描述',
+  `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY un_name (`name`),
+  UNIQUE KEY un_code (`code`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据字典' ROW_FORMAT = Dynamic;
+
+DROP TABLE IF EXISTS `sys_data_dict_item`;
+CREATE TABLE `sys_data_dict_item` (
+  `id`                          bigint            NOT NULL  AUTO_INCREMENT    COMMENT '主键',
+  `value`                       VARCHAR(16)       NOT NULL  DEFAULT ''        COMMENT '字典值',
+  `text`                        VARCHAR(32)       NOT NULL  DEFAULT ''        COMMENT '字典文本',
+  `sort`                        int(11)           NOT NULL  DEFAULT 0         COMMENT '排序',
+  `sys_data_dict_id`            bigint            NOT NULL  DEFAULT 0         COMMENT '字典id',
+  `enabled`                     int(1)            NOT NULL  DEFAULT 1         COMMENT '启用状态(1:启用(默认);0:禁用;)',
+  `created_user_id`             bigint            NOT NULL  DEFAULT 0         COMMENT '创建人id',
+  `created_time`                datetime          DEFAULT CURRENT_TIMESTAMP   COMMENT '创建时间',
+  `last_modified_user_id`       bigint            NOT NULL  DEFAULT 0         COMMENT '最后修改人id',
+  `last_modified_time`          datetime          DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY `index_dict_id_value` (`sys_data_dict_id`, `value`)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据字典详情' ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS=1;

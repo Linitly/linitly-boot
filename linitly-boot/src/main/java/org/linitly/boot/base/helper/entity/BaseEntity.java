@@ -1,5 +1,6 @@
 package org.linitly.boot.base.helper.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -20,12 +21,14 @@ public class BaseEntity implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "创建人id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long createdUserId;
 
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
     @ApiModelProperty(value = "最后修改人id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long lastModifiedUserId;
 
     @ApiModelProperty(value = "最后一次更新时间")

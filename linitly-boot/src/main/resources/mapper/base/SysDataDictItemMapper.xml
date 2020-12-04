@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.linitly.boot.base.dao.SysDataDictItemMapper">
+    <resultMap extends="org.linitly.boot.base.dao.BaseBeanMapper.BaseEntityMap" id="BaseResultMap" type="org.linitly.boot.base.entity.SysDataDictItem">
+        <result column="value" jdbcType="VARCHAR" property="value" />
+        <result column="text" jdbcType="VARCHAR" property="text" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="sys_data_dict_id" jdbcType="BIGINT" property="sysDataDictId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, value, text, sort, sys_data_dict_id, enabled, created_user_id, created_time, 
+        last_modified_user_id, last_modified_time
+    </sql>
+
+    <select id="findByDictId" parameterType="long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM sys_data_dict_item
+        WHERE sys_data_dict_id = #{dictId}
+    </select>
+
+    <select id="countByDictIdAndValue" resultType="int">
+        SELECT COUNT(id)
+        FROM sys_data_dict_item
+        WHERE sys_data_dict_id = #{dictId} AND value = #{value}
+        <if test="id != null">
+            AND id != #{id}
+        </if>
+    </select>
+
+    <select id="findTextByDictIdAndValue" resultType="string">
+        SELECT text
+        FROM sys_data_dict_item
+        WHERE sys_data_dict_id = #{dictId} AND value = #{value}
+        LIMIT 1
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM sys_data_dict_item
+        WHERE id = #{id, jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM sys_data_dict_item
+        WHERE id = #{id, jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="org.linitly.boot.base.entity.SysDataDictItem">
+        INSERT INTO sys_data_dict_item (id, value, text, 
+            sort, sys_data_dict_id, created_user_id, 
+            last_modified_user_id)
+        VALUES (#{id, jdbcType=BIGINT}, #{value, jdbcType=VARCHAR}, #{text, jdbcType=VARCHAR}, 
+            #{sort, jdbcType=INTEGER}, #{sysDataDictId, jdbcType=BIGINT}, #{createdUserId, jdbcType=BIGINT}, 
+            #{lastModifiedUserId, jdbcType=BIGINT})
+    </insert>
+
+    <update id="updateById" parameterType="org.linitly.boot.base.entity.SysDataDictItem">
+        UPDATE sys_data_dict_item
+        SET value = #{value, jdbcType=VARCHAR},
+            text = #{text, jdbcType=VARCHAR},
+            sort = #{sort, jdbcType=INTEGER},
+            sys_data_dict_id = #{sysDataDictId, jdbcType=BIGINT},
+            last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT}
+        WHERE id = #{id, jdbcType=BIGINT}
+    </update>
+
+    <select id="findAll" parameterType="org.linitly.boot.base.entity.SysDataDictItem" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List" />
+        FROM sys_data_dict_item
+        <where>
+            <if test="value != null and value != ''">
+                value LIKE CONCAT('%', #{value, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="text != null and text != ''">
+                AND text LIKE CONCAT('%', #{text, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="sort != null">
+                AND sort = #{sort, jdbcType=INTEGER}
+            </if>
+            <if test="sysDataDictId != null">
+                AND sys_data_dict_id = #{sysDataDictId, jdbcType=BIGINT}
+            </if>
+            <if test="enabled != null">
+                AND enabled = #{enabled, jdbcType=INTEGER}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime, jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertSelective" parameterType="org.linitly.boot.base.entity.SysDataDictItem">
+        INSERT INTO sys_data_dict_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="value != null">
+                value,
+            </if>
+            <if test="text != null">
+                text,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="sysDataDictId != null">
+                sys_data_dict_id,
+            </if>
+            <if test="createdUserId != null">
+                created_user_id,
+            </if>
+            <if test="lastModifiedUserId != null">
+                last_modified_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=BIGINT},
+            </if>
+            <if test="value != null">
+                #{value, jdbcType=VARCHAR},
+            </if>
+            <if test="text != null">
+                #{text, jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort, jdbcType=INTEGER},
+            </if>
+            <if test="sysDataDictId != null">
+                #{sysDataDictId, jdbcType=BIGINT},
+            </if>
+            <if test="createdUserId != null">
+                #{createdUserId, jdbcType=BIGINT},
+            </if>
+            <if test="lastModifiedUserId != null">
+                #{lastModifiedUserId, jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysDataDictItem">
+        UPDATE sys_data_dict_item
+        <set>
+            <if test="value != null">
+                value = #{value, jdbcType=VARCHAR},
+            </if>
+            <if test="text != null">
+                text = #{text, jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort, jdbcType=INTEGER},
+            </if>
+            <if test="sysDataDictId != null">
+                sys_data_dict_id = #{sysDataDictId, jdbcType=BIGINT},
+            </if>
+            <if test="lastModifiedUserId != null">
+                last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id, jdbcType=BIGINT}
+    </update>
+
+</mapper>
