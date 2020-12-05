@@ -4,10 +4,12 @@ import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
+import org.linitly.boot.base.config.GeneratorConfig;
 import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.enums.DBCommandTypeEnum;
 import org.linitly.boot.base.helper.entity.BaseEntity;
 import org.linitly.boot.base.helper.entity.LogHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,8 +25,12 @@ import java.util.Properties;
 @Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
 public class LogHelperInterceptor implements Interceptor {
 
+    @Autowired
+    private GeneratorConfig generatorInfo;
+
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
+        if (!generatorInfo.logRecord()) return invocation.proceed();
         Boolean pass = MyBatisConstant.MYBATIS_INTERCEPT_PASS.get();
         if (pass != null && pass) return invocation.proceed();
         try {

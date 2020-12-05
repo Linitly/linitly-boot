@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "info")
-public class InfoProperties {
+@ConfigurationProperties(prefix = "linitly.swagger-info")
+public class SwaggerInfoConfig {
 
     private String author;
 

@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.linitly.boot.base.annotation.LogIgnore;
+import org.linitly.boot.base.config.GeneratorConfig;
 import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.dao.BaseBeanMapper;
 import org.linitly.boot.base.helper.entity.BaseEntity;
@@ -38,6 +39,8 @@ public class LogAspect {
     @Lazy
     @Autowired
     private LogAspect logAspect;
+    @Autowired
+    private GeneratorConfig generatorInfo;
 
     @Pointcut("execution(public * org.linitly.boot.base.dao..*.*(..)))")
     public void baseAspect() {
@@ -58,9 +61,10 @@ public class LogAspect {
     }
 
     private void checkAndGet(JoinPoint joinPoint) {
+        if (!generatorInfo.logRecord()) return;
         LogHelper helper = MyBatisConstant.LOG_HELPER.get();
+        if (helper == null) return;
         try {
-            if (helper == null) return;
             MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             String mapperClassName = methodSignature.getDeclaringTypeName();
             if (mapperClassName.equals(BaseBeanMapper.class.getName())) {

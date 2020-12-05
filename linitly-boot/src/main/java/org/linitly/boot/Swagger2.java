@@ -1,6 +1,6 @@
 package org.linitly.boot;
 
-import org.linitly.boot.base.config.InfoProperties;
+import org.linitly.boot.base.config.SwaggerInfoConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class Swagger2 {
 
     @Autowired
-    private InfoProperties swaggerEntity;
+    private SwaggerInfoConfig swaggerInfo;
 
     @Bean
     public Docket createRestApi() {
@@ -37,13 +37,13 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title(swaggerEntity.getTitle())
+                .title(swaggerInfo.getTitle())
                 //描述
-                .description(swaggerEntity.getDescription())
+                .description(swaggerInfo.getDescription())
                 //创建人
-                .contact(new Contact(swaggerEntity.getAuthor(), null, null))
+                .contact(new Contact(swaggerInfo.getAuthor(), null, null))
                 //版本号
-                .version(swaggerEntity.getVersion())
+                .version(swaggerInfo.getVersion())
                 .build();
     }
 }

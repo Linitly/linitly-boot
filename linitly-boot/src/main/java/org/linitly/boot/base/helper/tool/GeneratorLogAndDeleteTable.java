@@ -2,6 +2,7 @@ package org.linitly.boot.base.helper.tool;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.linitly.boot.base.config.GeneratorConfig;
 import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.dao.BaseBeanMapper;
 import org.linitly.boot.base.helper.entity.TableColumn;
@@ -26,9 +27,12 @@ public class GeneratorLogAndDeleteTable implements CommandLineRunner {
 
     @Autowired
     private BaseBeanMapper baseBeanMapper;
+    @Autowired
+    private GeneratorConfig generatorInfo;
 
     @Override
     public void run(String... args) throws Exception {
+        if (!generatorInfo.isEnabled()) return;
         List<String> tableNames = baseBeanMapper.findTableNames();
         List<TableColumn> tableColumns;
 
@@ -43,8 +47,8 @@ public class GeneratorLogAndDeleteTable implements CommandLineRunner {
             if (StringUtils.isNotBlank(ddls[1])) logTableDDLS.add(ddls[1]);
         }
         MyBatisConstant.MYBATIS_INTERCEPT_PASS.set(true);
-        baseBeanMapper.createTables(deleteTableDDLS);
-        baseBeanMapper.createTables(logTableDDLS);
+        if (generatorInfo.generatorDeleteTable()) baseBeanMapper.createTables(deleteTableDDLS);
+        if (generatorInfo.generatorLogTable()) baseBeanMapper.createTables(logTableDDLS);
         MyBatisConstant.MYBATIS_INTERCEPT_PASS.remove();
     }
 }

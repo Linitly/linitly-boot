@@ -5,6 +5,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.linitly.boot.base.config.GeneratorConfig;
 import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.dao.BaseBeanMapper;
 import org.linitly.boot.base.helper.entity.BaseEntity;
@@ -41,6 +42,8 @@ public class DeleteBackupAspect {
     @Lazy
     @Autowired
     private DeleteBackupAspect deleteBackupAspect;
+    @Autowired
+    private GeneratorConfig generatorInfo;
 
     @Pointcut("@annotation(org.linitly.boot.base.annotation.DeleteBackup)")
     public void deleteBackupAspect() {
@@ -53,6 +56,7 @@ public class DeleteBackupAspect {
 
     @AfterReturning("deleteBackupAspect()")
     public void deleteBackupAfterReturn(JoinPoint joinPoint) {
+        if (!generatorInfo.deleteBackupRecord()) return;
         DeleteHelper deleteHelper = MyBatisConstant.DELETE_HELPER.get();
         if (deleteHelper == null || CollectionUtils.isEmpty(deleteHelper.getDeleteData())) return;
         deleteBackupAspect.aspectAfterReturn(joinPoint, deleteHelper);
@@ -73,6 +77,7 @@ public class DeleteBackupAspect {
     }
 
     private void aspectBefore(JoinPoint joinPoint) {
+        if (!generatorInfo.deleteBackupRecord()) return;
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object[] args = joinPoint.getArgs();
         try {

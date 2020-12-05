@@ -1,8 +1,17 @@
-info:
-  author: "Linitly"
-  version: @version@
-  title: "Linitly Boot Frame Project"
-  description: "Linitly Boot Frame Project API Doc"
+linitly:
+  swagger-info:
+    author: "Linitly"
+    version: @version@
+    title: "Linitly Boot Frame Project"
+    description: "Linitly Boot Frame Project API Doc"
+  generator:
+    enabled: false
+    log-enabled: true
+    log-record: true
+    log-table-generator: false
+    delete-enabled: true
+    delete-table-generator: false
+    delete-backup-record: true
 
 server:
   port: 8081
