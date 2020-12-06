@@ -1,11 +1,15 @@
 package org.linitly.boot.base.constant.entity;
 
+import org.linitly.boot.base.constant.global.GlobalConstant;
+
 /**
  * @author: linitly-generator
  * @date: 2020-12-04 11:48
  * @description: 
  */
 public interface SysDataDictItemConstant {
+
+    String CACHE_KEY_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + "dict:";
 
     String VALUE_EMPTY_ERROR = "字典值不能为空";
 

@@ -2,6 +2,7 @@ package org.linitly.boot.base.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.dao.SysDataDictItemMapper;
 import org.linitly.boot.base.dto.SysDataDictItemDTO;
 import org.linitly.boot.base.entity.SysDataDictItem;
@@ -20,24 +21,30 @@ public class SysDataDictItemService {
 
     @Autowired
     private SysDataDictItemMapper sysDataDictItemMapper;
+    @Autowired
+    private SysDataDictItemCacheService sysDataDictItemCacheService;
 
     public void insert(SysDataDictItemDTO dto) {
         checkExist(dto.getSysDataDictId(), dto.getValue(), dto.getId());
         SysDataDictItem sysDataDictItem = new SysDataDictItem();
         BeanUtils.copyProperties(dto, sysDataDictItem);
         sysDataDictItemMapper.insertSelective(sysDataDictItem);
+        sysDataDictItemCacheService.insertDictItemCache(dto.getSysDataDictId(), dto.getValue());
     }
 
     public void updateById(SysDataDictItemDTO dto) {
+        SysDataDictItem dictItem = sysDataDictItemMapper.findById(dto.getId());
+        if (dictItem == null) throw new CommonException("不存在该字典，唯一键错误");
         checkExist(dto.getSysDataDictId(), dto.getValue(), dto.getId());
         SysDataDictItem sysDataDictItem = new SysDataDictItem();
         BeanUtils.copyProperties(dto, sysDataDictItem);
         sysDataDictItemMapper.updateByIdSelective(sysDataDictItem);
+        sysDataDictItemCacheService.updateDictItemCache(dictItem.getSysDataDictId(), dictItem.getValue(), dto.getSysDataDictId(), dto.getValue(), dto.getText());
     }
 
     private void checkExist(Long sysDataDictId, String value, Long id) {
         int count = sysDataDictItemMapper.countByDictIdAndValue(sysDataDictId, value, id);
-        if (count > 0) throw new CommonException("该字典已存在此值");
+        if (count > 0) throw new CommonException("该字典已存在");
     }
 
     public SysDataDictItem findById(Long id) {
@@ -53,10 +60,18 @@ public class SysDataDictItemService {
     }
 
     public void deleteById(Long id) {
+        sysDataDictItemCacheService.deleteDictItemCache(id);
         sysDataDictItemMapper.deleteById(id);
     }
 
     public String findTextByDictCodeAndValue(String code, String value) {
-        return sysDataDictItemMapper.findTextByDictCodeAndValue(code, value);
+        String cache = sysDataDictItemCacheService.getItemCache(code, value);
+        if (StringUtils.isNotBlank(cache)) {
+            return cache;
+        } else {
+            String text = sysDataDictItemMapper.findTextByDictCodeAndValue(code, value);
+            sysDataDictItemCacheService.setDictItemCache(code, value, text);
+            return text;
+        }
     }
 }

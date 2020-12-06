@@ -19,6 +19,8 @@ public class SysDataDictService {
 
     @Autowired
     private SysDataDictMapper sysDataDictMapper;
+    @Autowired
+    private SysDataDictItemCacheService sysDataDictItemCacheService;
 
     public void insert(SysDataDictDTO dto) {
         checkExist(dto.getName(), dto.getCode(), dto.getId());
@@ -28,10 +30,13 @@ public class SysDataDictService {
     }
 
     public void updateById(SysDataDictDTO dto) {
+        SysDataDict beforeDataDict = sysDataDictMapper.findById(dto.getId());
+        if (beforeDataDict == null) throw new CommonException("不存在该字典");
         checkExist(dto.getName(), dto.getCode(), dto.getId());
         SysDataDict sysDataDict = new SysDataDict();
         BeanUtils.copyProperties(dto, sysDataDict);
         sysDataDictMapper.updateByIdSelective(sysDataDict);
+        sysDataDictItemCacheService.updateDictCache(beforeDataDict.getCode(), dto.getCode());
     }
 
     private void checkExist(String name, String code, Long id) {
@@ -50,6 +55,7 @@ public class SysDataDictService {
     }
 
     public void deleteById(Long id) {
+        sysDataDictItemCacheService.deleteDictCache(id);
         sysDataDictMapper.deleteById(id);
     }
 }

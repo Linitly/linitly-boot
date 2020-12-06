@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.linitly.boot.base.annotation.DeleteBackup;
 import org.linitly.boot.base.entity.SysDataDictItem;
+import org.linitly.boot.base.vo.SysDataDictItemCacheVO;
 
 /**
  * @author: linitly-generator
@@ -33,4 +34,6 @@ public interface SysDataDictItemMapper {
     String findTextByDictCodeAndValue(@Param("code") String code, @Param("value") String value);
 
     int countByDictIdAndValue(@Param("dictId") Long dictId, @Param("value") String value, @Param("id") Long id);
+
+    List<SysDataDictItemCacheVO> findDictItemCache(@Param("code") String code, @Param("dictId") Long dictId, @Param("value") String value, @Param("dictItemId") Long dictItemId);
 }

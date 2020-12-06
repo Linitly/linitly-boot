@@ -14,6 +14,26 @@
         last_modified_user_id, last_modified_time
     </sql>
 
+    <select id="findDictItemCache" resultType="sysDataDictItemCacheVO">
+        SELECT sdd.code, sddi.value, sddi.text
+        FROM sys_data_dict sdd INNER JOIN sys_data_dict_item sddi
+        ON sdd.id = sddi.sys_data_dict_id
+        <where>
+            <if test="code != null and code != ''">
+                sdd.code = #{code}
+            </if>
+            <if test="dictId != null">
+                AND sddi.sys_data_dict_id = #{dictId}
+            </if>
+            <if test="value != null and value != ''">
+                AND sddi.value = #{value}
+            </if>
+            <if test="dictItemId != null">
+                AND sddi.id = #{dictItemId}
+            </if>
+        </where>
+    </select>
+
     <select id="findByDictId" parameterType="long" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />
