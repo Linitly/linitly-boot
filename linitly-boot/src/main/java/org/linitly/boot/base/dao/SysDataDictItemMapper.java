@@ -30,7 +30,7 @@ public interface SysDataDictItemMapper {
 
     List<SysDataDictItem> findByDictId(Long dictId);
 
-    String findTextByDictIdAndValue(@Param("dictId") Long dictId, @Param("value") String value);
+    String findTextByDictCodeAndValue(@Param("code") String code, @Param("value") String value);
 
     int countByDictIdAndValue(@Param("dictId") Long dictId, @Param("value") String value, @Param("id") Long id);
 }

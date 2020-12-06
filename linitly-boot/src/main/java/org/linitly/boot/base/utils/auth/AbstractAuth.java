@@ -1,5 +1,7 @@
 package org.linitly.boot.base.utils.auth;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.utils.bean.SpringBeanUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -17,36 +19,46 @@ public abstract class AbstractAuth implements AuthRedis {
 
     @Override
     public void setRedisToken(String key, String token, long expireSecond) {
-        redisTemplate.opsForValue().set(key, token, expireSecond, TimeUnit.SECONDS);
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(token))
+            redisTemplate.opsForValue().set(key, token, expireSecond, TimeUnit.SECONDS);
     }
 
     @Override
     public void setRedisRefreshToken(String key, String refreshToken, long expireSecond) {
-        redisTemplate.opsForValue().set(key, refreshToken, expireSecond, TimeUnit.SECONDS);
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(refreshToken))
+            redisTemplate.opsForValue().set(key, refreshToken, expireSecond, TimeUnit.SECONDS);
     }
 
     @Override
     public void setRedisDepts(String key, Set depts, long expireSecond) {
-        redisTemplate.opsForSet().add(key, depts.toArray());
-        expireRedisDepts(key, expireSecond);
+        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(depts)) {
+            redisTemplate.opsForSet().add(key, depts.toArray());
+            expireRedisDepts(key, expireSecond);
+        }
     }
 
     @Override
     public void setRedisPosts(String key, Set posts, long expireSecond) {
-        redisTemplate.opsForSet().add(key, posts.toArray());
-        expireRedisPosts(key, expireSecond);
+        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(posts)) {
+            redisTemplate.opsForSet().add(key, posts.toArray());
+            expireRedisDepts(key, expireSecond);
+        }
     }
 
     @Override
     public void setRedisRoles(String key, Set roles, long expireSecond) {
-        redisTemplate.opsForSet().add(key, roles.toArray());
-        expireRedisRoles(key, expireSecond);
+        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(roles)) {
+            redisTemplate.opsForSet().add(key, roles.toArray());
+            expireRedisDepts(key, expireSecond);
+        }
     }
 
     @Override
     public void setRedisFunctionPermissions(String key, Set functionPermissions, long expireSecond) {
-        redisTemplate.opsForSet().add(key, functionPermissions.toArray());
-        expireRedisFunctionPermissions(key, expireSecond);
+        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(functionPermissions)) {
+            redisTemplate.opsForSet().add(key, functionPermissions.toArray());
+            expireRedisDepts(key, expireSecond);
+        }
     }
 
     protected void expireRedisDepts(String key, long expireSecond) {

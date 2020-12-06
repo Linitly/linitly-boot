@@ -28,7 +28,8 @@ import javax.validation.Valid;
  */
 @Result
 @RestController
-@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysAdminUser")
+//@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysAdminUser")
+@RequestMapping("/sysAdminUser")
 @Api(tags = "系统用户管理")
 public class SysAdminUserController {
 
@@ -68,9 +69,9 @@ public class SysAdminUserController {
         sysAdminUserService.changePassword(dto);
     }
 
-//    @PostMapping("/deleteById/{id}")
-//    @ApiOperation(value = "根据id删除系统用户")
-//    public void deleteById(@PathVariable Long id) {
-//        sysAdminUserService.deleteById(id);
-//    }
+    @PostMapping("/deleteById/{id}")
+    @ApiOperation(value = "根据id删除系统用户")
+    public void deleteById(@PathVariable Long id) {
+        sysAdminUserService.deleteById(id);
+    }
 }

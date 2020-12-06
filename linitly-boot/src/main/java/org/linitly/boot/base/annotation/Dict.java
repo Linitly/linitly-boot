@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * @description 字典注解
  */
 @Documented
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Dict {
 

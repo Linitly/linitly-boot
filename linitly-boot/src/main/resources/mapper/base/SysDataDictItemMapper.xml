@@ -30,10 +30,10 @@
         </if>
     </select>
 
-    <select id="findTextByDictIdAndValue" resultType="string">
+    <select id="findTextByDictCodeAndValue" resultType="string">
         SELECT text
         FROM sys_data_dict_item
-        WHERE sys_data_dict_id = #{dictId} AND value = #{value}
+        WHERE sys_data_dict_id = (SELECT id FROM sys_data_dict WHERE code = #{code}) AND value = #{value}
         LIMIT 1
     </select>
 

@@ -52,11 +52,11 @@ public class SysDataDictItemService {
         return sysDataDictItemMapper.findByDictId(dictId);
     }
 
-    public String findTextByDictIdAndValue(Long dictId, String value) {
-        return sysDataDictItemMapper.findTextByDictIdAndValue(dictId, value);
-    }
-
     public void deleteById(Long id) {
         sysDataDictItemMapper.deleteById(id);
+    }
+
+    public String findTextByDictCodeAndValue(String code, String value) {
+        return sysDataDictItemMapper.findTextByDictCodeAndValue(code, value);
     }
 }

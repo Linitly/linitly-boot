@@ -1,10 +1,12 @@
 package org.linitly.boot.base.helper.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.linitly.boot.base.annotation.Dict;
+import org.linitly.boot.base.handle.DictSerialize;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,6 +38,7 @@ public class BaseEntity implements Serializable {
     private Date lastModifiedTime;
 
     @Dict
+    @JsonSerialize(using = DictSerialize.class)
     @ApiModelProperty(value = "启用禁用状态", notes = "1:启用(默认);0:禁用")
     private Integer enabled;
 }
