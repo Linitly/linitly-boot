@@ -19,6 +19,8 @@ public class SysPostService {
 
     @Autowired
     private SysPostMapper sysPostMapper;
+    @Autowired
+    private SysAdminUserCacheService sysAdminUserCacheService;
 
     public void insert(SysPostDTO dto) {
         checkExists(dto.getName(), dto.getSysDeptId(), dto.getId());
@@ -32,6 +34,7 @@ public class SysPostService {
         SysPost sysPost = new SysPost();
         BeanUtils.copyProperties(dto, sysPost);
         sysPostMapper.updateByIdSelective(sysPost);
+        sysAdminUserCacheService.updateDeptCache(dto.getId());
     }
 
     private void checkExists(String name, Long sysDeptId, Long id) {

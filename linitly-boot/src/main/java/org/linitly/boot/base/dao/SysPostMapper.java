@@ -1,6 +1,7 @@
 package org.linitly.boot.base.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 import org.linitly.boot.base.annotation.DeleteBackup;
@@ -29,4 +30,6 @@ public interface SysPostMapper {
     int updateByIdSelective(SysPost sysPost);
 
     int countByNameAndDeptId(@Param("name") String name, @Param("sysDeptId") Long sysDeptId, @Param("id") Long id);
+
+    Set<Long> findAdminUserIdByPostId(Long postId);
 }

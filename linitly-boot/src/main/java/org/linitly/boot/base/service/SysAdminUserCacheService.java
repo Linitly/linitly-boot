@@ -1,19 +1,18 @@
 package org.linitly.boot.base.service;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.linitly.boot.base.constant.admin.AdminCommonConstant;
-import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
 import org.linitly.boot.base.dao.SysAdminUserMapper;
+import org.linitly.boot.base.dao.SysPostMapper;
 import org.linitly.boot.base.dao.SysRoleMapper;
-import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 import org.linitly.boot.base.utils.auth.AbstractAuth;
 import org.linitly.boot.base.utils.auth.AuthFactory;
+import org.linitly.boot.base.vo.SysPostDeptIdVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,9 +25,9 @@ import java.util.Set;
 public class SysAdminUserCacheService {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
     private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysPostMapper sysPostMapper;
     @Autowired
     private SysAdminUserMapper sysAdminUserMapper;
     @Autowired
@@ -36,33 +35,53 @@ public class SysAdminUserCacheService {
     private AbstractAuth auth;
 
     @Async
-    public void updateRoleBaseCache(Long roleId) {
-        List<Long> adminUserIdList = findAdminUserIdByRoleId(roleId);
-        if (CollectionUtils.isEmpty(adminUserIdList)) return;
+    public void updateAdminUser(Long sysAdminUserId) {
         auth = AuthFactory.getAuth(request);
-        adminUserIdList.forEach(this::checkLogin);
+        if (checkLogin(sysAdminUserId)) auth.logoutRedisDel(sysAdminUserId.toString());
+    }
+
+    @Async
+    public void updateDeptCache(Long postId) {
+        Set<Long> adminUserIdSet = sysPostMapper.findAdminUserIdByPostId(postId);
+        if (CollectionUtils.isEmpty(adminUserIdSet)) return;
+        auth = AuthFactory.getAuth(request);
+        adminUserIdSet.forEach(this::updateRedisDeptCache);
+    }
+
+    @Async
+    public void updateRoleBaseCache(Long roleId) {
+        Set<Long> adminUserIdSet = findAdminUserIdByRoleId(roleId);
+        if (CollectionUtils.isEmpty(adminUserIdSet)) return;
+        auth = AuthFactory.getAuth(request);
+        adminUserIdSet.forEach(e -> {if (checkLogin(e)) updateRedisRoleCache(e);});
     }
 
     @Async
     public void deleteRolePowerCache(Long roleId) {
-        List<Long> adminUserIdList = findAdminUserIdByRoleId(roleId);
-        if (CollectionUtils.isEmpty(adminUserIdList)) return;
-        adminUserIdList.forEach(e -> auth.updateFunctionPermissions(e.toString(), null));
+        Set<Long> adminUserIdSet = findAdminUserIdByRoleId(roleId);
+        if (CollectionUtils.isEmpty(adminUserIdSet)) return;
+        auth = AuthFactory.getAuth(request);
+        adminUserIdSet.forEach(e -> auth.updateFunctionPermissions(e.toString(), null));
     }
 
-    private List<Long> findAdminUserIdByRoleId(Long roleId) {
+    private Set<Long> findAdminUserIdByRoleId(Long roleId) {
         return sysRoleMapper.findAdminUserIdByRoleId(roleId);
     }
 
-    private void checkLogin(Long sysAdminUserId) {
-        String encryptId = EncryptionUtil.md5(sysAdminUserId.toString(), SysAdminUserConstant.TOKEN_ID_SALT);
-        Object token = redisTemplate.opsForValue().get(AdminCommonConstant.ADMIN_TOKEN_PREFIX + encryptId);
-        if (token == null) return;
-        updateRedisRoleCache(sysAdminUserId);
+    private boolean checkLogin(Long sysAdminUserId) {
+        String token = auth.getToken(sysAdminUserId.toString());
+        return token == null;
     }
 
     private void updateRedisRoleCache(Long sysAdminUserId) {
         Set<String> roleCodes = sysAdminUserMapper.findRoleCodesByAdminUserId(sysAdminUserId);
         auth.updateRoles(sysAdminUserId.toString(), roleCodes);
+    }
+
+    private void updateRedisDeptCache(Long sysAdminUserId) {
+        Set<Long> deptIds = new HashSet<>();
+        List<SysPostDeptIdVO> postDeptIdList = sysAdminUserMapper.findPostAndDeptIdsByAdminUserId(sysAdminUserId);
+        postDeptIdList.forEach(e -> deptIds.add(e.getDeptId()));
+        auth.updateDepts(sysAdminUserId.toString(), deptIds);
     }
 }

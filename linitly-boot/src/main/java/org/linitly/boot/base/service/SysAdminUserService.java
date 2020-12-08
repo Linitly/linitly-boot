@@ -28,6 +28,8 @@ public class SysAdminUserService {
 
     @Autowired
     private SysAdminUserMapper sysAdminUserMapper;
+    @Autowired
+    private SysAdminUserCacheService sysAdminUserCacheService;
 
     public void changePassword(SysAdminUserChangePasswordDTO dto) {
         SysAdminUser adminUser = sysAdminUserMapper.findById(dto.getId());
@@ -59,6 +61,7 @@ public class SysAdminUserService {
         BeanUtils.copyProperties(dto, sysAdminUser);
         sysAdminUserMapper.updateByIdSelective(sysAdminUser);
         empower(sysAdminUser.getId(), dto.getRoleIds(), dto.getPostIds(), true);
+        sysAdminUserCacheService.updateAdminUser(dto.getId());
     }
 
     public SysAdminUser findById(Long id) {

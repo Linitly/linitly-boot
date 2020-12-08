@@ -87,7 +87,6 @@
                 last_modified_user_id,
             </if>
         </trim>
-
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id, jdbcType=BIGINT},
@@ -105,7 +104,6 @@
                 #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </trim>
-
     </insert>
 
     <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysPost">
@@ -121,8 +119,12 @@
                 last_modified_user_id = #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </set>
-
         where id = #{id, jdbcType=BIGINT}
     </update>
 
+    <select id="findAdminUserIdByPostId" resultType="long" parameterType="long">
+        SELECT admin_user_id
+        FROM sys_admin_user_post saup
+        WHERE post_id = #{postId}
+    </select>
 </mapper>

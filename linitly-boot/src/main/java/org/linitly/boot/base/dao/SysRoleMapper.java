@@ -41,7 +41,7 @@ public interface SysRoleMapper {
 
     void insertRoleFunctionPermissions(@Param("id") Long id, @Param("permissionIds") List<Long> permissionIds);
 
-    List<Long> findAdminUserIdByRoleId(Long roleId);
+    Set<Long> findAdminUserIdByRoleId(Long roleId);
 
     List<SysMenuTreeVO> findMenusByAdminUserId(Long adminUserId);
 

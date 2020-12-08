@@ -28,8 +28,8 @@ import javax.validation.Valid;
  */
 @Result
 @RestController
-//@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysAdminUser")
-@RequestMapping("/sysAdminUser")
+@RequestMapping(AdminCommonConstant.URL_PREFIX + "/sysAdminUser")
+//@RequestMapping("/sysAdminUser")
 @Api(tags = "系统用户管理")
 public class SysAdminUserController {
 
