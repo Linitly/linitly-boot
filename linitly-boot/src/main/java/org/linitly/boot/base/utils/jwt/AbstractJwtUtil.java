@@ -27,15 +27,16 @@ public abstract class AbstractJwtUtil implements JwtUtil {
 
     protected static RedisTemplate<String, Object> redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
 
-    protected static AbstractAuth abstractAuth;
+    public AbstractAuth abstractAuth;
 
     protected SignatureAlgorithm algorithm;
 
     protected String salt;
 
-    AbstractJwtUtil(SignatureAlgorithm algorithm, String salt) {
+    AbstractJwtUtil(SignatureAlgorithm algorithm, String salt, AbstractAuth abstractAuth) {
         this.algorithm = algorithm;
         this.salt = salt;
+        this.abstractAuth = abstractAuth;
     }
 
     @Override
@@ -85,5 +86,9 @@ public abstract class AbstractJwtUtil implements JwtUtil {
 
     public String getSalt() {
         return salt;
+    }
+
+    public AbstractAuth getAbstractAuth() {
+        return abstractAuth;
     }
 }

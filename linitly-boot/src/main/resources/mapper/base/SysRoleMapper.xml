@@ -171,4 +171,35 @@
             (#{id}, #{pId})
         </foreach>
     </insert>
+
+    <select id="findAdminUserIdByRoleId" parameterType="long" resultType="int">
+        SELECT saur.`admin_user_id`
+        FROM sys_role sr, sys_admin_user_role saur
+        WHERE sr.`id` = saur.`role_id` AND saur.`role_id` = #{roleId}
+    </select>
+
+    <select id="findMenusByAdminUserId" parameterType="long" resultType="sysMenuTreeVO">
+        SELECT sm.id, sm.name, sm.parent_id parentId, sm.sort, sm.child_number childNumber, sm.url
+        FROM sys_admin_user sau, sys_admin_user_role saur, sys_role sr, sys_role_menu srm, sys_menu sm
+        WHERE sau.id = #{adminUserId} AND sau.id = saur.admin_user_id AND saur.role_id = sr.id AND sr.id = srm.role_id AND srm.menu_id = sm.id
+    </select>
+
+    <select id="findFunctionPermissionsByAdminUserId" parameterType="long" resultType="sysFunctionPermissionTreeVO">
+        SELECT sfp.id, sfp.name, sfp.sys_menu_id sysMenuId, sfp.code
+        FROM sys_admin_user sau, sys_admin_user_role saur, sys_role sr, sys_role_function_permission srfp, sys_function_permission sfp
+        WHERE sau.id = #{adminUserId} AND sau.id = saur.admin_user_id AND saur.role_id = sr.id
+        AND sr.id = srfp.role_id AND srfp.function_permission_id = sfp.id
+    </select>
+
+    <select id="findMenuIdByRoleId" parameterType="long" resultType="long">
+        SELECT sm.id
+        FROM sys_role_menu srm, sys_menu sm
+        WHERE srm.role_id = #{roleId} AND srm.menu_id = sm.id
+    </select>
+
+    <select id="findFunctionPermissionIdByRoleId" parameterType="long" resultType="long">
+        SELECT sfp.id
+        FROM sys_role_function_permission srfp, sys_function_permission sfp
+        WHERE srfp.role_id = #{roleId} AND srfp.function_permission_id = sfp.id
+    </select>
 </mapper>

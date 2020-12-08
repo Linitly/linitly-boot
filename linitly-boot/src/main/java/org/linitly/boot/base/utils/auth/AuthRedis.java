@@ -4,27 +4,67 @@ import java.util.Set;
 
 public interface AuthRedis {
 
-    void setRedisToken(String key, String token, long expireSecond);
+    void setRedisToken(String id, String token);
 
-    void setRedisRefreshToken(String key, String refreshToken, long expireSecond);
+    void setRedisRefreshToken(String id, String refreshToken);
 
-    void setRedisDepts(String key, Set depts, long expireSecond);
+    void setRedisDepts(String id, Set depts);
 
-    void setRedisPosts(String key, Set posts, long expireSecond);
+    void setRedisPosts(String id, Set posts);
 
-    void setRedisRoles(String key, Set roles, long expireSecond);
+    void setRedisRoles(String id, Set roles);
 
-    void setRedisFunctionPermissions(String key, Set functionPermissions, long expireSecond);
+    void setRedisFunctionPermissions(String id, Set functionPermissions);
 
-    void delRedisToken(String key);
+    void expireRedisDepts(String id);
 
-    void delRedisRefreshToken(String key);
+    void expireRedisPosts(String id);
 
-    void delRedisDepts(String key);
+    void expireRedisRoles(String id);
 
-    void delRedisPosts(String key);
+    void expireRedisFunctionPermissions(String id);
 
-    void delRedisRoles(String key);
+    void updateDepts(String id, Set depts);
 
-    void delRedisFunctionPermissions(String key);
+    void updatePosts(String id, Set posts);
+
+    void updateRoles(String id, Set roles);
+
+    void updateFunctionPermissions(String id, Set functionPermissions);
+
+    void delRedisToken(String id);
+
+    void delRedisRefreshToken(String id);
+
+    void delRedisDepts(String id);
+
+    void delRedisPosts(String id);
+
+    void delRedisRoles(String id);
+
+    void delRedisFunctionPermissions(String id);
+
+    String getTokenKey(String id);
+
+    String getRefreshTokenKey(String id);
+
+    String getDeptKey(String id);
+
+    String getPostKey(String id);
+
+    String getRoleKey(String id);
+
+    String getFunctionPermissionKey(String id);
+
+    String getToken(String id);
+
+    String getRefreshToken(String id);
+
+    Set getDepts(String id);
+
+    Set getPosts(String id);
+
+    Set getRoles(String id);
+
+    Set getFunctionPermissions(String id);
 }

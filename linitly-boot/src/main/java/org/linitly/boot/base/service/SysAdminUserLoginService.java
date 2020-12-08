@@ -1,5 +1,6 @@
 package org.linitly.boot.base.service;
 
+import com.google.common.collect.Sets;
 import org.linitly.boot.base.dao.SysAdminUserMapper;
 import org.linitly.boot.base.dto.SysAdminUserLoginDTO;
 import org.linitly.boot.base.entity.SysAdminUser;
@@ -9,7 +10,6 @@ import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.utils.Precondition;
 import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 import org.linitly.boot.base.utils.auth.AbstractAuth;
-import org.linitly.boot.base.utils.auth.AuthFactory;
 import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
 import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.vo.SysAdminUserLoginVO;
@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,12 +36,16 @@ public class SysAdminUserLoginService {
 
     @PostConstruct
     public void init() {
-        adminAuth = AuthFactory.getAuth(SystemEnum.ADMIN.getSystemCode());
         jwtUtil = JwtUtilFactory.getJwtUtil(SystemEnum.ADMIN.getSystemCode());
+        adminAuth = jwtUtil.getAbstractAuth();
     }
 
     @Autowired
     private SysAdminUserMapper sysAdminUserMapper;
+    @Autowired
+    private SysRoleService sysRoleService;
+    @Autowired
+    private HttpServletRequest request;
 
     private AbstractJwtUtil jwtUtil;
     private AbstractAuth adminAuth;
@@ -55,11 +60,12 @@ public class SysAdminUserLoginService {
             deptIds.add(e.getDeptId());
         });
         Set<String> roleCodes = sysAdminUserMapper.findRoleCodesByAdminUserId(sysAdminUser.getId());
-        Set<String> functionPermissionCodes = sysAdminUserMapper.findFunctionPermissionCodesByAdminUserId(sysAdminUser.getId());
+        Set<String> functionPermissionCodes = Sets.newHashSet();
         String[] tokens = getTokens(sysAdminUser);
-        adminAuth.loginRedisSet(sysAdminUser.getId().toString(), tokens[0], tokens[1], deptIds, postIds, roleCodes, functionPermissionCodes);
         SysAdminUserLoginVO loginVO = new SysAdminUserLoginVO().setToken(tokens[0]).setRefreshToken(tokens[1]);
         BeanUtils.copyProperties(sysAdminUser, loginVO);
+        loginVO.setMenuTree(sysRoleService.tree(null, request, functionPermissionCodes, sysAdminUser.getId()));
+        adminAuth.loginRedisSet(sysAdminUser.getId().toString(), tokens[0], tokens[1], deptIds, postIds, roleCodes, functionPermissionCodes);
         return loginVO;
     }
 

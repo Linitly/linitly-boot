@@ -13,12 +13,13 @@ import org.linitly.boot.base.entity.SysRole;
 import org.linitly.boot.base.helper.groups.InsertValidGroup;
 import org.linitly.boot.base.helper.groups.UpdateValidGroup;
 import org.linitly.boot.base.service.SysRoleService;
+import org.linitly.boot.base.vo.SysMenuTreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author: linitly-generator
@@ -64,6 +65,12 @@ public class SysRoleController {
     public List<SysRole> findAll(@RequestParam(defaultValue = AdminCommonConstant.PAGE_NUMBER) int pageNumber, @RequestParam(defaultValue = AdminCommonConstant.PAGE_SIZE) int pageSize, @RequestBody(required = false) SysRole sysRole) {
         PageHelper.startPage(pageNumber, pageSize, "id desc");
         return sysRoleService.findAll(sysRole);
+    }
+
+    @PostMapping("/tree")
+    @ApiOperation(value = "获取树状权限列表")
+    public List<SysMenuTreeVO> tree(@RequestParam(required = false) Long roleId, HttpServletRequest request) {
+        return sysRoleService.tree(roleId, request, null, null);
     }
 
 //    @PostMapping("/deleteById/{id}")

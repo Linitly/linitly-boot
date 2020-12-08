@@ -131,7 +131,6 @@
                 last_modified_user_id,
             </if>
         </trim>
-
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id, jdbcType=BIGINT},
@@ -158,7 +157,6 @@
                 #{lastModifiedUserId, jdbcType=BIGINT},
             </if>
         </trim>
-
     </insert>
 
     <update id="updateByIdSelective" parameterType="org.linitly.boot.base.entity.SysMenu">

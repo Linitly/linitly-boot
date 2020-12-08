@@ -2,6 +2,7 @@ package org.linitly.boot.base.utils.auth;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 import org.linitly.boot.base.utils.bean.SpringBeanUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -15,106 +16,228 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractAuth implements AuthRedis {
 
-    protected static RedisTemplate<String, Object> redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
+    private static RedisTemplate<String, Object> redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
+    private String idSalt;
+    private String tokenKeyPrefix;
+    private String refreshTokenKeyPrefix;
+    private String deptKeyPrefix;
+    private String postKeyPrefix;
+    private String roleKeyPrefix;
+    private String functionPermissionKeyPrefix;
+    private long tokenExpireTime;
+    private long refreshTokenExpireTime;
+    private long deptExpireTime;
+    private long postExpireTime;
+    private long roleExpireTime;
+    private long functionPermissionExpireTime;
 
-    @Override
-    public void setRedisToken(String key, String token, long expireSecond) {
-        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(token))
-            redisTemplate.opsForValue().set(key, token, expireSecond, TimeUnit.SECONDS);
+    protected AbstractAuth(String idSalt, String tokenKeyPrefix, String refreshTokenKeyPrefix, String deptKeyPrefix, String postKeyPrefix,
+                           String roleKeyPrefix, String functionPermissionKeyPrefix,
+                           long tokenExpireTime, long refreshTokenExpireTime, long deptExpireTime, long postExpireTime, long roleExpireTime,
+                           long functionPermissionExpireTime) {
+        this.idSalt = idSalt;
+        this.tokenKeyPrefix = tokenKeyPrefix;
+        this.refreshTokenKeyPrefix = refreshTokenKeyPrefix;
+        this.deptKeyPrefix = deptKeyPrefix;
+        this.postKeyPrefix = postKeyPrefix;
+        this.roleKeyPrefix = roleKeyPrefix;
+        this.functionPermissionKeyPrefix = functionPermissionKeyPrefix;
+        this.tokenExpireTime = tokenExpireTime;
+        this.refreshTokenExpireTime = refreshTokenExpireTime;
+        this.deptExpireTime = deptExpireTime;
+        this.postExpireTime = postExpireTime;
+        this.roleExpireTime = roleExpireTime;
+        this.functionPermissionExpireTime = functionPermissionExpireTime;
     }
 
     @Override
-    public void setRedisRefreshToken(String key, String refreshToken, long expireSecond) {
-        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(refreshToken))
-            redisTemplate.opsForValue().set(key, refreshToken, expireSecond, TimeUnit.SECONDS);
+    public void setRedisToken(String id, String token) {
+        if (StringUtils.isNotBlank(id) && StringUtils.isNotBlank(token))
+            redisTemplate.opsForValue().set(getTokenKey(id), token, tokenExpireTime, TimeUnit.SECONDS);
     }
 
     @Override
-    public void setRedisDepts(String key, Set depts, long expireSecond) {
-        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(depts)) {
-            redisTemplate.opsForSet().add(key, depts.toArray());
-            expireRedisDepts(key, expireSecond);
+    public void setRedisRefreshToken(String id, String refreshToken) {
+        if (StringUtils.isNotBlank(id) && StringUtils.isNotBlank(refreshToken))
+            redisTemplate.opsForValue().set(getRefreshTokenKey(id), refreshToken, refreshTokenExpireTime, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void setRedisDepts(String id, Set depts) {
+        if (StringUtils.isNotBlank(id) && CollectionUtils.isNotEmpty(depts)) {
+            redisTemplate.opsForSet().add(getDeptKey(id), depts.toArray());
+            expireRedisDepts(id);
         }
     }
 
     @Override
-    public void setRedisPosts(String key, Set posts, long expireSecond) {
-        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(posts)) {
-            redisTemplate.opsForSet().add(key, posts.toArray());
-            expireRedisPosts(key, expireSecond);
+    public void setRedisPosts(String id, Set posts) {
+        if (StringUtils.isNotBlank(id) && CollectionUtils.isNotEmpty(posts)) {
+            redisTemplate.opsForSet().add(getPostKey(id), posts.toArray());
+            expireRedisPosts(id);
         }
     }
 
     @Override
-    public void setRedisRoles(String key, Set roles, long expireSecond) {
-        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(roles)) {
-            redisTemplate.opsForSet().add(key, roles.toArray());
-            expireRedisRoles(key, expireSecond);
+    public void setRedisRoles(String id, Set roles) {
+        if (StringUtils.isNotBlank(id) && CollectionUtils.isNotEmpty(roles)) {
+            redisTemplate.opsForSet().add(getRoleKey(id), roles.toArray());
+            expireRedisRoles(id);
         }
     }
 
     @Override
-    public void setRedisFunctionPermissions(String key, Set functionPermissions, long expireSecond) {
-        if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(functionPermissions)) {
-            redisTemplate.opsForSet().add(key, functionPermissions.toArray());
-            expireRedisFunctionPermissions(key, expireSecond);
+    public void setRedisFunctionPermissions(String id, Set functionPermissions) {
+        if (StringUtils.isNotBlank(id) && CollectionUtils.isNotEmpty(functionPermissions)) {
+            redisTemplate.opsForSet().add(getFunctionPermissionKey(id), functionPermissions.toArray());
+            expireRedisFunctionPermissions(id);
         }
     }
 
-    protected void expireRedisDepts(String key, long expireSecond) {
-        redisTemplate.expire(key, expireSecond, TimeUnit.SECONDS);
-    }
-
-    protected void expireRedisPosts(String key, long expireSecond) {
-        redisTemplate.expire(key, expireSecond, TimeUnit.SECONDS);
-    }
-
-    protected void expireRedisRoles(String key, long expireSecond) {
-        redisTemplate.expire(key, expireSecond, TimeUnit.SECONDS);
-    }
-
-    protected void expireRedisFunctionPermissions(String key, long expireSecond) {
-        redisTemplate.expire(key, expireSecond, TimeUnit.SECONDS);
+    @Override
+    public void expireRedisDepts(String id) {
+        redisTemplate.expire(getDeptKey(id), deptExpireTime, TimeUnit.SECONDS);
     }
 
     @Override
-    public void delRedisToken(String key) {
-        redisTemplate.delete(key);
+    public void expireRedisPosts(String id) {
+        redisTemplate.expire(getPostKey(id), postExpireTime, TimeUnit.SECONDS);
     }
 
     @Override
-    public void delRedisRefreshToken(String key) {
-        redisTemplate.delete(key);
+    public void expireRedisRoles(String id) {
+        redisTemplate.expire(getRoleKey(id), roleExpireTime, TimeUnit.SECONDS);
     }
 
     @Override
-    public void delRedisDepts(String key) {
-        redisTemplate.delete(key);
+    public void expireRedisFunctionPermissions(String id) {
+        redisTemplate.expire(getFunctionPermissionKey(id), functionPermissionExpireTime, TimeUnit.SECONDS);
     }
 
     @Override
-    public void delRedisPosts(String key) {
-        redisTemplate.delete(key);
+    public void delRedisToken(String id) {
+        redisTemplate.delete(getTokenKey(id));
     }
 
     @Override
-    public void delRedisRoles(String key) {
-        redisTemplate.delete(key);
+    public void delRedisRefreshToken(String id) {
+        redisTemplate.delete(getRefreshTokenKey(id));
     }
 
     @Override
-    public void delRedisFunctionPermissions(String key) {
-        redisTemplate.delete(key);
+    public void delRedisDepts(String id) {
+        redisTemplate.delete(getDeptKey(id));
+    }
+
+    @Override
+    public void delRedisPosts(String id) {
+        redisTemplate.delete(getPostKey(id));
+    }
+
+    @Override
+    public void delRedisRoles(String id) {
+        redisTemplate.delete(getRoleKey(id));
+    }
+
+    @Override
+    public void delRedisFunctionPermissions(String id) {
+        redisTemplate.delete(getFunctionPermissionKey(id));
+    }
+
+    @Override
+    public void updateDepts(String id, Set depts) {
+        delRedisDepts(id);
+        setRedisDepts(id, depts);
+    }
+
+    @Override
+    public void updatePosts(String id, Set posts) {
+        delRedisPosts(id);
+        setRedisPosts(id, posts);
+    }
+
+    @Override
+    public void updateRoles(String id, Set roles) {
+        delRedisRoles(id);
+        setRedisRoles(id, roles);
+    }
+
+    @Override
+    public void updateFunctionPermissions(String id, Set functionPermissions) {
+        delRedisFunctionPermissions(id);
+        setRedisFunctionPermissions(id, functionPermissions);
+    }
+
+    protected String getEncryptId(String id) {
+        return EncryptionUtil.md5(id, idSalt);
+    }
+
+    @Override
+    public String getTokenKey(String id) {
+        return tokenKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
+    public String getRefreshTokenKey(String id) {
+        return refreshTokenKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
+    public String getDeptKey(String id) {
+        return deptKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
+    public String getPostKey(String id) {
+        return postKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
+    public String getRoleKey(String id) {
+        return roleKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
+    public String getFunctionPermissionKey(String id) {
+        return functionPermissionKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
+    public String getToken(String id) {
+        Object result = redisTemplate.opsForValue().get(getTokenKey(id));
+        return result == null ? null : result.toString();
+    }
+
+    @Override
+    public String getRefreshToken(String id) {
+        Object result = redisTemplate.opsForValue().get(getRefreshTokenKey(id));
+        return result == null ? null : result.toString();
+    }
+
+    @Override
+    public Set getDepts(String id) {
+        return redisTemplate.opsForSet().members(getDeptKey(id));
+    }
+
+    @Override
+    public Set getPosts(String id) {
+        return redisTemplate.opsForSet().members(getPostKey(id));
+    }
+
+    @Override
+    public Set getRoles(String id) {
+        return redisTemplate.opsForSet().members(getRoleKey(id));
+    }
+
+    @Override
+    public Set getFunctionPermissions(String id) {
+        return redisTemplate.opsForSet().members(getFunctionPermissionKey(id));
     }
 
     public abstract void newTokenRedisSet(String id, String token);
 
     public abstract void loginRedisSet(String id, String token, String refreshToken, Set deptIds, Set postIds,
-                              Set roles, Set functionPermissions);
+                                       Set roles, Set functionPermissions);
 
     public abstract void logoutRedisDel(String id);
-
-    public abstract void updateRoles(String id, Set roles);
-
-    public abstract void updateFunctionPermissions(String id);
 }

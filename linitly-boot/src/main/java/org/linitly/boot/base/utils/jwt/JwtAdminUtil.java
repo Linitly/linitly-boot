@@ -6,13 +6,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.constant.admin.AdminJwtConstant;
-import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
 import org.linitly.boot.base.constant.global.JwtConstant;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.helper.entity.BaseEntity;
-import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 import org.linitly.boot.base.utils.auth.AuthFactory;
 import org.linitly.boot.base.utils.bean.SpringBeanUtil;
 
@@ -24,16 +22,15 @@ public class JwtAdminUtil extends AbstractJwtUtil {
 
     private static JwtAdminUtil jwtAdminUtil;
 
-    private JwtAdminUtil(SignatureAlgorithm algorithm, String salt) {
-        super(algorithm, salt);
+    private JwtAdminUtil() {
+        super(AdminJwtConstant.ADMIN_ALGORITHM, AdminJwtConstant.JWT_SALT, AuthFactory.getAuth(SystemEnum.ADMIN.getSystemCode()));
     }
 
     public static JwtAdminUtil getInstance() {
         if (jwtAdminUtil == null) {
             synchronized (JwtAdminUtil.class) {
                 if (jwtAdminUtil == null) {
-                    jwtAdminUtil = new JwtAdminUtil(AdminJwtConstant.ADMIN_ALGORITHM, AdminJwtConstant.JWT_SALT);
-                    abstractAuth = AuthFactory.getAuth(SystemEnum.ADMIN.getSystemCode());
+                    jwtAdminUtil = new JwtAdminUtil();
                 }
             }
         }
@@ -115,7 +112,7 @@ public class JwtAdminUtil extends AbstractJwtUtil {
     @Override
     public void validToken(String token, Map<String, Object> claims) {
         String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
-        String redisKey = AdminCommonConstant.ADMIN_TOKEN_PREFIX + EncryptionUtil.md5(userId, SysAdminUserConstant.TOKEN_ID_SALT);
+        String redisKey = abstractAuth.getTokenKey(userId);
         String redisToken = String.valueOf(redisTemplate.opsForValue().get(redisKey));
         if (StringUtils.isBlank(redisToken)) {
             throw new CommonException(ResultEnum.LOGIN_FAILURE);
@@ -145,7 +142,7 @@ public class JwtAdminUtil extends AbstractJwtUtil {
     @Override
     public void validRefreshToken(String refreshToken, Map<String, Object> claims) {
         String userId = claims.get(AdminJwtConstant.ADMIN_USER_ID).toString();
-        String redisKey = AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + EncryptionUtil.md5(userId, SysAdminUserConstant.TOKEN_ID_SALT);
+        String redisKey = abstractAuth.getRefreshTokenKey(userId);
         String redisRefreshToken = String.valueOf(redisTemplate.opsForValue().get(redisKey));
         if (StringUtils.isBlank(redisRefreshToken)) {
             throw new CommonException(ResultEnum.LOGIN_FAILURE);

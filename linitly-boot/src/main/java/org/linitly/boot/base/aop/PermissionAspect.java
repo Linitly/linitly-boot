@@ -7,10 +7,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.linitly.boot.base.annotation.RequirePermission;
 import org.linitly.boot.base.annotation.RequireRole;
-import org.linitly.boot.base.constant.admin.AdminCommonConstant;
 import org.linitly.boot.base.enums.ResultEnum;
-import org.linitly.boot.base.utils.RedisOperator;
 import org.linitly.boot.base.exception.CommonException;
+import org.linitly.boot.base.utils.auth.AbstractAuth;
 import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
 import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.utils.permission.PermissionAnnotationUtil;
@@ -26,8 +25,6 @@ import java.util.Set;
 @Component
 public class PermissionAspect {
 
-	@Autowired
-	private RedisOperator redisOperator;
 	@Autowired
     private HttpServletRequest request;
 
@@ -56,9 +53,8 @@ public class PermissionAspect {
 
 			AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
 			String userId = jwtUtil.getUserId(request);
-			Set<String> rolesOrPermissions = targetClass == RequireRole.class ?
-					redisOperator.setMembers(AdminCommonConstant.ADMIN_ROLES_PREFIX + userId) :
-					redisOperator.setMembers(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + userId);
+			AbstractAuth auth = jwtUtil.getAbstractAuth();
+			Set<String> rolesOrPermissions = targetClass == RequireRole.class ? auth.getRoles(userId) : auth.getFunctionPermissions(userId);
 
 			String[] requireRolesOrPermissions = PermissionAnnotationUtil.parseRoleOrPermission(target.getClass(),
 					methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);

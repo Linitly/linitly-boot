@@ -15,7 +15,14 @@ public class AdminAuth extends AbstractAuth {
 
     private static AdminAuth adminAuth;
 
-    private AdminAuth() {}
+    private AdminAuth() {
+        super(SysAdminUserConstant.TOKEN_ID_SALT, AdminCommonConstant.ADMIN_TOKEN_PREFIX, AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX,
+                AdminCommonConstant.ADMIN_DEPTS_PREFIX, AdminCommonConstant.ADMIN_POSTS_PREFIX, AdminCommonConstant.ADMIN_ROLES_PREFIX,
+                AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX, AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND,
+                AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,
+                AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,
+                AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
+    }
 
     protected static AdminAuth getInstance() {
         if (adminAuth == null) {
@@ -30,45 +37,36 @@ public class AdminAuth extends AbstractAuth {
 
     @Override
     public void newTokenRedisSet(String id, String token) {
-        String encryptId = EncryptionUtil.md5(id, SysAdminUserConstant.TOKEN_ID_SALT);
-        setRedisToken(AdminCommonConstant.ADMIN_TOKEN_PREFIX + encryptId, token, AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
-        expireRedisDepts(AdminCommonConstant.ADMIN_DEPTS_PREFIX + encryptId, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-        expireRedisDepts(AdminCommonConstant.ADMIN_POSTS_PREFIX + encryptId, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-        expireRedisDepts(AdminCommonConstant.ADMIN_ROLES_PREFIX + encryptId, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-        expireRedisDepts(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + encryptId, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
+        setRedisToken(id, token);
+        expireRedisDepts(id);
+        expireRedisPosts(id);
+        expireRedisRoles(id);
+        expireRedisFunctionPermissions(id);
     }
 
     @Override
     public void loginRedisSet(String id, String token, String refreshToken, Set deptIds, Set postIds,
                               Set roles, Set functionPermissions) {
-        String encryptId = EncryptionUtil.md5(id, SysAdminUserConstant.TOKEN_ID_SALT);
-        setRedisToken(AdminCommonConstant.ADMIN_TOKEN_PREFIX + encryptId, token, AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND);
-        setRedisRefreshToken(AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + encryptId, refreshToken, AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND);
-        setRedisDepts(AdminCommonConstant.ADMIN_DEPTS_PREFIX + encryptId, deptIds, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-        setRedisPosts(AdminCommonConstant.ADMIN_POSTS_PREFIX + encryptId, postIds, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-        setRedisRoles(AdminCommonConstant.ADMIN_ROLES_PREFIX + encryptId, roles, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-        setRedisFunctionPermissions(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + encryptId, functionPermissions, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
+        setRedisToken(id, token);
+        setRedisRefreshToken(id, refreshToken);
+        setRedisDepts(id, deptIds);
+        setRedisPosts(id, postIds);
+        setRedisRoles(id, roles);
+        setRedisFunctionPermissions(id, functionPermissions);
     }
 
     @Override
     public void logoutRedisDel(String id) {
-        String encryptId = EncryptionUtil.md5(id, SysAdminUserConstant.TOKEN_ID_SALT);
-        delRedisToken(AdminCommonConstant.ADMIN_TOKEN_PREFIX + encryptId);
-        delRedisRefreshToken(AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX + encryptId);
-        delRedisDepts(AdminCommonConstant.ADMIN_DEPTS_PREFIX + encryptId);
-        delRedisPosts(AdminCommonConstant.ADMIN_POSTS_PREFIX + encryptId);
-        delRedisRoles(AdminCommonConstant.ADMIN_ROLES_PREFIX + encryptId);
-        delRedisFunctionPermissions(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + encryptId);
+        delRedisToken(id);
+        delRedisRefreshToken(id);
+        delRedisDepts(id);
+        delRedisPosts(id);
+        delRedisRoles(id);
+        delRedisFunctionPermissions(id);
     }
 
     @Override
-    public void updateRoles(String id, Set roles) {
-        String encryptId = EncryptionUtil.md5(id, SysAdminUserConstant.TOKEN_ID_SALT);
-        setRedisRoles(AdminCommonConstant.ADMIN_ROLES_PREFIX + encryptId, roles, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
-    }
-
-    @Override
-    public void updateFunctionPermissions(String id) {
+    public void updateFunctionPermissions(String id, Set functionPermissions) {
         logoutRedisDel(id);
     }
 }
