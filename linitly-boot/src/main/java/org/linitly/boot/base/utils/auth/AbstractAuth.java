@@ -41,7 +41,7 @@ public abstract class AbstractAuth implements AuthRedis {
     public void setRedisPosts(String key, Set posts, long expireSecond) {
         if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(posts)) {
             redisTemplate.opsForSet().add(key, posts.toArray());
-            expireRedisDepts(key, expireSecond);
+            expireRedisPosts(key, expireSecond);
         }
     }
 
@@ -49,7 +49,7 @@ public abstract class AbstractAuth implements AuthRedis {
     public void setRedisRoles(String key, Set roles, long expireSecond) {
         if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(roles)) {
             redisTemplate.opsForSet().add(key, roles.toArray());
-            expireRedisDepts(key, expireSecond);
+            expireRedisRoles(key, expireSecond);
         }
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractAuth implements AuthRedis {
     public void setRedisFunctionPermissions(String key, Set functionPermissions, long expireSecond) {
         if (StringUtils.isNotBlank(key) && CollectionUtils.isNotEmpty(functionPermissions)) {
             redisTemplate.opsForSet().add(key, functionPermissions.toArray());
-            expireRedisDepts(key, expireSecond);
+            expireRedisFunctionPermissions(key, expireSecond);
         }
     }
 
@@ -113,4 +113,8 @@ public abstract class AbstractAuth implements AuthRedis {
                               Set roles, Set functionPermissions);
 
     public abstract void logoutRedisDel(String id);
+
+    public abstract void updateRoles(String id, Set roles);
+
+    public abstract void updateFunctionPermissions(String id);
 }

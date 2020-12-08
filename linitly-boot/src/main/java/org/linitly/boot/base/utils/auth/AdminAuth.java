@@ -60,4 +60,15 @@ public class AdminAuth extends AbstractAuth {
         delRedisRoles(AdminCommonConstant.ADMIN_ROLES_PREFIX + encryptId);
         delRedisFunctionPermissions(AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX + encryptId);
     }
+
+    @Override
+    public void updateRoles(String id, Set roles) {
+        String encryptId = EncryptionUtil.md5(id, SysAdminUserConstant.TOKEN_ID_SALT);
+        setRedisRoles(AdminCommonConstant.ADMIN_ROLES_PREFIX + encryptId, roles, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
+    }
+
+    @Override
+    public void updateFunctionPermissions(String id) {
+        logoutRedisDel(id);
+    }
 }

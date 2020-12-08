@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping(AdminCommonConstant.URL_PREFIX + "/job")
 @Api(tags = "定时任务管理")
-public class JobController {
+public class SysQuartzJobController {
 
     @Autowired
     private SysQuartzJobService jobService;

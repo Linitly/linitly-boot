@@ -25,7 +25,7 @@ public class SysMenu extends BaseEntity {
     @ApiModelProperty(value = "菜单描述")
     private String description;
 
-    @ApiModelProperty(value = "上级部门id")
+    @ApiModelProperty(value = "上级菜单id")
     private Long parentId;
 
     @ApiModelProperty(value = "当前层级的排序")

@@ -30,7 +30,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
         UN_CHECK_URIS.add(AdminCommonConstant.URL_PREFIX + "/login");
 
         // 退出接口
-        UN_CHECK_URIS.add(AdminCommonConstant.URL_PREFIX + "/logout/**");
+        UN_CHECK_URIS.add(AdminCommonConstant.URL_PREFIX + "/logout");
     }
 
     @Override
