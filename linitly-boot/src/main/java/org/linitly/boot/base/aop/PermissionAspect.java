@@ -10,11 +10,10 @@ import org.linitly.boot.base.annotation.RequireRole;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.utils.LinitlyUtil;
-import org.linitly.boot.base.utils.permission.PermissionAnnotationUtil;
-import org.linitly.boot.base.utils.permission.RoleAndPermissionUtil;
+import org.linitly.boot.base.utils.permission.PermissionUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 @Aspect
@@ -39,25 +38,22 @@ public class PermissionAspect {
 		return aspectAround(RequireRole.class, joinPoint);
 	}
 
-	private Object aspectAround(Class targetClass, ProceedingJoinPoint joinPoint) throws Throwable {
+	private Object aspectAround(Class<? extends Annotation> annotationClass, ProceedingJoinPoint joinPoint) throws Throwable {
 		try {
-			Object target = joinPoint.getTarget();
 			MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
-			Set<String> rolesOrPermissions = targetClass == RequireRole.class ?
+			Set<String> rolesOrPermissions = annotationClass == RequireRole.class ?
 					LinitlyUtil.getCurrentCacheRoles() : LinitlyUtil.getCurrentCacheFunctionPermissions();
 
-			String[] requireRolesOrPermissions = PermissionAnnotationUtil.parseRoleOrPermission(target.getClass(),
-					methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);
+			String[] requireRolesOrPermissions = PermissionUtil.getRequireRoleOrPermission(methodSignature.getMethod(), annotationClass);
+
 			if (requireRolesOrPermissions != null && requireRolesOrPermissions.length > 0) {
-				boolean hasRoleOrPermission = RoleAndPermissionUtil.hasRoleOrPermission(new ArrayList<>(rolesOrPermissions), requireRolesOrPermissions,
-						target.getClass(), methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);
-				if (!hasRoleOrPermission)
+				if (!PermissionUtil.hasPower(methodSignature.getMethod(), annotationClass, requireRolesOrPermissions, rolesOrPermissions))
 					throw new CommonException(ResultEnum.NO_PERMISSION);
 			}
-		} catch (NoSuchMethodException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new CommonException(ResultEnum.CLASS_METHOD_ERROR);
+			throw new CommonException(ResultEnum.NO_PERMISSION);
 		}
 		return joinPoint.proceed();
 	}
