@@ -8,7 +8,7 @@ import com.google.common.base.CaseFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.linitly.boot.base.annotation.Dict;
-import org.linitly.boot.base.service.SysDataDictItemService;
+import org.linitly.boot.base.service.SysDataDictItemCacheService;
 import org.linitly.boot.base.utils.bean.SpringBeanUtil;
 import org.linitly.boot.base.utils.db.ClassUtil;
 
@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 @Slf4j
 public class DictSerialize extends JsonSerializer {
 
-    private SysDataDictItemService sysDataDictItemService = SpringBeanUtil.getBean(SysDataDictItemService.class);
+    private SysDataDictItemCacheService sysDataDictItemCacheService = SpringBeanUtil.getBean(SysDataDictItemCacheService.class);
 
     @Override
     public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
@@ -49,7 +49,7 @@ public class DictSerialize extends JsonSerializer {
             }
             String code = StringUtils.isNotBlank(dict.code()) ? dict.code() :
                     CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, currentName);
-            String text = sysDataDictItemService.findTextByDictCodeAndValue(code, o.toString());
+            String text = sysDataDictItemCacheService.getItemCache(code, o.toString());
             if (StringUtils.isBlank(text)) {
                 objectMapper.writeValue(jsonGenerator, o);
             } else {

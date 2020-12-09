@@ -63,15 +63,4 @@ public class SysDataDictItemService {
         sysDataDictItemCacheService.deleteDictItemCache(id);
         sysDataDictItemMapper.deleteById(id);
     }
-
-    public String findTextByDictCodeAndValue(String code, String value) {
-        String cache = sysDataDictItemCacheService.getItemCache(code, value);
-        if (StringUtils.isNotBlank(cache)) {
-            return cache;
-        } else {
-            String text = sysDataDictItemMapper.findTextByDictCodeAndValue(code, value);
-            sysDataDictItemCacheService.setDictItemCache(code, value, text);
-            return text;
-        }
-    }
 }

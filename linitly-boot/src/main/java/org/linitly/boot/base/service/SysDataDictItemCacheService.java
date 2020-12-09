@@ -73,7 +73,12 @@ public class SysDataDictItemCacheService {
 
     public String getItemCache(String code, String value) {
         Object result = redisTemplate.opsForHash().get(SysDataDictItemConstant.CACHE_KEY_PREFIX + code, value);
-        return result == null ? null : result.toString();
+        if (result == null) {
+            String text = sysDataDictItemMapper.findTextByDictCodeAndValue(code, value);
+            setDictItemCache(code, value, text);
+            return text;
+        }
+        return result.toString();
     }
 
     public void setDictItemCache(String code, String value, String text) {
