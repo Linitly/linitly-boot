@@ -9,9 +9,8 @@ import org.linitly.boot.base.helper.entity.BaseLog;
 import org.linitly.boot.base.helper.entity.LogHelper;
 import org.linitly.boot.base.utils.IDateUtil;
 import org.linitly.boot.base.utils.JsonUtils;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.linitly.boot.base.utils.bean.SpringBeanUtil;
-import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
-import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -117,11 +116,10 @@ public class LogUtil {
         BaseLog baseLog = new BaseLog();
         HttpServletRequest request = SpringBeanUtil.getRequest();
         Integer systemCode = RequestUtil.getSystemCode(request);
-        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(systemCode);
         baseLog.setSystemCode(systemCode);
         baseLog.setIp(RequestUtil.getIp(request));
         baseLog.setOperation(GeneratorHelperUtil.getOperation(helper));
-        baseLog.setOperatorId(jwtUtil.getUserId(request));
+        baseLog.setOperatorId(LinitlyUtil.getCurrentUserId().toString());
         return baseLog;
     }
 }

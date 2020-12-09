@@ -168,7 +168,7 @@ public abstract class AbstractAuth implements AuthRedis {
         setRedisFunctionPermissions(id, functionPermissions);
     }
 
-    protected String getEncryptId(String id) {
+    private String getEncryptId(String id) {
         return EncryptionUtil.md5(id, idSalt);
     }
 

@@ -9,24 +9,17 @@ import org.linitly.boot.base.annotation.RequirePermission;
 import org.linitly.boot.base.annotation.RequireRole;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.CommonException;
-import org.linitly.boot.base.utils.auth.AbstractAuth;
-import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
-import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.linitly.boot.base.utils.permission.PermissionAnnotationUtil;
 import org.linitly.boot.base.utils.permission.RoleAndPermissionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Set;
 
 @Aspect
 @Component
 public class PermissionAspect {
-
-	@Autowired
-    private HttpServletRequest request;
 
 	@Pointcut("@annotation(org.linitly.boot.base.annotation.RequirePermission)")
 	public void permissionAspect() {
@@ -51,10 +44,8 @@ public class PermissionAspect {
 			Object target = joinPoint.getTarget();
 			MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
-			AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
-			String userId = jwtUtil.getUserId(request);
-			AbstractAuth auth = jwtUtil.getAbstractAuth();
-			Set<String> rolesOrPermissions = targetClass == RequireRole.class ? auth.getRoles(userId) : auth.getFunctionPermissions(userId);
+			Set<String> rolesOrPermissions = targetClass == RequireRole.class ?
+					LinitlyUtil.getCurrentCacheRoles() : LinitlyUtil.getCurrentCacheFunctionPermissions();
 
 			String[] requireRolesOrPermissions = PermissionAnnotationUtil.parseRoleOrPermission(target.getClass(),
 					methodSignature.getName(), methodSignature.getParameterTypes(), targetClass);

@@ -6,13 +6,10 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.helper.entity.BaseEntity;
-import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
-import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.linitly.boot.base.utils.db.ClassUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
@@ -26,9 +23,6 @@ import java.util.Properties;
 @Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
 public class DataInjectInterceptor implements Interceptor {
 
-    @Autowired
-    private HttpServletRequest request;
-
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Boolean pass = MyBatisConstant.MYBATIS_INTERCEPT_PASS.get();
@@ -37,25 +31,24 @@ public class DataInjectInterceptor implements Interceptor {
             MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
             SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
             Object parameter = invocation.getArgs()[1];
-            AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
 
             if (SqlCommandType.INSERT == sqlCommandType) {
                 if (parameter instanceof BaseEntity) {
-                    dealInsertSql(parameter, jwtUtil);
+                    dealInsertSql(parameter);
                 } else if (parameter instanceof List) {
                     List parameterList = (List) parameter;
                     for (Object o : parameterList) {
-                        if (o instanceof BaseEntity) dealInsertSql(o, jwtUtil);
+                        if (o instanceof BaseEntity) dealInsertSql(o);
                     }
                 }
             }
             if (SqlCommandType.UPDATE == sqlCommandType) {
                 if (parameter instanceof BaseEntity) {
-                    dealUpdateSql(parameter, jwtUtil);
+                    dealUpdateSql(parameter);
                 } else if (parameter instanceof List) {
                     List parameterList = (List) parameter;
                     for (Object o : parameterList) {
-                        if (o instanceof BaseEntity) dealUpdateSql(parameter, jwtUtil);
+                        if (o instanceof BaseEntity) dealUpdateSql(parameter);
                     }
                 }
             }
@@ -75,29 +68,29 @@ public class DataInjectInterceptor implements Interceptor {
 
     }
 
-    private void dealInsertSql(Object parameter, AbstractJwtUtil jwtUtil) throws Exception {
+    private void dealInsertSql(Object parameter) throws Exception {
         Field[] fields = ClassUtil.getAllFields(parameter, true);
         for (Field field : fields) {
             if (MyBatisConstant.CREATED_USER_ID_FIELD.equals(field.getName()) || MyBatisConstant.LAST_MODIFIED_USER_ID_FIELD.equals(field.getName())) {
-                dealField(field, parameter, jwtUtil);
+                dealField(field, parameter);
             }
         }
     }
 
-    private void dealUpdateSql(Object parameter, AbstractJwtUtil jwtUtil) throws Exception {
+    private void dealUpdateSql(Object parameter) throws Exception {
         Field[] fields = ClassUtil.getAllFields(parameter, true);
         for (Field field : fields) {
             if (MyBatisConstant.LAST_MODIFIED_USER_ID_FIELD.equals(field.getName())) {
-                dealField(field, parameter, jwtUtil);
+                dealField(field, parameter);
             }
         }
     }
 
-    private void dealField(Field field, Object parameter, AbstractJwtUtil jwtUtil) throws Exception {
+    private void dealField(Field field, Object parameter) throws Exception {
         field.setAccessible(true);
         Object localCreateUserId = field.get(parameter);
         if (localCreateUserId == null) {
-            setId(jwtUtil.getUserId(request), parameter, field);
+            setId(LinitlyUtil.getCurrentUserId().toString(), parameter, field);
         }
         field.setAccessible(false);
     }

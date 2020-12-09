@@ -19,8 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author: linitly-generator
  * @date: 2020-11-25 14:02
@@ -69,8 +67,8 @@ public class SysRoleController {
 
     @PostMapping("/tree")
     @ApiOperation(value = "获取树状权限列表")
-    public List<SysMenuTreeVO> tree(@RequestParam(required = false) Long roleId, HttpServletRequest request) {
-        return sysRoleService.tree(roleId, request, null, null);
+    public List<SysMenuTreeVO> tree(@RequestParam(required = false) Long roleId) {
+        return sysRoleService.tree(roleId, null, null);
     }
 
 //    @PostMapping("/deleteById/{id}")

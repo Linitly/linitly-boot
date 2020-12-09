@@ -10,10 +10,9 @@ import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.dao.BaseBeanMapper;
 import org.linitly.boot.base.helper.entity.BaseEntity;
 import org.linitly.boot.base.helper.entity.DeleteHelper;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.linitly.boot.base.utils.db.ClassUtil;
 import org.linitly.boot.base.utils.db.RequestUtil;
-import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
-import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
@@ -92,10 +91,9 @@ public class DeleteBackupAspect {
                 deleteData = baseBeanMapper.findByIds(tableName, ids);
             }
             if (CollectionUtils.isNotEmpty(deleteData)) {
-                AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
                 deleteData.forEach(e -> {
                     e.put(MyBatisConstant.SYSTEM_CODE_COLUMN, RequestUtil.getSystemCode(request));
-                    e.put(MyBatisConstant.DELETED_USER_ID_COLUMN, jwtUtil.getUserId(request));
+                    e.put(MyBatisConstant.DELETED_USER_ID_COLUMN, LinitlyUtil.getCurrentUserId());
                 });
             }
             MyBatisConstant.DELETE_HELPER.set(new DeleteHelper().setDeleteTableName(deleteTableName).setDeleteData(deleteData));

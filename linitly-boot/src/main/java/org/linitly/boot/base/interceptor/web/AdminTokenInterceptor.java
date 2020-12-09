@@ -2,8 +2,7 @@ package org.linitly.boot.base.interceptor.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.linitly.boot.base.constant.admin.AdminCommonConstant;
-import org.linitly.boot.base.utils.jwt.AbstractJwtUtil;
-import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.linitly.boot.base.utils.permission.AntPathMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -40,9 +39,7 @@ public class AdminTokenInterceptor implements HandlerInterceptor {
             if (AntPathMatcher.getInstance().matches(unCheckUri, uri))
                 return true;
         }
-
-        AbstractJwtUtil jwtUtil = JwtUtilFactory.getJwtUtil(request);
-        jwtUtil.interceptorValid(request);
+        LinitlyUtil.interceptorValid();
         return true;
     }
 

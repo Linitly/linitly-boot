@@ -52,4 +52,9 @@ public interface GlobalConstant {
 	 * request存储system_code请求头的key
 	 */
 	String SYSTEM_CODE_KEY = "system_code";
+
+	/**
+	 * request存储本次请求jwt实例的attribute属性名
+	 */
+	String JWT_ATTRIBUTE = "jwt";
 }

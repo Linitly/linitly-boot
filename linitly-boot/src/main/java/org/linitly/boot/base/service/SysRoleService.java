@@ -14,6 +14,7 @@ import org.linitly.boot.base.dto.SysRoleDTO;
 import org.linitly.boot.base.dto.SysRoleEmpowerDTO;
 import org.linitly.boot.base.entity.SysRole;
 import org.linitly.boot.base.exception.CommonException;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.linitly.boot.base.utils.jwt.JwtUtilFactory;
 import org.linitly.boot.base.vo.SysFunctionPermissionTreeVO;
 import org.linitly.boot.base.vo.SysMenuTreeVO;
@@ -85,8 +86,8 @@ public class SysRoleService {
         sysAdminUserCacheService.deleteRolePowerCache(dto.getId());
     }
 
-    public List<SysMenuTreeVO> tree(Long roleId, HttpServletRequest request, Set<String> functionPermissionCodes, Long userId) {
-        userId = userId == null ? Long.valueOf(JwtUtilFactory.getJwtUtil(request).getUserId(request)) : userId;
+    public List<SysMenuTreeVO> tree(Long roleId, Set<String> functionPermissionCodes, Long userId) {
+        userId = userId == null ? LinitlyUtil.getCurrentUserId() : userId;
         List<SysMenuTreeVO> menus = sysRoleMapper.findMenusByAdminUserId(userId);
         List<SysFunctionPermissionTreeVO> functionPermissions = sysRoleMapper.findFunctionPermissionsByAdminUserId(userId);
 

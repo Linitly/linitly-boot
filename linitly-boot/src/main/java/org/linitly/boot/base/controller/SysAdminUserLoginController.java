@@ -8,7 +8,6 @@ import org.linitly.boot.base.dto.SysAdminUserLoginDTO;
 import org.linitly.boot.base.service.SysAdminUserLoginService;
 import org.linitly.boot.base.vo.SysAdminUserLoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,6 @@ import javax.validation.Valid;
  * @date: 2020/11/27 14:23
  * @descrption:
  */
-@Lazy
 @Result
 @RestController
 @RequestMapping(AdminCommonConstant.URL_PREFIX)

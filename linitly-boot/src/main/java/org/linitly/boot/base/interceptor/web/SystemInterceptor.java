@@ -6,6 +6,7 @@ import org.linitly.boot.base.constant.global.MyBatisConstant;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.enums.SystemEnum;
 import org.linitly.boot.base.exception.CommonException;
+import org.linitly.boot.base.utils.LinitlyUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,10 @@ public class SystemInterceptor implements HandlerInterceptor {
         for (SystemEnum systemEnum : systemEnums) {
             if (systemEnum.getSystemCode().equals(Integer.valueOf(systemCode))) trueCode = true;
         }
-        if (trueCode) return true;
+        if (trueCode) {
+            LinitlyUtil.setJwt(request);
+            return true;
+        }
         throw new CommonException(ResultEnum.SYSTEM_CODE_ERROR);
     }
 
