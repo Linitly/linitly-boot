@@ -69,7 +69,7 @@ public class SysAdminUserLoginService {
         return new String[]{token, refreshToken};
     }
 
-    public void logout(Long userId) {
-        LinitlyUtil.logoutCacheDel(userId);
+    public void logout() {
+        LinitlyUtil.logoutCurrentCacheDel();
     }
 }

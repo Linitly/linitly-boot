@@ -118,6 +118,10 @@ public class LinitlyUtil {
         getAuth().logoutRedisDel(userId.toString());
     }
 
+    public static void logoutCurrentCacheDel() {
+        logoutCacheDel(getCurrentUserId());
+    }
+
     public static void updateCacheRoles(Long userId, Set roles) {
         getAuth().updateRoles(userId.toString(), roles);
     }

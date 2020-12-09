@@ -33,9 +33,9 @@ public class SysAdminUserLoginController {
         return loginService.login(dto);
     }
 
-    @PostMapping("/logout/{userId}")
+    @PostMapping("/logout")
     @ApiModelProperty(value = "后台用户退出登陆")
-    public void logout(@PathVariable Long userId) {
-        loginService.logout(userId);
+    public void logout() {
+        loginService.logout();
     }
 }
