@@ -34,6 +34,8 @@ public enum ResultEnum {
 	CLASS_METHOD_ERROR(440, "反射获取方法失败"),
 	ANNOTATION_GET_ERROR(441, "获取权限注解内容错误"),
 
+    FILE_TYPE_ERROR(454, "上传文件类型出错"),
+	FILE_RESOLVER_ERROR(455, "文件转换错误"),
 	FILE_NOT_UPLOAD_ERROR(456, "所需文件没有上传"),
 	FILE_TOO_BIG_ERROR(458, "文件大小超过限制"),
 	FILE_DOWNLOAD_ERROR(459, "文件下载失败"),
