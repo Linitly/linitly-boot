@@ -5,6 +5,7 @@ import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
 import org.linitly.boot.base.utils.algorithm.EncryptionUtil;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: linxiunan
@@ -17,11 +18,12 @@ public class AdminAuth extends AbstractAuth {
 
     private AdminAuth() {
         super(SysAdminUserConstant.TOKEN_ID_SALT, AdminCommonConstant.ADMIN_TOKEN_PREFIX, AdminCommonConstant.ADMIN_REFRESH_TOKEN_PREFIX,
-                AdminCommonConstant.ADMIN_DEPTS_PREFIX, AdminCommonConstant.ADMIN_POSTS_PREFIX, AdminCommonConstant.ADMIN_ROLES_PREFIX,
+                AdminCommonConstant.ADMIN_LAST_EXPIRED_TOKEN_PREFIX, AdminCommonConstant.ADMIN_DEPTS_PREFIX,
+                AdminCommonConstant.ADMIN_POSTS_PREFIX, AdminCommonConstant.ADMIN_ROLES_PREFIX,
                 AdminCommonConstant.ADMIN_FUNCTION_PERMISSIONS_PREFIX, AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND,
-                AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,
-                AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,
-                AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
+                AdminCommonConstant.ADMIN_REFRESH_TOKEN_EXPIRE_SECOND, AdminCommonConstant.ADMIN_TOKEN_EXPIRE_SECOND,
+                AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND,
+                AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND, AdminCommonConstant.ADMIN_RPPD_EXPIRE_SECOND);
     }
 
     protected static AdminAuth getInstance() {
@@ -36,12 +38,13 @@ public class AdminAuth extends AbstractAuth {
     }
 
     @Override
-    public void newTokenRedisSet(String id, String token) {
-        setRedisToken(id, token);
-        expireRedisDepts(id);
-        expireRedisPosts(id);
-        expireRedisRoles(id);
-        expireRedisFunctionPermissions(id);
+    public String newTokenRedisSet(String id, String token) {
+        Boolean set = redisTemplate.opsForValue().setIfAbsent(getTokenKey(id), token, tokenExpireTime, TimeUnit.SECONDS);
+        if (set != null && set) {
+            return token;
+        } else {
+            return getToken(id);
+        }
     }
 
     @Override

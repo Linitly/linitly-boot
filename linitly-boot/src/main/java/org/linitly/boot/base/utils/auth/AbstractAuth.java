@@ -16,34 +16,38 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractAuth implements AuthRedis {
 
-    private static RedisTemplate<String, Object> redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
-    private String idSalt;
-    private String tokenKeyPrefix;
-    private String refreshTokenKeyPrefix;
-    private String deptKeyPrefix;
-    private String postKeyPrefix;
-    private String roleKeyPrefix;
-    private String functionPermissionKeyPrefix;
-    private long tokenExpireTime;
-    private long refreshTokenExpireTime;
-    private long deptExpireTime;
-    private long postExpireTime;
-    private long roleExpireTime;
-    private long functionPermissionExpireTime;
+    protected static RedisTemplate<String, Object> redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
+    protected String idSalt;
+    protected String tokenKeyPrefix;
+    protected String refreshTokenKeyPrefix;
+    protected String lastExpiredTokenKeyPrefix;
+    protected String deptKeyPrefix;
+    protected String postKeyPrefix;
+    protected String roleKeyPrefix;
+    protected String functionPermissionKeyPrefix;
+    protected long tokenExpireTime;
+    protected long refreshTokenExpireTime;
+    protected long lastExpiredTokenExpireTime;
+    protected long deptExpireTime;
+    protected long postExpireTime;
+    protected long roleExpireTime;
+    protected long functionPermissionExpireTime;
 
-    protected AbstractAuth(String idSalt, String tokenKeyPrefix, String refreshTokenKeyPrefix, String deptKeyPrefix, String postKeyPrefix,
-                           String roleKeyPrefix, String functionPermissionKeyPrefix,
-                           long tokenExpireTime, long refreshTokenExpireTime, long deptExpireTime, long postExpireTime, long roleExpireTime,
-                           long functionPermissionExpireTime) {
+    protected AbstractAuth(String idSalt, String tokenKeyPrefix, String refreshTokenKeyPrefix, String lastExpiredTokenKeyPrefix,
+                           String deptKeyPrefix, String postKeyPrefix, String roleKeyPrefix, String functionPermissionKeyPrefix,
+                           long tokenExpireTime, long refreshTokenExpireTime, long lastExpiredTokenExpireTime, long deptExpireTime,
+                           long postExpireTime, long roleExpireTime, long functionPermissionExpireTime) {
         this.idSalt = idSalt;
         this.tokenKeyPrefix = tokenKeyPrefix;
         this.refreshTokenKeyPrefix = refreshTokenKeyPrefix;
+        this.lastExpiredTokenKeyPrefix = lastExpiredTokenKeyPrefix;
         this.deptKeyPrefix = deptKeyPrefix;
         this.postKeyPrefix = postKeyPrefix;
         this.roleKeyPrefix = roleKeyPrefix;
         this.functionPermissionKeyPrefix = functionPermissionKeyPrefix;
         this.tokenExpireTime = tokenExpireTime;
         this.refreshTokenExpireTime = refreshTokenExpireTime;
+        this.lastExpiredTokenExpireTime = lastExpiredTokenExpireTime;
         this.deptExpireTime = deptExpireTime;
         this.postExpireTime = postExpireTime;
         this.roleExpireTime = roleExpireTime;
@@ -60,6 +64,12 @@ public abstract class AbstractAuth implements AuthRedis {
     public void setRedisRefreshToken(String id, String refreshToken) {
         if (StringUtils.isNotBlank(id) && StringUtils.isNotBlank(refreshToken))
             redisTemplate.opsForValue().set(getRefreshTokenKey(id), refreshToken, refreshTokenExpireTime, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void setLastExpiredToken(String id, String lastExpiredToken) {
+        if (StringUtils.isNotBlank(id) && StringUtils.isNotBlank(lastExpiredToken))
+            redisTemplate.opsForValue().set(getLastExpiredToken(id), lastExpiredToken, lastExpiredTokenExpireTime, TimeUnit.SECONDS);
     }
 
     @Override
@@ -183,6 +193,11 @@ public abstract class AbstractAuth implements AuthRedis {
     }
 
     @Override
+    public String getLastExpiredTokenKey(String id) {
+        return lastExpiredTokenKeyPrefix + getEncryptId(id);
+    }
+
+    @Override
     public String getDeptKey(String id) {
         return deptKeyPrefix + getEncryptId(id);
     }
@@ -215,6 +230,12 @@ public abstract class AbstractAuth implements AuthRedis {
     }
 
     @Override
+    public String getLastExpiredToken(String id) {
+        Object result = redisTemplate.opsForValue().get(getLastExpiredTokenKey(id));
+        return result == null ? null : result.toString();
+    }
+
+    @Override
     public Set getDepts(String id) {
         return redisTemplate.opsForSet().members(getDeptKey(id));
     }
@@ -234,7 +255,7 @@ public abstract class AbstractAuth implements AuthRedis {
         return redisTemplate.opsForSet().members(getFunctionPermissionKey(id));
     }
 
-    public abstract void newTokenRedisSet(String id, String token);
+    public abstract String newTokenRedisSet(String id, String token);
 
     public abstract void loginRedisSet(String id, String token, String refreshToken, Set deptIds, Set postIds,
                                        Set roles, Set functionPermissions);

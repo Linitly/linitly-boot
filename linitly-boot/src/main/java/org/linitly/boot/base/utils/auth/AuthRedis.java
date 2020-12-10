@@ -8,6 +8,8 @@ public interface AuthRedis {
 
     void setRedisRefreshToken(String id, String refreshToken);
 
+    void setLastExpiredToken(String id, String lastExpiredToken);
+
     void setRedisDepts(String id, Set depts);
 
     void setRedisPosts(String id, Set posts);
@@ -48,6 +50,8 @@ public interface AuthRedis {
 
     String getRefreshTokenKey(String id);
 
+    String getLastExpiredTokenKey(String id);
+
     String getDeptKey(String id);
 
     String getPostKey(String id);
@@ -59,6 +63,8 @@ public interface AuthRedis {
     String getToken(String id);
 
     String getRefreshToken(String id);
+
+    String getLastExpiredToken(String id);
 
     Set getDepts(String id);
 

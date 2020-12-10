@@ -9,8 +9,6 @@ import org.linitly.boot.base.constant.global.JwtConstant;
 import org.linitly.boot.base.enums.ResultEnum;
 import org.linitly.boot.base.exception.CommonException;
 import org.linitly.boot.base.utils.auth.AbstractAuth;
-import org.linitly.boot.base.utils.bean.SpringBeanUtil;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -24,8 +22,6 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class AbstractJwtUtil implements JwtUtil {
-
-    protected static RedisTemplate<String, Object> redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
 
     public AbstractAuth abstractAuth;
 

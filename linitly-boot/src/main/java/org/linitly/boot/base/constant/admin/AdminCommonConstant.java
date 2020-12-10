@@ -58,12 +58,12 @@ public interface AdminCommonConstant {
     /**
      * 后台refresh_token过期时间(秒)
      */
-    long ADMIN_REFRESH_TOKEN_EXPIRE_SECOND = 15 * 24 * 60 * 60;
+    long ADMIN_REFRESH_TOKEN_EXPIRE_SECOND = 24 * 60 * 60;
 
     /**
      * 后台token对应角色信息、权限信息、岗位信息、部门信息过期时间(秒)
      */
-    long ADMIN_RPPD_EXPIRE_SECOND = 30 * 60 + 10;
+    long ADMIN_RPPD_EXPIRE_SECOND = 24 * 60 * 60;
 
     /**
      * 后台token存入redis的前缀
@@ -98,5 +98,5 @@ public interface AdminCommonConstant {
     /**
      * 后台最后一次过期token存入redis的前缀
      */
-    String ADMIN_LAST_EXPIRED_TOKEN_KEY = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "expire_tokens";
+    String ADMIN_LAST_EXPIRED_TOKEN_PREFIX = GlobalConstant.REDIS_KEY_PREFIX + AdminCommonConstant.REDIS_KEY_INFIX + "expire_token:";
 }
