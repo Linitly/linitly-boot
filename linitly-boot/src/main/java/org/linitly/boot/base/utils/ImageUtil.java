@@ -1,17 +1,21 @@
 package org.linitly.boot.base.utils;
 
 import net.coobird.thumbnailator.Thumbnails;
+import sun.misc.BASE64Encoder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
 /**
- * @program: life-insurance->ImageUtils
+ * @program: life-insurance->ImageUtil
  * @description: 图片压缩
  * @author: caofeng
  * @create: 2019-08-07 14:43
  **/
-public class ImageUtils {
+public class ImageUtil {
 
     /**
      *  按指定大小把图片进行缩和放（会遵循原图高宽比例）
@@ -85,6 +89,29 @@ public class ImageUtils {
         }
         if (asFile)
             file.createNewFile();
+    }
+
+    public static String toBase64(BufferedImage bufferedImage) {
+        ByteArrayOutputStream outputStream = null;
+        String captchaBase64 = null;
+        try {
+            outputStream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "jpg", outputStream);
+            BASE64Encoder encoder = new BASE64Encoder();
+            String base64 = encoder.encode(outputStream.toByteArray());
+            captchaBase64 = "data:image/jpeg;base64," + base64.replaceAll("\r\n", "");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return captchaBase64;
     }
 
 }

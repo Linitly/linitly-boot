@@ -69,7 +69,7 @@ public abstract class AbstractAuth implements AuthRedis {
     @Override
     public void setLastExpiredToken(String id, String lastExpiredToken) {
         if (StringUtils.isNotBlank(id) && StringUtils.isNotBlank(lastExpiredToken))
-            redisTemplate.opsForValue().set(getLastExpiredToken(id), lastExpiredToken, lastExpiredTokenExpireTime, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(getLastExpiredTokenKey(id), lastExpiredToken, lastExpiredTokenExpireTime, TimeUnit.SECONDS);
     }
 
     @Override

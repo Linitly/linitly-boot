@@ -7,6 +7,10 @@ package org.linitly.boot.base.constant.entity;
  */
 public interface SysAdminUserConstant {
 
+    String CAPTCHA_KEY_EMPTY_ERROR = "验证码key不能为空";
+
+    String CAPTCHA_CODE_EMPTY_ERROR = "验证码不能为空";
+
     String DEFAULT_PASSWORD = "123456";
 
     String USERNAME_EMPTY_ERROR = "登录用户名不能为空";

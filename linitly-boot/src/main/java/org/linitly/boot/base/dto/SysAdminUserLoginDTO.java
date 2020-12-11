@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.linitly.boot.base.constant.entity.SysAdminUserConstant;
+import org.linitly.boot.base.vo.CaptchaVO;
 
 import javax.validation.constraints.NotBlank;
 
@@ -16,7 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Accessors(chain = true)
 @ApiModel(value = "系统用户登陆DTO")
-public class SysAdminUserLoginDTO {
+public class SysAdminUserLoginDTO extends CaptchaVO {
 
     @ApiModelProperty(value = "登陆用户名")
     @NotBlank(message = SysAdminUserConstant.USERNAME_EMPTY_ERROR)
