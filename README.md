@@ -1,6 +1,60 @@
 # linitly-boot
 
+本项目是基于SpringBoot2.1、JWT、MyBatis、Redis集成一些常用功能的脚手架，旨在简化日常开发。
 
+## 技术架构
+
+### 开发环境
+
+- 开发语言：JAVA 1.8
+- IDE：IDEA+Lombok插件
+- 项目管理：Maven
+- 数据库：MySQL5.7+
+- 缓存数据库：Redis
+
+### 后端框架
+
+- 基础框架：SpringBoot 2.1.17.RELEASE
+- 持久层框架：mybatis、pageHelper
+- 缓存：redis
+- 数据库连接池：druid
+- 文档框架：swagger
+- 安全：JWT
+- 定时任务：quartz
+- 其它：谷歌guava、fastjson、lombok、poi、httpclient
+
+## 项目结构
+
+### 后端
+
+```
+- base	系统提供基础功能模块
+	- annotation  系统注解
+	- aop  系统切面功能模块
+	- config  系统配置文件
+	- constant  系统常量文件
+	- controller  系统控制层文件
+	- dao  系统dao层
+	- dto  系统dto文件
+	- entity  系统数据库映射实体类
+	- enums  系统枚举
+	- exception 系统异常
+	- filter  系统过滤器
+	- handle  系统处理功能
+	- helper  系统帮助模块
+	- interceptor  系统拦截器
+	- service  系统业务层文件
+    - utils  系统工具类
+    - vo  系统vo文件
+- business	开发者业务模块(预留)
+	- constant  业务常量文件
+	- controller  业务控制层文件
+	- dao  业务dao层
+	- dto  业务dto文件
+	- entity  业务数据库映射实体类
+	- service  业务逻辑层文件
+	- vo  业务vo文件
+```
 
 ## 前端对接说明
 
@@ -140,7 +194,7 @@
 
 3. 分页请求时，分页请求参数在请求参数中，即在url后拼接；
 
-   页码参数名固定为==pageNumber==，单页数据量参数名固定为==pageSize==；其它参数仍在json请求体中；
+   页码参数名固定为`pageNumber`，单页数据量参数名固定为`pageSize`；其它参数仍在json请求体中；
 
    > 例：`http://xxx.com/xxx?pageNumber=1&pageSize=10`
 
