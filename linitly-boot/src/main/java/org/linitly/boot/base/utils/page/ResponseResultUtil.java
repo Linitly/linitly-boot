@@ -33,7 +33,7 @@ public class ResponseResultUtil {
 	public static <T> ResponseResult getResponseResult(List<T> list) {
 		PageInfo<T> pageInfo = new PageInfo<>(list);
 		PageResponseResult pageResponseResult = copyToPageResponseResult(pageInfo);
-		return pageResponseResult == null ? new ResponseResult<>(new PageResponseResult<>(0, null)) : new ResponseResult<>(pageResponseResult);
+		return new ResponseResult<>(pageResponseResult);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class ResponseResultUtil {
 	public static <T> ResponseResult getResponseResult(List<T> list, Object specialData) {
 		PageInfo<T> pageInfo = new PageInfo<>(list);
 		PageResponseResult pageResponseResult = copyToPageResponseResult(pageInfo);
-		return pageResponseResult == null ? new ResponseResult<>(new PageResponseResult<>(0, null)) : new ResponseResult<>(pageResponseResult, specialData);
+		return new ResponseResult<>(pageResponseResult, specialData);
 	}
 
 	/**
